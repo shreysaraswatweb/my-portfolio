@@ -1,0 +1,280 @@
+{
+  "$schema": "design-system-context-v1",
+  "meta": {
+    "name": "Glass Profile UI Kit",
+    "description": "A dark, glassmorphic 'digital business card' / profile UI system spanning a mobile app (default + scrolled states) and a desktop portfolio dashboard. Use this file as style context for an AI code generator (e.g. Cursor) to produce new screens that feel visually consistent with the source design.",
+    "platforms": ["mobile-ios-app", "desktop-web-dashboard"],
+    "designStyle": [
+      "dark-mode-first",
+      "glassmorphism (translucent panels, soft blur, subtle inner highlight)",
+      "rounded/soft geometry (large corner radii everywhere, no sharp corners)",
+      "single warm accent (amber/orange) against a cool dark navy/black base",
+      "ambient gradient glows behind content (top-left warm glow, bottom purple glow) rather than flat backgrounds",
+      "card-based composition: every logical group of content lives in its own rounded panel",
+      "high-contrast white typography on dark surfaces, generous whitespace-equivalent (dark-space) between blocks"
+    ]
+  },
+
+  "colorPalette": {
+    "base": {
+      "bg-canvas-top": "#2A1A1F  (warm dark maroon/brown radial glow, blends downward)",
+      "bg-canvas-mid": "#12141C  (near-black navy, dominant background)",
+      "bg-canvas-bottom-accent": "#2A1240  (subtle purple glow at bottom of mobile screens)",
+      "bg-sidebar-desktop": "#0B0D14  (near-black, slightly darker than main canvas)"
+    },
+    "surface": {
+      "surface-card-primary": "rgba(30, 34, 48, 0.55)  glassmorphic navy panel, ~24-40px corner radius, faint 1px lighter top border for glass highlight",
+      "surface-card-secondary": "rgba(255,255,255,0.04)  even more transparent nested panel used for sub-cards (link tiles, stat pills)",
+      "surface-pill-dark": "#242B3D  solid-ish dark slate used behind icon glyphs (stat icons, social icons)",
+      "surface-elevated-desktop-card": "#131722  flatter, slightly opaque card used in desktop dashboard widgets"
+    },
+    "accent": {
+      "accent-primary": "#F5A623  amber/orange - avatar background, active tab underline, gradient starts, small highlight dots",
+      "accent-gradient-secondary": "#8B5CF6  violet - used as the second stop in gradient text/logo treatments (name wordmark on desktop)",
+      "accent-gradient-usage": "linear-gradient(90deg, #F5A623 0%, #A855F7 100%) - applied to hero heading text (surname) and primary CTA buttons on desktop"
+    },
+    "brand-icons": {
+      "facebook": "#1877F2",
+      "github": "#FFFFFF on #000000 chip",
+      "figma": "multicolor logo, kept on dark chip",
+      "instagram": "brand gradient, kept on dark chip",
+      "devto": "#000000 chip, white 'DEV' wordmark"
+    },
+    "text": {
+      "text-primary": "#FFFFFF  headings, names, primary values",
+      "text-secondary": "#9AA1B2  handles, captions, meta labels, nav item default state",
+      "text-tertiary": "#6B7280  timestamps / least important meta",
+      "text-on-accent": "#12141C  dark text used only on the amber accent surfaces when needed"
+    },
+    "status": {
+      "success-available": "#22C55E  'Available' badge on desktop avatar",
+      "playing-indicator": "#8B5CF6  'Playing now' pill on music widget"
+    },
+    "borders": {
+      "hairline-on-dark": "rgba(255,255,255,0.08)",
+      "glass-edge-highlight": "rgba(255,255,255,0.12) 1px top/inner border to sell the glass effect"
+    }
+  },
+
+  "typography": {
+    "fontFamily": {
+      "primary": "Rounded geometric sans-serif (visually close to 'Baloo 2', 'Quicksand', or 'SF Pro Rounded'). Friendly, high x-height, soft terminals.",
+      "fallbackStack": "'SF Pro Rounded', 'Baloo 2', 'Quicksand', system-ui, sans-serif",
+      "secondaryUI": "Standard system sans (SF Pro / Inter) acceptable for dense desktop dashboard body copy/labels"
+    },
+    "scale": {
+      "display": { "size": "40-48px", "weight": 700, "usage": "Desktop hero name (e.g. person's first+last name)", "lineHeight": 1.1 },
+      "h1": { "size": "30-34px", "weight": 700, "usage": "Mobile profile name" },
+      "h2": { "size": "20-22px", "weight": 700, "usage": "Section headers (desktop dashboard cards: 'Skills & Tools', 'Featured Projects')" },
+      "body-lg": { "size": "16-18px", "weight": 500, "usage": "Bio lines, primary card values" },
+      "body": { "size": "14-15px", "weight": 400, "usage": "Handles, descriptions, list items" },
+      "caption": { "size": "12-13px", "weight": 500, "usage": "Stat labels, meta text, tab labels", "letterSpacing": "0.01em" },
+      "micro": { "size": "10-11px", "weight": 600, "usage": "Status badges, tags/chips" }
+    },
+    "notes": "Numeric stat values (3.5k, 359, 620) are bold/heavy weight and visually larger than their labels; label sits directly below value, center-aligned."
+  },
+
+  "spacingScale": {
+    "unit": "4px base grid",
+    "tokens": {
+      "space-1": "4px",
+      "space-2": "8px",
+      "space-3": "12px",
+      "space-4": "16px",
+      "space-5": "20px",
+      "space-6": "24px",
+      "space-8": "32px",
+      "space-10": "40px",
+      "space-12": "48px"
+    },
+    "usagePattern": "Card outer padding ~24px. Gap between stacked cards ~16-20px. Gap between grid items (photos, link tiles, stat cards) ~12-16px. Section vertical rhythm on desktop ~32px."
+  },
+
+  "radiusScale": {
+    "radius-sm": "8px  (small chips, tags)",
+    "radius-md": "16px (stat pill icons, small buttons)",
+    "radius-lg": "24px (link tiles, stat cards, sidebar nav items)",
+    "radius-xl": "32px (main profile card, avatar frame)",
+    "radius-full": "9999px (pill buttons, tab underline, avatars-as-circles when used, progress bars)",
+    "principle": "Nothing in this system uses a sharp (0px) corner. Larger containers get proportionally larger radii; the avatar image itself uses the same large radius as its parent frame, not a circle."
+  },
+
+  "elevationAndEffects": {
+    "glassBlur": "backdrop-filter: blur(20-30px) on all card surfaces sitting over the gradient background",
+    "shadow-card": "0 8px 32px rgba(0,0,0,0.35)  soft, diffuse, no hard drop shadows anywhere",
+    "shadow-avatar": "0 4px 20px rgba(245,166,35,0.25)  faint warm glow bleeding from the amber avatar frame",
+    "gradientGlowBg": "Large soft radial gradients (warm top-left, purple bottom) placed behind/under the glass cards to give the dark UI depth; never a flat single-color background",
+    "innerHighlight": "1px semi-transparent white top border on cards to simulate light catching a glass edge"
+  },
+
+  "iconography": {
+    "style": "Filled, simple, rounded-corner square 'app icon' chips (44-56px) for brand/social icons rather than bare line icons",
+    "chipTreatment": "Icon sits centered on a dark rounded-square or brand-colored rounded-square background, size ~48-64px, radius-md/lg",
+    "utilityIcons": "Thin-stroke line icons (pin/location, calendar/cake, envelope, external-link arrow) used inline next to text, ~16-20px, text-secondary color",
+    "externalLinkAffordance": "Small diagonal arrow-out-of-box icon top-right of any tappable link card"
+  },
+
+  "layoutStructure": {
+    "mobileApp": {
+      "screenFrame": "iOS status bar (time left, signal/wifi/battery right) + home indicator bar at bottom",
+      "state_default": {
+        "description": "Profile landing screen, avatar + identity + stats + content grid",
+        "order": [
+          "StatusBar",
+          "AvatarFrame (large, square-rounded, overlapping top of the main card by ~40%)",
+          "MainProfileCard (glass panel containing everything below)",
+          "NameHeading + HandleSubtext (centered)",
+          "SocialStatRow (4 icon chips, each with a numeric value below it, evenly spaced)",
+          "SegmentedTabBar (All / Photos / Music / Videos, text tabs with animated underline on active)",
+          "ContentGrid (3-column square media grid, small consistent gap, extends below/outside the glass card onto canvas)"
+        ]
+      },
+      "state_scrolledDetail": {
+        "description": "Same profile, scrolled/expanded to show bio + structured link list instead of the stat/grid view",
+        "order": [
+          "StatusBar",
+          "AvatarFrame (smaller/compressed on scroll, or fixed while card scrolls beneath - treat as sticky header)",
+          "NameHeading + HandleSubtext",
+          "BioList (2-3 lines, each prefixed with a small emoji or pin icon, left-aligned, stacked)",
+          "MetaRow (location pin + joined-date, horizontally inline, separated by generous gap, text-secondary)",
+          "LinkTileGrid (2-column grid of medium tiles: icon top-left, external-link icon top-right, label bold, value/handle below in text-secondary; brand-colored fill for primary social e.g. Facebook, dark fill for neutral entries e.g. Email)",
+          "LinkTileFullWidth (single full-width row variant for entries needing a trailing action button, e.g. GitHub with a 'Follow' pill button)",
+          "LinkTileRowCompact (smaller square icon-only tiles for remaining links, e.g. Figma / Dev.to, shown partially cropped at scroll edge to hint more content)"
+        ]
+      },
+      "breakpoint": "Single column, fixed ~390-430px design width (standard iPhone frame). No internal responsive behavior other than scroll."
+    },
+
+    "desktopDashboard": {
+      "description": "Wider portfolio/dashboard layout reusing the same identity data in a 3-column grid",
+      "grid": "12-column grid inside a max-width shell (~1440-1536px), 3 macro-columns: fixed-width left sidebar, flexible center content, fixed-width right rail",
+      "columns": {
+        "leftSidebar": {
+          "width": "~260-280px fixed",
+          "background": "darker than canvas (near-black)",
+          "contents": ["MiniLogo/InitialsBadge + name/title", "AvatarFrame (same amber rounded-square treatment) with an 'Available' status badge overlapping bottom-left", "VerticalNavList (icon + label rows, active item gets a filled rounded-rect highlight in a deep violet/indigo, inactive items text-secondary)", "Divider", "'Let's Connect' label + row of circular/rounded social icon buttons pinned near bottom", "Footer copyright line"]
+        },
+        "centerContent": {
+          "width": "flexible / fills remaining space",
+          "contents": [
+            "HeroCard: greeting eyebrow text, large 2-line display name (second line in accent gradient text), role subtitle, 2-line description paragraph, primary gradient CTA button + secondary outline/ghost button, illustrative graphic anchored right (kept generic - a workstation/desk illustration)",
+            "InfoStatRow: 4 equal-width small cards in a row, each = icon chip + 2-line text (bold value / label caption)",
+            "QuickLinkRow: 4 equal-width tiles reusing the mobile link-tile component (icon, label, value, external-link glyph), same visual language as mobile LinkTileGrid",
+            "BottomRow (2 columns): 'Featured Projects' card (horizontal card carousel, each project = image thumbnail + title + tech-stack caption + external link icon, carousel dots below) sits left/wider; 'My Vibes' media-player card sits right/narrower (album art, track title/subtitle, 'Playing now' pill, queued track list, playback controls + scrub bar)"
+          ]
+        },
+        "rightRail": {
+          "width": "~300-340px fixed",
+          "contents": [
+            "SkillsCard: header + 'View all' link, wrapped pill/chip list of skill tags (rounded-full, dark fill, tight gap), plus a labeled horizontal gradient progress/slider bar (e.g. 'Design' to 'Development' spectrum)",
+            "QuickLinksCard: compact 2-column icon+label grid (Email/Facebook/GitHub/Figma) plus 2 extra rows (Dev handle, 'Download CV' button) - denser variant of the mobile link tiles"
+          ]
+        }
+      }
+    }
+  },
+
+  "components": {
+    "AvatarFrame": {
+      "shape": "Large rounded-square (radius-xl), never a circle",
+      "background": "Solid accent-primary (amber) fill behind a character illustration/photo",
+      "sizing": { "mobile": "~220x220px, overlaps top of main card", "desktop": "~180-220px in sidebar" },
+      "statusBadge": "Small rounded-full pill, positioned overlapping the bottom-left or top-left corner of the frame, colored text/dot for state (e.g. 'Available' = success-available bg)"
+    },
+    "ProfileIdentityBlock": {
+      "layout": "Centered on mobile (name, then @handle directly below, both centered); left-aligned on desktop sidebar/hero",
+      "nameStyle": "h1/display weight 700, white",
+      "handleStyle": "body, text-secondary, no @ styling beyond the character itself"
+    },
+    "StatChip": {
+      "structure": "Icon chip (rounded-square, brand or dark fill) stacked above a bold numeric value, stacked above a small caption label",
+      "alignment": "Center-aligned column, repeated in a horizontal row with equal gaps",
+      "interaction": "Tap opens the linked external profile/app"
+    },
+    "SegmentedTabBar": {
+      "structure": "Row of text labels, equal or content-based spacing, one 'active' label in text-primary + accent-primary underline bar (radius-full, ~3px thick, width = label width) beneath it; inactive labels in text-secondary with no underline",
+      "motion": "Underline should animate/slide horizontally between tabs on change (~200-250ms ease-out)"
+    },
+    "ContentGridItem": {
+      "shape": "Square, radius-lg, image fill, cropped to fit",
+      "grid": "3 columns, small consistent gutter (~space-3), no card chrome/border - the image itself is the tile"
+    },
+    "BioLine": {
+      "structure": "Leading small icon or emoji (pin/briefcase/person) + single line of text, left-aligned, stacked with tight vertical gap (~space-2)"
+    },
+    "LinkTile": {
+      "variants": ["primary-brand-fill (e.g. Facebook - solid brand color background)", "neutral-dark-fill (e.g. Email, Figma - dark glass background)", "full-width-with-action (e.g. GitHub - includes a trailing pill 'Follow' button)"],
+      "structure": "Icon chip top-left, external-link glyph top-right (opacity-muted), bold label mid, text-secondary value/handle below label",
+      "radius": "radius-lg",
+      "padding": "space-4 to space-5"
+    },
+    "PillButton": {
+      "variants": ["solid-neutral (e.g. 'Follow')", "gradient-primary (desktop CTA, uses accent-gradient-usage)", "outline-ghost (desktop secondary CTA, 1px hairline border, transparent fill)"],
+      "radius": "radius-full",
+      "padding": "space-3 vertical / space-6 horizontal"
+    },
+    "SidebarNavItem": {
+      "structure": "Leading icon (20px) + label, full-width row, radius-lg",
+      "states": { "default": "transparent bg, text-secondary", "active": "filled deep-violet/indigo background, text-primary, icon accent-colored" }
+    },
+    "ProjectCard": {
+      "structure": "Thumbnail image (radius-lg top corners or full card), title bold, tech-stack caption text-secondary below, small external-link icon top-right of thumbnail",
+      "carousel": "Horizontally scrollable row with pagination dots below (active dot = accent-primary filled, inactive = muted small dot)"
+    },
+    "MediaPlayerWidget": {
+      "structure": "Header (title + 'View all'), large album-art thumbnail with track title/subtitle and a 'Playing now' status pill, queued-track list rows (small thumbnail + title/subtitle + duration + overflow-menu dot), transport controls (prev/play-pause/next) with a horizontal scrub/progress bar and elapsed/total time labels"
+    },
+    "SkillChip": {
+      "shape": "radius-full pill, dark fill, text-secondary or text-primary, tightly packed in a wrapping row"
+    },
+    "GradientMeterBar": {
+      "structure": "Horizontal track filled with accent-gradient-usage, labeled at both ends (e.g. 'Design' / 'Development'), small circular handle/dot marking current position"
+    }
+  },
+
+  "responsiveBehavior": {
+    "breakpoints": {
+      "mobile": "< 480px — single column, the two mobile screenshots ARE this breakpoint's default and scrolled states",
+      "tablet": "480–1024px — not shown in source; recommended: collapse desktop's 3-column layout to 2 columns (sidebar collapses to icon-only rail or a top bar; right rail content moves below center content)",
+      "desktop": "> 1024px — the 3-column dashboard layout shown in the 4th screenshot"
+    },
+    "rules": [
+      "Below 1024px, convert the left sidebar into either a top app bar with a hamburger/drawer, or an icon-only rail (labels hidden, tooltips on hover)",
+      "Below 1024px, the right rail (Skills, Quick Links) stacks beneath the center content rather than sitting beside it",
+      "Stat/info rows that show 4 items in a row on desktop reflow to a 2x2 grid on tablet and a horizontally scrollable row (matching the mobile StatChip pattern) on mobile",
+      "The hero illustration (desk/workstation graphic) is desktop-only chrome — hide it below tablet to conserve space rather than shrinking it further",
+      "LinkTile grids stay 2-column down to mobile; below ~360px width they may stack to 1 column",
+      "All corner radii, spacing tokens and font sizes stay constant across breakpoints (this system does not scale down radii/spacing for mobile — it reflows layout, not density)",
+      "The glass/blur background treatment and ambient gradient glow should persist at every breakpoint for visual consistency"
+    ]
+  },
+
+  "motion": {
+    "principles": "Subtle, soft, never abrupt. Favor ease-out for entrances, ease-in-out for state toggles.",
+    "patterns": {
+      "tabUnderline": "slide + resize 200-250ms ease-out",
+      "cardEntrance": "fade + slight upward translate (8-12px), 250-300ms ease-out, staggered ~40ms per item in a grid/list",
+      "tileTap": "scale down to 0.97 on press, spring back on release",
+      "carouselDots": "opacity/scale transition 150ms on active dot change"
+    }
+  },
+
+  "aiReplicationGuidance": {
+    "doList": [
+      "Always wrap content in a translucent, blurred, rounded-corner (24-32px) panel over a dark gradient-glow background — never a flat white or flat solid-dark background with sharp cards",
+      "Keep exactly one accent hue (amber) as the dominant highlight color; use violet only as a secondary gradient partner, never as a standalone primary",
+      "Use rounded-square avatar/icon frames consistently instead of circles",
+      "Pair every numeric stat with a small caption label directly beneath it",
+      "Give every external/social link its own tile with a small 'external link' glyph in the corner",
+      "Keep typography rounded/friendly for names and headings; utilitarian/system sans is fine for dense dashboard data",
+      "Reflow, don't shrink: adapt layouts across breakpoints by changing column count and stacking order, not by scaling down the radius/spacing/type scale"
+    ],
+    "avoidList": [
+      "Sharp 0-4px corners anywhere",
+      "Flat, non-gradient, single-color backgrounds",
+      "Circular avatars (this system standardizes on rounded-squares)",
+      "Hard, high-contrast drop shadows (keep shadows soft/diffuse)",
+      "Mixing more than two accent hues at full saturation simultaneously"
+    ]
+  }
+}
