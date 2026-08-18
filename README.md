@@ -1,16 +1,49 @@
-# React + Vite
+# Shrey Saraswat — Portfolio
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Personal developer portfolio for **Shrey Saraswat**, a full-stack developer based in India. Dark glassmorphic UI with an amber/violet accent system: identity + contact tiles on mobile, and a three-column dashboard on desktop.
 
-Currently, two official plugins are available:
+**Live site:** [https://portfolioweb-shrey-saraswat-portfolio.vercel.app/](https://portfolioweb-shrey-saraswat-portfolio.vercel.app/)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Features
 
-## React Compiler
+- Responsive layouts from `design-system.json`
+  - **Mobile:** profile card, bento contact tiles, then Photos / Music / Videos
+  - **Desktop:** sticky sidebar, scrolling main column, skills and quick links rail
+- Hero, skills, experience, featured projects, certifications, and a music widget
+- Motion with Framer Motion (avatar float, tab underline, staggered cards)
+- Tokens mapped into Tailwind (colors, radii, spacing, type)
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Tech stack
 
-## Expanding the ESLint configuration
+| Layer | Tools |
+| --- | --- |
+| UI | React 19, Vite 8 |
+| Styling | Tailwind CSS 4 |
+| Motion | Framer Motion |
+| Icons | lucide-react |
+| Deploy | Vercel |
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## Run locally
+
+```bash
+npm install
+npm run dev
+```
+
+App runs at `http://localhost:5173/`.
+
+```bash
+npm run build    # production build
+npm run preview  # preview the build
+npm run lint     # ESLint
+```
+
+## Customize
+
+Most copy, links, skills, projects, and experience live in [`src/data/profile.js`](src/data/profile.js).
+
+Replace the avatar later by swapping [`src/assets/avatar.png`](src/assets/avatar.png). Visual tokens stay in [`design-system.json`](design-system.json) and [`tailwind.config.js`](tailwind.config.js).
+
+## License
+
+Private project — all rights reserved.
