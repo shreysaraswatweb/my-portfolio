@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { Analytics } from '@vercel/analytics/react'
 import Sidebar from './components/Sidebar'
 import MobileApp from './layouts/MobileApp'
 import DesktopDashboard from './layouts/DesktopDashboard'
@@ -12,6 +13,7 @@ export default function App() {
     return (
       <div className="min-h-screen bg-canvas-mid bg-canvas-glow text-text-primary">
         <MobileApp />
+        <Analytics />
       </div>
     )
   }
@@ -24,6 +26,7 @@ export default function App() {
           <DesktopDashboard />
         </div>
       </div>
+      <Analytics />
     </div>
   )
 }
