@@ -1,34 +1,36 @@
-import { motion } from 'framer-motion'
-import { assets, profile } from '../data/profile'
+import { motion } from "framer-motion";
+import { assets, profile } from "../data/profile";
 
 const boxMotion = {
   y: [0, -5, 0],
-  transition: { duration: 5.2, repeat: Infinity, ease: 'easeInOut' },
-}
+  transition: { duration: 5.2, repeat: Infinity, ease: "easeInOut" },
+};
 
 const imageMotion = {
   scale: [1.02, 1.05, 1.02],
-  transition: { duration: 3.8, repeat: Infinity, ease: 'easeInOut' },
-}
+  transition: { duration: 3.8, repeat: Infinity, ease: "easeInOut" },
+};
 
 export default function AvatarFrame({
-  size = 'mobile',
+  size = "mobile",
   showBadge = false,
   compact = false,
   float = true,
-  className = '',
+  className = "",
 }) {
-  const box =
-    compact
-      ? 'h-avatar-compact w-avatar-compact'
-      : size === 'desktop'
-        ? 'h-avatar-desktop w-avatar-desktop'
-        : 'h-avatar-mobile w-avatar-mobile'
+  const box = compact
+    ? "h-avatar-compact w-avatar-compact"
+    : size === "desktop"
+      ? "h-avatar-desktop w-avatar-desktop"
+      : "h-avatar-mobile w-avatar-mobile";
 
   return (
-    <div className={['relative', className].join(' ')}>
+    <div className={["relative", className].join(" ")}>
       <motion.div
-        className={[box, 'relative isolate overflow-hidden rounded-xl shadow-avatar'].join(' ')}
+        className={[
+          box,
+          "relative isolate overflow-hidden rounded-xl shadow-avatar",
+        ].join(" ")}
         animate={float ? boxMotion : false}
       >
         <img
@@ -51,5 +53,5 @@ export default function AvatarFrame({
         </span>
       ) : null}
     </div>
-  )
+  );
 }

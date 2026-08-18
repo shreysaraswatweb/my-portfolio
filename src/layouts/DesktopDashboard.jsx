@@ -1,12 +1,12 @@
-import Hero from '../components/Hero'
-import StatRow from '../components/StatRow'
-import ContactGrid, { QuickLinks } from '../components/ContactGrid'
-import FeaturedProjects from '../components/ProjectCard'
-import ExperienceTimeline from '../components/ExperienceTimeline'
-import SkillsCard from '../components/SkillsCard'
-import AchievementCard from '../components/AchievementCard'
-import CertificationGrid from '../components/CertificationTile'
-import MediaPlayer from '../components/MediaPlayer'
+import Hero from "../components/Hero";
+import StatRow from "../components/StatRow";
+import ContactGrid, { QuickLinks } from "../components/ContactGrid";
+import FeaturedProjects from "../components/ProjectCard";
+import ExperienceTimeline from "../components/ExperienceTimeline";
+import SkillsCard from "../components/SkillsCard";
+import AchievementCard from "../components/AchievementCard";
+import CertificationGrid from "../components/CertificationTile";
+import MediaPlayer from "../components/MediaPlayer";
 
 export default function DesktopDashboard() {
   return (
@@ -26,5 +26,5 @@ export default function DesktopDashboard() {
         <MediaPlayer />
       </aside>
     </div>
-  )
+  );
 }

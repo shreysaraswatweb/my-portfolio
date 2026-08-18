@@ -15,13 +15,13 @@ Personal developer portfolio for **Shrey Saraswat**, a full-stack developer base
 
 ## Tech stack
 
-| Layer | Tools |
-| --- | --- |
-| UI | React 19, Vite 8 |
-| Styling | Tailwind CSS 4 |
-| Motion | Framer Motion |
-| Icons | lucide-react |
-| Deploy | Vercel |
+| Layer   | Tools            |
+| ------- | ---------------- |
+| UI      | React 19, Vite 8 |
+| Styling | Tailwind CSS 4   |
+| Motion  | Framer Motion    |
+| Icons   | lucide-react     |
+| Deploy  | Vercel           |
 
 ## Run locally
 

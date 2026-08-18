@@ -1,5 +1,5 @@
-import { Menu } from 'lucide-react'
-import { profile } from '../data/profile'
+import { Menu } from "lucide-react";
+import { profile } from "../data/profile";
 
 export default function TopBar({ onMenu }) {
   return (
@@ -9,13 +9,20 @@ export default function TopBar({ onMenu }) {
           {profile.initials}
         </span>
         <div>
-          <p className="text-body font-medium text-text-primary">{profile.displayName}</p>
+          <p className="text-body font-medium text-text-primary">
+            {profile.displayName}
+          </p>
           <p className="text-caption text-text-secondary">{profile.role}</p>
         </div>
       </div>
-      <button type="button" onClick={onMenu} className="text-text-primary" aria-label="Open navigation">
+      <button
+        type="button"
+        onClick={onMenu}
+        className="text-text-primary"
+        aria-label="Open navigation"
+      >
         <Menu className="h-space-6 w-space-6" strokeWidth={1.75} />
       </button>
     </header>
-  )
+  );
 }

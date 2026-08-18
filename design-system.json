@@ -63,13 +63,43 @@
       "secondaryUI": "Standard system sans (SF Pro / Inter) acceptable for dense desktop dashboard body copy/labels"
     },
     "scale": {
-      "display": { "size": "40-48px", "weight": 700, "usage": "Desktop hero name (e.g. person's first+last name)", "lineHeight": 1.1 },
-      "h1": { "size": "30-34px", "weight": 700, "usage": "Mobile profile name" },
-      "h2": { "size": "20-22px", "weight": 700, "usage": "Section headers (desktop dashboard cards: 'Skills & Tools', 'Featured Projects')" },
-      "body-lg": { "size": "16-18px", "weight": 500, "usage": "Bio lines, primary card values" },
-      "body": { "size": "14-15px", "weight": 400, "usage": "Handles, descriptions, list items" },
-      "caption": { "size": "12-13px", "weight": 500, "usage": "Stat labels, meta text, tab labels", "letterSpacing": "0.01em" },
-      "micro": { "size": "10-11px", "weight": 600, "usage": "Status badges, tags/chips" }
+      "display": {
+        "size": "40-48px",
+        "weight": 700,
+        "usage": "Desktop hero name (e.g. person's first+last name)",
+        "lineHeight": 1.1
+      },
+      "h1": {
+        "size": "30-34px",
+        "weight": 700,
+        "usage": "Mobile profile name"
+      },
+      "h2": {
+        "size": "20-22px",
+        "weight": 700,
+        "usage": "Section headers (desktop dashboard cards: 'Skills & Tools', 'Featured Projects')"
+      },
+      "body-lg": {
+        "size": "16-18px",
+        "weight": 500,
+        "usage": "Bio lines, primary card values"
+      },
+      "body": {
+        "size": "14-15px",
+        "weight": 400,
+        "usage": "Handles, descriptions, list items"
+      },
+      "caption": {
+        "size": "12-13px",
+        "weight": 500,
+        "usage": "Stat labels, meta text, tab labels",
+        "letterSpacing": "0.01em"
+      },
+      "micro": {
+        "size": "10-11px",
+        "weight": 600,
+        "usage": "Status badges, tags/chips"
+      }
     },
     "notes": "Numeric stat values (3.5k, 359, 620) are bold/heavy weight and visually larger than their labels; label sits directly below value, center-aligned."
   },
@@ -152,7 +182,14 @@
         "leftSidebar": {
           "width": "~260-280px fixed",
           "background": "darker than canvas (near-black)",
-          "contents": ["MiniLogo/InitialsBadge + name/title", "AvatarFrame (same amber rounded-square treatment) with an 'Available' status badge overlapping bottom-left", "VerticalNavList (icon + label rows, active item gets a filled rounded-rect highlight in a deep violet/indigo, inactive items text-secondary)", "Divider", "'Let's Connect' label + row of circular/rounded social icon buttons pinned near bottom", "Footer copyright line"]
+          "contents": [
+            "MiniLogo/InitialsBadge + name/title",
+            "AvatarFrame (same amber rounded-square treatment) with an 'Available' status badge overlapping bottom-left",
+            "VerticalNavList (icon + label rows, active item gets a filled rounded-rect highlight in a deep violet/indigo, inactive items text-secondary)",
+            "Divider",
+            "'Let's Connect' label + row of circular/rounded social icon buttons pinned near bottom",
+            "Footer copyright line"
+          ]
         },
         "centerContent": {
           "width": "flexible / fills remaining space",
@@ -178,7 +215,10 @@
     "AvatarFrame": {
       "shape": "Large rounded-square (radius-xl), never a circle",
       "background": "Solid accent-primary (amber) fill behind a character illustration/photo",
-      "sizing": { "mobile": "~220x220px, overlaps top of main card", "desktop": "~180-220px in sidebar" },
+      "sizing": {
+        "mobile": "~220x220px, overlaps top of main card",
+        "desktop": "~180-220px in sidebar"
+      },
       "statusBadge": "Small rounded-full pill, positioned overlapping the bottom-left or top-left corner of the frame, colored text/dot for state (e.g. 'Available' = success-available bg)"
     },
     "ProfileIdentityBlock": {
@@ -203,19 +243,30 @@
       "structure": "Leading small icon or emoji (pin/briefcase/person) + single line of text, left-aligned, stacked with tight vertical gap (~space-2)"
     },
     "LinkTile": {
-      "variants": ["primary-brand-fill (e.g. Facebook - solid brand color background)", "neutral-dark-fill (e.g. Email, Figma - dark glass background)", "full-width-with-action (e.g. GitHub - includes a trailing pill 'Follow' button)"],
+      "variants": [
+        "primary-brand-fill (e.g. Facebook - solid brand color background)",
+        "neutral-dark-fill (e.g. Email, Figma - dark glass background)",
+        "full-width-with-action (e.g. GitHub - includes a trailing pill 'Follow' button)"
+      ],
       "structure": "Icon chip top-left, external-link glyph top-right (opacity-muted), bold label mid, text-secondary value/handle below label",
       "radius": "radius-lg",
       "padding": "space-4 to space-5"
     },
     "PillButton": {
-      "variants": ["solid-neutral (e.g. 'Follow')", "gradient-primary (desktop CTA, uses accent-gradient-usage)", "outline-ghost (desktop secondary CTA, 1px hairline border, transparent fill)"],
+      "variants": [
+        "solid-neutral (e.g. 'Follow')",
+        "gradient-primary (desktop CTA, uses accent-gradient-usage)",
+        "outline-ghost (desktop secondary CTA, 1px hairline border, transparent fill)"
+      ],
       "radius": "radius-full",
       "padding": "space-3 vertical / space-6 horizontal"
     },
     "SidebarNavItem": {
       "structure": "Leading icon (20px) + label, full-width row, radius-lg",
-      "states": { "default": "transparent bg, text-secondary", "active": "filled deep-violet/indigo background, text-primary, icon accent-colored" }
+      "states": {
+        "default": "transparent bg, text-secondary",
+        "active": "filled deep-violet/indigo background, text-primary, icon accent-colored"
+      }
     },
     "ProjectCard": {
       "structure": "Thumbnail image (radius-lg top corners or full card), title bold, tech-stack caption text-secondary below, small external-link icon top-right of thumbnail",

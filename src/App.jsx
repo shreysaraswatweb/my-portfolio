@@ -1,19 +1,19 @@
-import { useState } from 'react'
-import Sidebar from './components/Sidebar'
-import MobileApp from './layouts/MobileApp'
-import DesktopDashboard from './layouts/DesktopDashboard'
-import useDesktop from './hooks/useDesktop'
+import { useState } from "react";
+import Sidebar from "./components/Sidebar";
+import MobileApp from "./layouts/MobileApp";
+import DesktopDashboard from "./layouts/DesktopDashboard";
+import useDesktop from "./hooks/useDesktop";
 
 export default function App() {
-  const isDesktop = useDesktop()
-  const [active, setActive] = useState('home')
+  const isDesktop = useDesktop();
+  const [active, setActive] = useState("home");
 
   if (!isDesktop) {
     return (
       <div className="min-h-screen bg-canvas-mid bg-canvas-glow text-text-primary">
         <MobileApp />
       </div>
-    )
+    );
   }
 
   return (
@@ -25,5 +25,5 @@ export default function App() {
         </div>
       </div>
     </div>
-  )
+  );
 }

@@ -1,9 +1,9 @@
-import { motion } from 'framer-motion'
-import { socials } from '../data/profile'
-import { cardEntrance, staggerContainer, tileTap } from '../lib/motion'
-import GlassCard from './ui/GlassCard'
-import ExternalLinkIcon from './ui/ExternalLinkIcon'
-import PillButton from './ui/PillButton'
+import { motion } from "framer-motion";
+import { socials } from "../data/profile";
+import { cardEntrance, staggerContainer, tileTap } from "../lib/motion";
+import GlassCard from "./ui/GlassCard";
+import ExternalLinkIcon from "./ui/ExternalLinkIcon";
+import PillButton from "./ui/PillButton";
 import {
   Devto3D,
   DevtoMark,
@@ -15,7 +15,7 @@ import {
   GithubMark,
   Mail3D,
   MailMark,
-} from './icons/BrandIcons'
+} from "./icons/BrandIcons";
 
 const compactMarks = {
   email: MailMark,
@@ -23,7 +23,7 @@ const compactMarks = {
   github: GithubMark,
   figma: FigmaMark,
   devto: DevtoMark,
-}
+};
 
 const bentoMarks = {
   email: Mail3D,
@@ -31,20 +31,20 @@ const bentoMarks = {
   github: Github3D,
   figma: Figma3D,
   devto: Devto3D,
-}
+};
 
 const bentoSurfaces = {
-  email: 'bg-email-card',
-  facebook: 'bg-facebook-card',
-  github: 'bg-github-card ring-1 ring-inset ring-border-glass',
-  figma: 'bg-figma-card ring-1 ring-inset ring-border-glass',
-  devto: 'bg-devto-card',
-}
+  email: "bg-email-card",
+  facebook: "bg-facebook-card",
+  github: "bg-github-card ring-1 ring-inset ring-border-glass",
+  figma: "bg-figma-card ring-1 ring-inset ring-border-glass",
+  devto: "bg-devto-card",
+};
 
-function BentoTile({ item, className = '' }) {
-  const Mark = bentoMarks[item.id]
-  const isLight = item.variant === 'devto'
-  const isGithub = item.variant === 'github'
+function BentoTile({ item, className = "" }) {
+  const Mark = bentoMarks[item.id];
+  const isLight = item.variant === "devto";
+  const isGithub = item.variant === "github";
 
   return (
     <motion.a
@@ -52,10 +52,10 @@ function BentoTile({ item, className = '' }) {
       variants={cardEntrance}
       {...tileTap}
       className={[
-        'relative flex min-h-tile min-w-0 flex-col justify-between rounded-xl p-space-5 shadow-card',
-        bentoSurfaces[item.variant] || 'bg-surface-card border-border-glass',
+        "relative flex min-h-tile min-w-0 flex-col justify-between rounded-xl p-space-5 shadow-card",
+        bentoSurfaces[item.variant] || "bg-surface-card border-border-glass",
         className,
-      ].join(' ')}
+      ].join(" ")}
     >
       <div className="flex items-start justify-between gap-space-3">
         <div className="flex min-w-0 items-center gap-space-3">
@@ -66,28 +66,35 @@ function BentoTile({ item, className = '' }) {
             </span>
           ) : null}
         </div>
-        <ExternalLinkIcon className={isLight ? 'text-text-on-accent' : 'text-text-primary'} />
+        <ExternalLinkIcon
+          className={isLight ? "text-text-on-accent" : "text-text-primary"}
+        />
       </div>
       <div>
-        <p className={['text-body-lg font-semibold', isLight ? 'text-text-on-accent' : 'text-text-primary'].join(' ')}>
+        <p
+          className={[
+            "text-body-lg font-semibold",
+            isLight ? "text-text-on-accent" : "text-text-primary",
+          ].join(" ")}
+        >
           {item.label}
         </p>
         <p
           className={[
-            'mt-space-1 truncate text-caption',
-            isLight ? 'text-text-tertiary' : 'text-text-primary/80',
-          ].join(' ')}
+            "mt-space-1 truncate text-caption",
+            isLight ? "text-text-tertiary" : "text-text-primary/80",
+          ].join(" ")}
         >
           {item.handle}
         </p>
       </div>
     </motion.a>
-  )
+  );
 }
 
 function DesktopTile({ item }) {
-  const Mark = compactMarks[item.id]
-  const isLight = item.variant === 'devto'
+  const Mark = compactMarks[item.id];
+  const isLight = item.variant === "devto";
 
   return (
     <motion.a
@@ -95,22 +102,40 @@ function DesktopTile({ item }) {
       variants={cardEntrance}
       {...tileTap}
       className={[
-        'relative flex min-h-tile min-w-0 flex-col justify-between rounded-lg p-space-5 shadow-card',
-        bentoSurfaces[item.variant] || 'bg-surface-card border-border-glass',
-      ].join(' ')}
+        "relative flex min-h-tile min-w-0 flex-col justify-between rounded-lg p-space-5 shadow-card",
+        bentoSurfaces[item.variant] || "bg-surface-card border-border-glass",
+      ].join(" ")}
     >
       <div className="flex items-start justify-between">
         {Mark ? (
-          <Mark className={isLight ? 'h-space-8 w-space-12' : 'h-space-10 w-space-10 text-text-primary'} />
+          <Mark
+            className={
+              isLight
+                ? "h-space-8 w-space-12"
+                : "h-space-10 w-space-10 text-text-primary"
+            }
+          />
         ) : null}
-        <ExternalLinkIcon className={isLight ? 'text-text-on-accent' : 'text-text-primary'} />
+        <ExternalLinkIcon
+          className={isLight ? "text-text-on-accent" : "text-text-primary"}
+        />
       </div>
       <div className="flex items-end justify-between gap-space-3">
         <div className="min-w-0">
-          <p className={['text-body-lg', isLight ? 'text-text-on-accent' : 'text-text-primary'].join(' ')}>
+          <p
+            className={[
+              "text-body-lg",
+              isLight ? "text-text-on-accent" : "text-text-primary",
+            ].join(" ")}
+          >
             {item.label}
           </p>
-          <p className={['truncate text-caption', isLight ? 'text-text-tertiary' : 'text-text-primary/75'].join(' ')}>
+          <p
+            className={[
+              "truncate text-caption",
+              isLight ? "text-text-tertiary" : "text-text-primary/75",
+            ].join(" ")}
+          >
             {item.handle}
           </p>
         </div>
@@ -121,17 +146,17 @@ function DesktopTile({ item }) {
         ) : null}
       </div>
     </motion.a>
-  )
+  );
 }
 
-export default function ContactGrid({ layout = 'mobile' }) {
-  const email = socials.find((item) => item.id === 'email')
-  const facebook = socials.find((item) => item.id === 'facebook')
-  const github = socials.find((item) => item.id === 'github')
-  const figma = socials.find((item) => item.id === 'figma')
-  const devto = socials.find((item) => item.id === 'devto')
+export default function ContactGrid({ layout = "mobile" }) {
+  const email = socials.find((item) => item.id === "email");
+  const facebook = socials.find((item) => item.id === "facebook");
+  const github = socials.find((item) => item.id === "github");
+  const figma = socials.find((item) => item.id === "figma");
+  const devto = socials.find((item) => item.id === "devto");
 
-  if (layout === 'desktop') {
+  if (layout === "desktop") {
     return (
       <motion.div
         id="contact"
@@ -145,7 +170,7 @@ export default function ContactGrid({ layout = 'mobile' }) {
           <DesktopTile key={item.id} item={item} />
         ))}
       </motion.div>
-    )
+    );
   }
 
   return (
@@ -162,19 +187,23 @@ export default function ContactGrid({ layout = 'mobile' }) {
       <BentoTile item={figma} />
       <BentoTile item={devto} />
     </motion.div>
-  )
+  );
 }
 
 export function QuickLinks() {
-  const items = socials.filter((item) => ['email', 'facebook', 'github', 'figma'].includes(item.id))
-  const devto = socials.find((item) => item.id === 'devto')
+  const items = socials.filter((item) =>
+    ["email", "facebook", "github", "figma"].includes(item.id),
+  );
+  const devto = socials.find((item) => item.id === "devto");
 
   return (
     <GlassCard className="rounded-xl p-space-5">
-      <h2 className="mb-space-4 font-display text-h2 text-text-primary">Quick Links</h2>
+      <h2 className="mb-space-4 font-display text-h2 text-text-primary">
+        Quick Links
+      </h2>
       <div className="grid grid-cols-2 gap-space-3">
         {items.map((item) => {
-          const Mark = compactMarks[item.id]
+          const Mark = compactMarks[item.id];
           return (
             <a
               key={item.id}
@@ -182,9 +211,11 @@ export function QuickLinks() {
               className="flex min-w-0 flex-col items-center gap-space-2 rounded-lg bg-surface-secondary px-space-3 py-space-4"
             >
               <Mark className="h-space-8 w-space-8 text-text-primary" />
-              <span className="text-caption text-text-secondary">{item.label}</span>
+              <span className="text-caption text-text-secondary">
+                {item.label}
+              </span>
             </a>
-          )
+          );
         })}
       </div>
       <div className="mt-space-3 flex flex-col gap-space-3">
@@ -199,5 +230,5 @@ export function QuickLinks() {
         </PillButton>
       </div>
     </GlassCard>
-  )
+  );
 }

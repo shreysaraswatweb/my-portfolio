@@ -1,5 +1,5 @@
-import { motion } from 'framer-motion'
-import { cardEntrance, staggerContainer, tileTap } from '../lib/motion'
+import { motion } from "framer-motion";
+import { cardEntrance, staggerContainer, tileTap } from "../lib/motion";
 
 export default function ContentGrid({ items }) {
   return (
@@ -17,9 +17,13 @@ export default function ContentGrid({ items }) {
           {...tileTap}
           className="aspect-square overflow-hidden rounded-lg"
         >
-          <img src={item.src} alt={item.alt} className="h-full w-full object-cover" />
+          <img
+            src={item.src}
+            alt={item.alt}
+            className="h-full w-full object-cover"
+          />
         </motion.button>
       ))}
     </motion.div>
-  )
+  );
 }

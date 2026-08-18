@@ -1,8 +1,8 @@
-import { motion } from 'framer-motion'
-import { Award } from 'lucide-react'
-import { certifications } from '../data/profile'
-import { cardEntrance, staggerContainer, tileTap } from '../lib/motion'
-import GlassCard from './ui/GlassCard'
+import { motion } from "framer-motion";
+import { Award } from "lucide-react";
+import { certifications } from "../data/profile";
+import { cardEntrance, staggerContainer, tileTap } from "../lib/motion";
+import GlassCard from "./ui/GlassCard";
 
 export function CertificationTile({ cert }) {
   return (
@@ -19,13 +19,15 @@ export function CertificationTile({ cert }) {
         {cert.issuer} · {cert.year}
       </p>
     </motion.article>
-  )
+  );
 }
 
 export default function CertificationGrid() {
   return (
     <GlassCard id="blog" className="rounded-xl p-space-6">
-      <h2 className="mb-space-4 font-display text-h2 text-text-primary">Certifications</h2>
+      <h2 className="mb-space-4 font-display text-h2 text-text-primary">
+        Certifications
+      </h2>
       <motion.div
         variants={staggerContainer}
         initial="hidden"
@@ -38,5 +40,5 @@ export default function CertificationGrid() {
         ))}
       </motion.div>
     </GlassCard>
-  )
+  );
 }

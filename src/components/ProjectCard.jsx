@@ -1,9 +1,9 @@
-import { useState } from 'react'
-import { motion } from 'framer-motion'
-import { projects } from '../data/profile'
-import { cardEntrance, staggerContainer, tileTap } from '../lib/motion'
-import GlassCard from './ui/GlassCard'
-import ExternalLinkIcon from './ui/ExternalLinkIcon'
+import { useState } from "react";
+import { motion } from "framer-motion";
+import { projects } from "../data/profile";
+import { cardEntrance, staggerContainer, tileTap } from "../lib/motion";
+import GlassCard from "./ui/GlassCard";
+import ExternalLinkIcon from "./ui/ExternalLinkIcon";
 
 export function ProjectCard({ project }) {
   return (
@@ -13,25 +13,33 @@ export function ProjectCard({ project }) {
       variants={cardEntrance}
       className="relative min-w-project-card flex-1 overflow-hidden rounded-lg"
     >
-      <img src={project.image} alt={project.title} className="h-project-thumb w-full object-cover" />
+      <img
+        src={project.image}
+        alt={project.title}
+        className="h-project-thumb w-full object-cover"
+      />
       <div className="absolute right-space-3 top-space-3">
         <ExternalLinkIcon className="text-text-primary" />
       </div>
       <div className="bg-surface-elevated p-space-4">
         <h3 className="text-body-lg text-text-primary">{project.title}</h3>
-        <p className="mt-space-1 text-caption text-text-secondary">{project.stack}</p>
+        <p className="mt-space-1 text-caption text-text-secondary">
+          {project.stack}
+        </p>
       </div>
     </motion.a>
-  )
+  );
 }
 
 export default function FeaturedProjects() {
-  const [active, setActive] = useState(0)
+  const [active, setActive] = useState(0);
 
   return (
     <GlassCard id="projects" className="rounded-xl p-space-6">
       <div className="mb-space-4 flex items-center justify-between">
-        <h2 className="font-display text-h2 text-text-primary">Featured Projects</h2>
+        <h2 className="font-display text-h2 text-text-primary">
+          Featured Projects
+        </h2>
         <a href="#projects" className="text-caption text-accent-violet">
           View all projects
         </a>
@@ -54,15 +62,20 @@ export default function FeaturedProjects() {
             type="button"
             aria-label={`Show ${project.title}`}
             onClick={() => setActive(index)}
-            animate={{ scale: active === index ? 1.15 : 1, opacity: active === index ? 1 : 0.4 }}
+            animate={{
+              scale: active === index ? 1.15 : 1,
+              opacity: active === index ? 1 : 0.4,
+            }}
             transition={{ duration: 0.15 }}
             className={[
-              'h-space-2 rounded-full',
-              active === index ? 'w-space-6 bg-accent-primary' : 'w-space-2 bg-text-tertiary',
-            ].join(' ')}
+              "h-space-2 rounded-full",
+              active === index
+                ? "w-space-6 bg-accent-primary"
+                : "w-space-2 bg-text-tertiary",
+            ].join(" ")}
           />
         ))}
       </div>
     </GlassCard>
-  )
+  );
 }

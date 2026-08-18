@@ -1,11 +1,13 @@
-import { skills, skillBalance } from '../data/profile'
-import GlassCard from './ui/GlassCard'
+import { skills, skillBalance } from "../data/profile";
+import GlassCard from "./ui/GlassCard";
 
 export default function SkillsCard() {
   return (
     <GlassCard id="skills" className="rounded-xl p-space-6">
       <div className="mb-space-4 flex items-center justify-between">
-        <h2 className="font-display text-h2 text-text-primary">Skills & Tools</h2>
+        <h2 className="font-display text-h2 text-text-primary">
+          Skills & Tools
+        </h2>
         <a href="#skills" className="text-caption text-accent-violet">
           View all
         </a>
@@ -34,5 +36,5 @@ export default function SkillsCard() {
         </div>
       </div>
     </GlassCard>
-  )
+  );
 }
