@@ -1,6 +1,8 @@
 # Shrey Saraswat — Portfolio
 
-Personal developer portfolio for **Shrey Saraswat**, a full-stack developer based in India. Dark glassmorphic UI with an amber/violet accent system: identity + contact tiles on mobile, and a three-column dashboard on desktop.
+Personal developer portfolio for **Shrey Saraswat**, a frontend-focused software developer (React & Angular) based in Gurugram, India. Glassmorphic UI with an amber/violet accent system, plus light, dark, and system themes: identity + contact tiles on mobile, and a three-column dashboard on desktop.
+
+Professional copy is sourced from [`PORTFOLIO_INTELLIGENCE.md`](PORTFOLIO_INTELLIGENCE.md) — do not invent employers, metrics, skills, or contact details.
 
 **Live site:** [https://portfolioweb-shrey-saraswat-portfolio.vercel.app/](https://portfolioweb-shrey-saraswat-portfolio.vercel.app/)
 
@@ -9,9 +11,9 @@ Personal developer portfolio for **Shrey Saraswat**, a full-stack developer base
 - Responsive layouts from `design-system.json`
   - **Mobile:** profile card, bento contact tiles, then Photos / Music / Videos
   - **Desktop:** sticky sidebar, scrolling main column, skills and quick links rail
-- Hero, skills, experience, featured projects, certifications, and a music widget
+- Hero, skills, experience, featured projects, supporting projects, and a music widget
 - Motion with Framer Motion (avatar float, tab underline, staggered cards)
-- Tokens mapped into Tailwind (colors, radii, spacing, type)
+- Light, dark, and system color themes (preference is saved)
 
 ## Tech stack
 

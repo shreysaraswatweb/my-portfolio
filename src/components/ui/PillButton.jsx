@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
 
 const variants = {
-  gradient: "bg-accent-gradient text-text-primary shadow-card",
+  gradient: "bg-accent-gradient text-text-fixed-light shadow-card",
   ghost:
     "border border-border-hairline bg-transparent text-text-primary hover:bg-surface-secondary",
   solid: "bg-text-primary text-text-on-accent",

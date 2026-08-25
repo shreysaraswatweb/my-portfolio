@@ -1,5 +1,20 @@
-import { skills, skillBalance } from "../data/profile";
+import { primarySkills, secondarySkills, skillBalance } from "../data/profile";
 import GlassCard from "./ui/GlassCard";
+
+function SkillChips({ items }) {
+  return (
+    <div className="flex flex-wrap gap-space-2">
+      {items.map((skill) => (
+        <span
+          key={skill}
+          className="rounded-full bg-surface-pill px-space-3 py-space-2 text-caption text-text-secondary"
+        >
+          {skill}
+        </span>
+      ))}
+    </div>
+  );
+}
 
 export default function SkillsCard() {
   return (
@@ -12,16 +27,12 @@ export default function SkillsCard() {
           View all
         </a>
       </div>
-      <div className="flex flex-wrap gap-space-2">
-        {skills.map((skill) => (
-          <span
-            key={skill}
-            className="rounded-full bg-surface-pill px-space-3 py-space-2 text-caption text-text-secondary"
-          >
-            {skill}
-          </span>
-        ))}
-      </div>
+      <p className="mb-space-2 text-caption text-text-secondary">Primary</p>
+      <SkillChips items={primarySkills} />
+      <p className="mb-space-2 mt-space-4 text-caption text-text-secondary">
+        Also used in production
+      </p>
+      <SkillChips items={secondarySkills} />
       <div className="mt-space-6">
         <div className="mb-space-2 flex items-center justify-between text-caption">
           <span className="text-accent-primary">Design</span>

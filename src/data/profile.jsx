@@ -13,20 +13,22 @@ import albumLofi from "../assets/album-lofi.png";
 
 export const profile = {
   firstName: "Shrey",
-  lastName: "",
-  displayName: "Shrey",
-  handle: "@shrey",
-  initials: "S",
-  role: "Full-Stack Developer",
-  tagline: "Dev by Day | Design Wizard by Night.",
+  lastName: "Saraswat",
+  displayName: "Shrey Saraswat",
+  handle: "React & Angular",
+  initials: "SS",
+  role: "Software Developer — JavaScript / TypeScript",
+  tagline: "Product-UI engineer — specs and Figma to working, API-integrated interfaces.",
   greeting: "Hello, I'm",
   description:
-    "I craft glassmorphic interfaces and sturdy product backends — turning messy ideas into calm, usable software.",
-  birthday: "Building since 2022",
-  location: "India",
-  joinedOn: "Joined in 2024",
-  email: "hello@shrey.dev",
-  available: true,
+    "Cross-framework (React/Angular) product-UI engineer with strong API-integration and bug-resolution discipline, currently doing high-fidelity responsive/design-system work in a fintech-lending product.",
+  about:
+    "B.Tech in Mechanical Engineering from GLA University (2015–2019). I worked as a Senior Executive in 3D Design at UNO Minda Groups, then moved into software. Since 2021 I have owned frontend delivery on client products across telecom-regulatory, payments, blockchain, supply-chain, EdTech, and mortgage-lending domains — turning specs and Figma into working, API-integrated interfaces.",
+  birthday: "~4.5 years in software",
+  location: "Gurugram, India",
+  joinedOn: "Software work since 2021",
+  email: "",
+  available: false,
   cvUrl: "#",
 };
 
@@ -34,47 +36,42 @@ export const socials = [
   {
     id: "facebook",
     label: "Facebook",
-    handle: "@shrey",
+    handle: "On request",
     href: "#",
-    stat: "3.5k",
     variant: "facebook",
   },
   {
     id: "github",
     label: "GitHub",
-    handle: "@shrey",
-    href: "https://github.com/",
-    stat: "359",
+    handle: "On request",
+    href: "#",
     variant: "github",
-    action: "Follow",
   },
   {
     id: "figma",
     label: "Figma",
-    handle: "@shrey",
+    handle: "On request",
     href: "#",
-    stat: "620",
     variant: "figma",
   },
   {
     id: "instagram",
     label: "Instagram",
-    handle: "@shrey",
+    handle: "On request",
     href: "#",
-    stat: "1.6k",
     variant: "instagram",
   },
   {
     id: "email",
     label: "Email",
-    handle: profile.email,
-    href: `mailto:${profile.email}`,
+    handle: "On request",
+    href: "#",
     variant: "email",
   },
   {
     id: "devto",
     label: "Dev.to",
-    handle: "@shrey",
+    handle: "On request",
     href: "#",
     variant: "devto",
   },
@@ -86,96 +83,172 @@ export const navItems = [
   { id: "projects", label: "Projects", href: "#projects" },
   { id: "skills", label: "Skills", href: "#skills" },
   { id: "experience", label: "Experience", href: "#experience" },
-  { id: "blog", label: "Blog", href: "#blog" },
+  { id: "blog", label: "More work", href: "#blog" },
   { id: "contact", label: "Contact", href: "#contact" },
 ];
 
 export const infoStats = [
   {
-    id: "dob",
-    label: "Date of Birth",
-    value: profile.birthday,
+    id: "experience",
+    label: "Software experience",
+    value: "~4.5 years",
     icon: "calendar",
   },
-  { id: "role", label: "Profession", value: profile.role, icon: "briefcase" },
+  {
+    id: "role",
+    label: "Profession",
+    value: "Product UI engineer",
+    icon: "briefcase",
+  },
   { id: "location", label: "Location", value: profile.location, icon: "pin" },
-  { id: "joined", label: "Joined On", value: "2024", icon: "cake" },
+  {
+    id: "frameworks",
+    label: "UI frameworks",
+    value: "React & Angular",
+    icon: "cake",
+  },
 ];
 
-export const skills = [
-  "React",
-  "Next.js",
-  "TypeScript",
+export const primarySkills = [
+  "React JS",
   "JavaScript",
-  "Tailwind",
-  "Node.js",
-  "Framer Motion",
-  "Figma",
-  "Python",
-  "PostgreSQL",
+  "HTML5",
+  "CSS3",
+  "Redux",
+  "Redux Toolkit",
+  "Angular",
+  "TypeScript",
   "Git",
-  "Vite",
+  "GitLab",
+  "REST APIs",
+  "Postman",
 ];
+
+export const secondarySkills = [
+  "Node.js",
+  "MongoDB",
+  "PostgreSQL",
+  "Web3.js",
+  "MetaMask",
+  "JWT",
+  "Razorpay",
+  "React Hook Form",
+  "Yup",
+  "Recharts",
+  "Chart.js",
+  "Material UI",
+];
+
+export const skills = [...primarySkills, ...secondarySkills];
 
 export const skillBalance = { design: 42, development: 58 };
 
 export const achievements = [
-  { id: "followers", value: "3.5K", label: "Followers", icon: "users" },
-  { id: "projects", value: "25+", label: "Projects", icon: "briefcase" },
-  { id: "experience", value: "4+", label: "Years Exp.", icon: "star" },
-  { id: "following", value: "1.6K", label: "Following", icon: "heart" },
+  { id: "years", value: "~4.5", label: "Years", icon: "star" },
+  { id: "products", value: "15+", label: "Products", icon: "briefcase" },
+  { id: "domains", value: "6+", label: "Domains", icon: "users" },
+  { id: "frameworks", value: "2", label: "Frameworks", icon: "heart" },
 ];
 
 export const experience = [
   {
-    id: "exp-1",
-    role: "Full-Stack Developer",
-    company: "Independent",
-    period: "2024 — Present",
-    summary: "Shipping product UIs, APIs, and design systems for web apps.",
+    id: "exp-wizni",
+    role: "Web Developer",
+    company: "Wizni (Arive)",
+    period: "From Nov 2025",
+    shortDate: "Nov 2025",
+    blurb: "UI fidelity and bug-resolution on ARIVE (mortgage LOS/POS).",
+    summary:
+      "Frontend work on ARIVE, a US mortgage LOS/POS product — UI fidelity, responsiveness, and bug-resolution in an established Angular codebase, including VA/FHA/HECM breakpoint conversion and Document Folders.",
   },
   {
-    id: "exp-2",
-    role: "Frontend Engineer",
-    company: "Product Studio",
-    period: "2023 — 2024",
-    summary: "Built component libraries and dashboard experiences in React.",
+    id: "exp-teledgers",
+    role: "Junior Engineer – L1",
+    shortRole: "Jr. Engineer – L1",
+    company: "Teledgers Technology",
+    period: "Feb 2023 – Apr 2025",
+    shortDate: "Feb 2023",
+    blurb: "Frontend delivery on QTL-DLT, TRACEYARN, and related products.",
+    summary:
+      "Owned frontend delivery on client products including QTL-DLT (Angular TRAI DLT compliance), TRACEYARN (React supply-chain traceability), MAT/TELKOSH campaign tooling, NODE TRACING, and SMS-PORTAL — API-integrated UI, client demos, and QA-cycle fixes.",
   },
   {
-    id: "exp-3",
-    role: "Design + Code Intern",
-    company: "Creative Lab",
-    period: "2022 — 2023",
-    summary: "Paired visual design with production-ready interface code.",
+    id: "exp-blockcube",
+    role: "Junior Associate Software Engineer",
+    shortRole: "Jr. Associate Software Engineer",
+    company: "Blockcube Technology Limited",
+    period: "2022 – 2023",
+    shortDate: "2022",
+    blurb: "React, Redux, and Web3/MetaMask UI on client products.",
+    summary:
+      "Worked on frontend for TOKEN INFRA, CRYPTO DIRECTORY, CELENFT, and TELECOM TAP — React, Redux, and Web3/MetaMask UI.",
+  },
+  {
+    id: "exp-unominda",
+    role: "Senior Executive (3D Design)",
+    shortRole: "Sr. Executive (3D Design)",
+    company: "UNO Minda Groups",
+    period: "Jul 2019 – Dec 2020",
+    shortDate: "Jul 2019",
+    blurb: "3D/CATIA design at an automotive OEM supplier.",
+    summary:
+      "3D/CATIA design engineer at an automotive OEM supplier, before moving into software.",
   },
 ];
 
 export const certifications = [
-  { id: "cert-1", title: "Meta Front-End", issuer: "Coursera", year: "2024" },
-  { id: "cert-2", title: "React Nanodegree", issuer: "Udacity", year: "2023" },
-  { id: "cert-3", title: "UI Engineering", issuer: "Figma", year: "2023" },
+  {
+    id: "supp-tokeninfra",
+    title: "TOKEN INFRA",
+    issuer: "Blockchain / Web3",
+    year: "2021–2022",
+  },
+  {
+    id: "supp-edcert",
+    title: "EDCERT / EDCIL",
+    issuer: "EdTech / KYC",
+    year: "2022",
+  },
+  {
+    id: "supp-sms",
+    title: "SMS-PORTAL",
+    issuer: "SMS reporting · Node.js",
+    year: "2023–2024",
+  },
+  {
+    id: "supp-node",
+    title: "NODE TRACING",
+    issuer: "Telecom · Node.js / MongoDB",
+    year: "2024",
+  },
 ];
 
 export const projects = [
   {
-    id: "proj-1",
-    title: "Analytics Dashboard",
-    stack: "React · Node.js · Tailwind",
+    id: "qtl-dlt",
+    title: "QTL-DLT",
+    stack: "Angular · TypeScript · TRAI DLT compliance",
+    summary:
+      "Telecom DLT platform for Principal Entities, Telemarketers, and templates — PE-TM chain approval, Razorpay + dynamic TDS, and a 10-scenario PAN/TAN resubmission matrix.",
     image: projectAnalytics,
     href: "#",
   },
   {
-    id: "proj-2",
-    title: "Finance Mobile App",
-    stack: "React Native · TypeScript",
-    image: projectFinance,
+    id: "traceyarn",
+    title: "TRACEYARN",
+    stack: "React · Redux · Supply-chain QR traceability",
+    summary:
+      "0-to-1 textile traceability UI — repo scaffolding, routing, Redux, manufacturer/retailer dashboards, and QR batch provenance, through client demos and later revival.",
+    image: projectKanban,
     href: "#",
   },
   {
-    id: "proj-3",
-    title: "Kanban Workspace",
-    stack: "Next.js · PostgreSQL",
-    image: projectKanban,
+    id: "arive",
+    title: "ARIVE (Wizni)",
+    stack: "Angular · TypeScript · Mortgage LOS/POS",
+    summary:
+      "UI-fidelity and bug-resolution on an established US mortgage LOS/POS product — VA/FHA/HECM desktop-to-mobile conversion and Document Folders drag-and-drop classification.",
+    image: projectFinance,
     href: "#",
   },
 ];
@@ -232,7 +305,7 @@ export const assets = {
 };
 
 export const bioLines = [
-  { emoji: "🎈", text: profile.birthday },
-  { emoji: "📍", text: profile.role },
-  { emoji: "👨‍💻", text: profile.tagline },
+  { emoji: "👨‍💻", text: "Product UI engineer — React & Angular" },
+  { emoji: "📍", text: profile.location },
+  { emoji: "🎓", text: "Mechanical Engineering → software" },
 ];

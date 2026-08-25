@@ -11,6 +11,8 @@ import {
 } from "lucide-react";
 import { navItems, profile } from "../data/profile";
 import AvatarFrame from "./AvatarFrame";
+import ThemeToggle from "./ThemeToggle";
+import GlassCard from "./ui/GlassCard";
 import {
   FacebookMark,
   FigmaMark,
@@ -30,7 +32,7 @@ const navIcons = {
 
 const connect = [
   { id: "facebook", href: "#", Mark: FacebookMark },
-  { id: "github", href: "https://github.com/", Mark: GithubMark },
+  { id: "github", href: "#", Mark: GithubMark },
   { id: "figma", href: "#", Mark: FigmaMark },
   { id: "instagram", href: "#", Mark: InstagramMark },
 ];
@@ -42,14 +44,17 @@ export default function Sidebar({
   onClose,
 }) {
   return (
-    <aside
+    <GlassCard
+      as="aside"
       className={[
-        "sticky top-0 flex h-screen w-sidebar shrink-0 flex-col self-start bg-sidebar px-space-4 py-space-5",
-        drawer ? "fixed inset-y-0 left-0 z-50 shadow-card" : "sticky top-0",
+        "flex min-h-0 w-sidebar shrink-0 flex-col overflow-hidden px-space-4 py-space-5",
+        drawer
+          ? "fixed inset-y-0 left-0 z-50 h-screen rounded-none shadow-card"
+          : "sticky top-space-6 my-space-6 ml-space-6 h-[calc(100vh-3rem)] max-h-[calc(100vh-3rem)] self-start rounded-xl",
       ].join(" ")}
     >
-      <div className="mb-space-6 flex items-center gap-space-3">
-        <span className="flex h-space-10 w-space-10 items-center justify-center rounded-md bg-accent-gradient font-display text-body-lg">
+      <div className="mb-space-5 flex shrink-0 items-center gap-space-3">
+        <span className="flex h-space-10 w-space-10 items-center justify-center rounded-md bg-accent-gradient font-display text-body-lg text-text-fixed-light">
           {profile.initials}
         </span>
         <div className="min-w-0 flex-1">
@@ -74,11 +79,11 @@ export default function Sidebar({
         )}
       </div>
 
-      <div className="mb-space-6 flex justify-center">
+      <div className="mb-space-5 flex shrink-0 justify-center pb-space-2">
         <AvatarFrame size="desktop" showBadge />
       </div>
 
-      <nav className="flex-1 space-y-space-1">
+      <nav className="min-h-0 flex-1 space-y-space-1 overflow-y-auto pr-space-1 scrollbar-none">
         {navItems.map((item) => {
           const Icon = navIcons[item.id];
           const isActive = active === item.id;
@@ -107,16 +112,20 @@ export default function Sidebar({
         })}
       </nav>
 
-      <div className="mt-auto pt-space-6">
-        <p className="mb-space-3 text-caption text-text-secondary">
+      <div className="mt-space-4 shrink-0 border-t border-border-hairline pt-space-4">
+        <p className="mb-space-2 text-caption text-text-secondary">Theme</p>
+        <div className="mb-space-4">
+          <ThemeToggle compact />
+        </div>
+        <p className="mb-space-2 text-caption text-text-secondary">
           Let&apos;s Connect
         </p>
-        <div className="mb-space-6 flex gap-space-2">
+        <div className="mb-space-4 flex gap-space-2">
           {connect.map(({ id, href, Mark }) => (
             <a
               key={id}
               href={href}
-              className="flex h-space-10 w-space-10 items-center justify-center rounded-md bg-surface-pill text-text-primary"
+              className="flex h-space-10 w-space-10 items-center justify-center rounded-md border border-border-hairline bg-surface-secondary text-text-primary transition-colors hover:bg-surface-pill"
             >
               <Mark className="h-space-5 w-space-5" />
             </a>
@@ -126,6 +135,6 @@ export default function Sidebar({
           © {new Date().getFullYear()} {profile.displayName}
         </p>
       </div>
-    </aside>
+    </GlassCard>
   );
 }

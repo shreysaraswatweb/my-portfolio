@@ -18,7 +18,7 @@ export default function App() {
 
   return (
     <div className="min-h-screen bg-canvas-mid bg-canvas-glow text-text-primary">
-      <div className="mx-auto flex min-h-screen max-w-shell">
+      <div className="mx-auto flex min-h-screen max-w-shell gap-space-5">
         <Sidebar active={active} onNavigate={setActive} />
         <div className="min-w-0 flex-1">
           <DesktopDashboard />

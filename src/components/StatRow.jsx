@@ -81,9 +81,11 @@ function SocialRow() {
             <IconChip>
               <Mark className="h-space-6 w-space-6" />
             </IconChip>
-            <span className="text-caption font-bold text-text-primary">
-              {item.stat}
-            </span>
+            {item.stat ? (
+              <span className="text-caption font-bold text-text-primary">
+                {item.stat}
+              </span>
+            ) : null}
           </motion.a>
         );
       })}

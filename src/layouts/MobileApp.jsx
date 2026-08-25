@@ -6,12 +6,12 @@ import StatRow from "../components/StatRow";
 import SegmentedTabBar from "../components/SegmentedTabBar";
 import ContentGrid from "../components/ContentGrid";
 import ContactGrid from "../components/ContactGrid";
-import ExperienceTimeline from "../components/ExperienceTimeline";
 import FeaturedProjects from "../components/ProjectCard";
 import SkillsCard from "../components/SkillsCard";
 import AchievementCard from "../components/AchievementCard";
 import CertificationGrid from "../components/CertificationTile";
 import MediaPlayer from "../components/MediaPlayer";
+import ThemeToggle from "../components/ThemeToggle";
 
 export default function MobileApp() {
   const [tab, setTab] = useState("Photos");
@@ -22,8 +22,11 @@ export default function MobileApp() {
   }, [tab]);
 
   return (
-    <div className="relative min-h-screen w-full overflow-x-hidden bg-canvas-glow px-space-4 pb-space-12 pt-space-6">
+    <div className="relative min-h-screen w-full overflow-x-hidden px-space-4 pb-space-12 pt-space-6">
       <div className="mx-auto w-full max-w-mobile tablet:max-w-app">
+        <div className="mb-space-4 flex justify-end">
+          <ThemeToggle compact />
+        </div>
         <Hero variant="identity" />
 
         <section className="mt-space-4">
@@ -47,7 +50,6 @@ export default function MobileApp() {
 
         <div className="mt-space-5 space-y-space-4">
           {tab !== "All" ? <FeaturedProjects /> : null}
-          <ExperienceTimeline />
           <SkillsCard />
           <AchievementCard />
           <CertificationGrid />

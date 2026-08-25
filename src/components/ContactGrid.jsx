@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { socials } from "../data/profile";
+import { profile, socials } from "../data/profile";
 import { cardEntrance, staggerContainer, tileTap } from "../lib/motion";
 import GlassCard from "./ui/GlassCard";
 import ExternalLinkIcon from "./ui/ExternalLinkIcon";
@@ -67,14 +67,14 @@ function BentoTile({ item, className = "" }) {
           ) : null}
         </div>
         <ExternalLinkIcon
-          className={isLight ? "text-text-on-accent" : "text-text-primary"}
+          className={isLight ? "text-text-fixed-dark" : "text-text-fixed-light"}
         />
       </div>
       <div>
         <p
           className={[
             "text-body-lg font-semibold",
-            isLight ? "text-text-on-accent" : "text-text-primary",
+            isLight ? "text-text-fixed-dark" : "text-text-fixed-light",
           ].join(" ")}
         >
           {item.label}
@@ -82,7 +82,7 @@ function BentoTile({ item, className = "" }) {
         <p
           className={[
             "mt-space-1 truncate text-caption",
-            isLight ? "text-text-tertiary" : "text-text-primary/80",
+            isLight ? "text-text-tertiary" : "text-text-fixed-light/80",
           ].join(" ")}
         >
           {item.handle}
@@ -112,12 +112,12 @@ function DesktopTile({ item }) {
             className={
               isLight
                 ? "h-space-8 w-space-12"
-                : "h-space-10 w-space-10 text-text-primary"
+                : "h-space-10 w-space-10 text-text-fixed-light"
             }
           />
         ) : null}
         <ExternalLinkIcon
-          className={isLight ? "text-text-on-accent" : "text-text-primary"}
+          className={isLight ? "text-text-fixed-dark" : "text-text-fixed-light"}
         />
       </div>
       <div className="flex items-end justify-between gap-space-3">
@@ -125,7 +125,7 @@ function DesktopTile({ item }) {
           <p
             className={[
               "text-body-lg",
-              isLight ? "text-text-on-accent" : "text-text-primary",
+              isLight ? "text-text-fixed-dark" : "text-text-fixed-light",
             ].join(" ")}
           >
             {item.label}
@@ -133,7 +133,7 @@ function DesktopTile({ item }) {
           <p
             className={[
               "truncate text-caption",
-              isLight ? "text-text-tertiary" : "text-text-primary/75",
+              isLight ? "text-text-tertiary" : "text-text-fixed-light/75",
             ].join(" ")}
           >
             {item.handle}
@@ -225,7 +225,7 @@ export function QuickLinks() {
         >
           DEV.to
         </a>
-        <PillButton href="#contact" variant="ghost" className="w-full">
+        <PillButton href={profile.cvUrl || "#contact"} variant="ghost" className="w-full">
           Download CV
         </PillButton>
       </div>

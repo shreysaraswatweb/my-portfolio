@@ -19,27 +19,29 @@ export default {
     },
     extend: {
       colors: {
-        "canvas-top": "#2A1A1F",
-        "canvas-mid": "#12141C",
-        "canvas-bottom": "#2A1240",
-        sidebar: "#0B0D14",
-        "surface-card": "rgba(30, 34, 48, 0.55)",
-        "surface-secondary": "rgba(255, 255, 255, 0.04)",
-        "surface-pill": "#242B3D",
-        "surface-elevated": "#131722",
+        "canvas-top": "rgb(var(--rgb-canvas-top) / <alpha-value>)",
+        "canvas-mid": "rgb(var(--rgb-canvas-mid) / <alpha-value>)",
+        "canvas-bottom": "rgb(var(--rgb-canvas-bottom) / <alpha-value>)",
+        sidebar: "rgb(var(--rgb-sidebar) / <alpha-value>)",
+        "surface-card": "var(--color-surface-card)",
+        "surface-secondary": "var(--color-surface-secondary)",
+        "surface-pill": "rgb(var(--rgb-surface-pill) / <alpha-value>)",
+        "surface-elevated": "rgb(var(--rgb-surface-elevated) / <alpha-value>)",
         "accent-primary": "#F5A623",
         "accent-violet": "#8B5CF6",
         "accent-end": "#A855F7",
         facebook: "#1877F2",
         "devto-card": "#F4F4F5",
-        "text-primary": "#FFFFFF",
-        "text-secondary": "#9AA1B2",
-        "text-tertiary": "#6B7280",
-        "text-on-accent": "#12141C",
+        "text-primary": "rgb(var(--rgb-text-primary) / <alpha-value>)",
+        "text-secondary": "rgb(var(--rgb-text-secondary) / <alpha-value>)",
+        "text-tertiary": "rgb(var(--rgb-text-tertiary) / <alpha-value>)",
+        "text-on-accent": "rgb(var(--rgb-text-on-accent) / <alpha-value>)",
+        "text-fixed-light": "#FFFFFF",
+        "text-fixed-dark": "#12141C",
         "status-available": "#22C55E",
-        "status-playing": "#8B5CF6",
-        "border-hairline": "rgba(255, 255, 255, 0.08)",
-        "border-glass": "rgba(255, 255, 255, 0.12)",
+        "status-playing": "rgb(var(--rgb-status-playing) / <alpha-value>)",
+        "border-hairline": "var(--color-border-hairline)",
+        "border-glass": "var(--color-border-glass)",
         "nav-active": "rgba(139, 92, 246, 0.28)",
       },
       spacing: {
@@ -113,7 +115,7 @@ export default {
         micro: ["0.6875rem", { lineHeight: "1.3", fontWeight: "600" }],
       },
       boxShadow: {
-        card: "0 8px 32px rgba(0, 0, 0, 0.35)",
+        card: "var(--shadow-card)",
         avatar: "0 4px 20px rgba(245, 166, 35, 0.25)",
         icon: "0 10px 18px rgba(0, 0, 0, 0.28)",
       },
@@ -122,10 +124,10 @@ export default {
       },
       backgroundImage: {
         "accent-gradient": "linear-gradient(90deg, #F5A623 0%, #A855F7 100%)",
-        "canvas-glow":
-          "radial-gradient(ellipse 80% 50% at 18% -8%, #2A1A1F 0%, transparent 58%), radial-gradient(ellipse 70% 45% at 85% 108%, #2A1240 0%, transparent 52%)",
-        "nav-active-fill":
-          "linear-gradient(90deg, rgba(139, 92, 246, 0.35) 0%, rgba(245, 166, 35, 0.08) 100%)",
+        "timeline-track":
+          "linear-gradient(90deg, #8B5CF6 0%, #A855F7 48%, #F5A623 100%)",
+        "canvas-glow": "var(--bg-canvas-glow)",
+        "nav-active-fill": "var(--bg-nav-active-fill)",
         "email-card":
           "linear-gradient(165deg, #3A5BA0 0%, #243056 52%, #1A2238 100%)",
         "facebook-card":

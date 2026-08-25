@@ -19,7 +19,7 @@ export function ProjectCard({ project }) {
         className="h-project-thumb w-full object-cover"
       />
       <div className="absolute right-space-3 top-space-3">
-        <ExternalLinkIcon className="text-text-primary" />
+        <ExternalLinkIcon className="text-text-fixed-light" />
       </div>
       <div className="bg-surface-elevated p-space-4">
         <h3 className="text-body-lg text-text-primary">{project.title}</h3>

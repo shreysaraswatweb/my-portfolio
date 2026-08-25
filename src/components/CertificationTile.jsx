@@ -26,7 +26,7 @@ export default function CertificationGrid() {
   return (
     <GlassCard id="blog" className="rounded-xl p-space-6">
       <h2 className="mb-space-4 font-display text-h2 text-text-primary">
-        Certifications
+        More projects
       </h2>
       <motion.div
         variants={staggerContainer}
