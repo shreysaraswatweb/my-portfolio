@@ -11,8 +11,10 @@ import {
 import { motion } from "framer-motion";
 import { experience } from "../data/profile";
 import { cardEntrance, staggerContainer } from "../lib/motion";
+import { easeOutExpo } from "../lib/scroll";
 import GlassCard from "./ui/GlassCard";
 import IconChip from "./ui/IconChip";
+import SmoothOverflow from "./SmoothOverflow";
 
 const tones = [
   {
@@ -96,60 +98,64 @@ function EdgeArrow({ label, onClick, side }) {
   );
 }
 
-function easeInOutCubic(t) {
-  return t < 0.5 ? 4 * t * t * t : 1 - (-2 * t + 2) ** 3 / 2;
-}
-
 export default function ExperienceTimeline() {
   const scrollerRef = useRef(null);
-  const scrollFrame = useRef(0);
   const [canScroll, setCanScroll] = useState({ left: false, right: false });
 
   const updateScroll = useCallback(() => {
-    const node = scrollerRef.current;
-    if (!node) return;
-    const max = node.scrollWidth - node.clientWidth;
+    const wrapper = scrollerRef.current?.wrapper;
+    if (!wrapper) return;
+    const max = wrapper.scrollWidth - wrapper.clientWidth;
     setCanScroll({
-      left: node.scrollLeft > 8,
-      right: max > 8 && node.scrollLeft < max - 8,
+      left: wrapper.scrollLeft > 8,
+      right: max > 8 && wrapper.scrollLeft < max - 8,
     });
   }, []);
 
   useEffect(() => {
-    const node = scrollerRef.current;
-    if (!node) return;
-    updateScroll();
-    node.addEventListener("scroll", updateScroll, { passive: true });
-    const observer = new ResizeObserver(updateScroll);
-    observer.observe(node);
+    let cleanup = () => {};
+    let frame = 0;
+
+    const bind = () => {
+      const wrapper = scrollerRef.current?.wrapper;
+      if (!wrapper) {
+        frame = requestAnimationFrame(bind);
+        return;
+      }
+      updateScroll();
+      wrapper.addEventListener("scroll", updateScroll, { passive: true });
+      const observer = new ResizeObserver(updateScroll);
+      observer.observe(wrapper);
+      cleanup = () => {
+        wrapper.removeEventListener("scroll", updateScroll);
+        observer.disconnect();
+      };
+    };
+
+    bind();
     return () => {
-      node.removeEventListener("scroll", updateScroll);
-      observer.disconnect();
-      cancelAnimationFrame(scrollFrame.current);
+      cancelAnimationFrame(frame);
+      cleanup();
     };
   }, [updateScroll]);
 
   const scrollByPage = (direction) => {
-    const node = scrollerRef.current;
-    if (!node) return;
+    const wrapper = scrollerRef.current?.wrapper;
+    const lenis = scrollerRef.current?.lenis;
+    if (!wrapper) return;
 
-    const distance = direction * Math.min(node.clientWidth * 0.7, 320);
-    const start = node.scrollLeft;
-    const end = Math.max(0, Math.min(node.scrollWidth - node.clientWidth, start + distance));
-    const duration = 850;
-    const started = performance.now();
+    const distance = direction * Math.min(wrapper.clientWidth * 0.7, 320);
+    const start = wrapper.scrollLeft;
+    const end = Math.max(
+      0,
+      Math.min(wrapper.scrollWidth - wrapper.clientWidth, start + distance),
+    );
 
-    cancelAnimationFrame(scrollFrame.current);
-
-    const step = (now) => {
-      const progress = Math.min(1, (now - started) / duration);
-      node.scrollLeft = start + (end - start) * easeInOutCubic(progress);
-      if (progress < 1) {
-        scrollFrame.current = requestAnimationFrame(step);
-      }
-    };
-
-    scrollFrame.current = requestAnimationFrame(step);
+    if (lenis) {
+      lenis.scrollTo(end, { duration: 0.85, easing: easeOutExpo });
+      return;
+    }
+    wrapper.scrollTo({ left: end, behavior: "smooth" });
   };
 
   return (
@@ -171,7 +177,7 @@ export default function ExperienceTimeline() {
             </p>
           </div>
         </div>
-        <a href="#experience" className="shrink-0 text-caption text-accent-violet">
+        <a href="#experience" className="hover-link shrink-0 text-caption text-accent-violet">
           View all
         </a>
       </div>
@@ -187,7 +193,7 @@ export default function ExperienceTimeline() {
           ) : null}
         </div>
 
-        <div
+        <SmoothOverflow
           ref={scrollerRef}
           className="min-w-0 flex-1 overflow-x-auto overflow-y-visible pb-space-2 scrollbar-none"
         >
@@ -289,7 +295,7 @@ export default function ExperienceTimeline() {
               })}
             </motion.ol>
           </div>
-        </div>
+        </SmoothOverflow>
 
         <div className="mx-[2px] flex w-[15px] shrink-0 items-center justify-center overflow-visible">
           {canScroll.right ? (

@@ -35,7 +35,7 @@ export default function ThemeToggle({ compact = false }) {
               compact ? "flex-1" : "",
               selected
                 ? "bg-surface-elevated text-text-primary shadow-card"
-                : "text-text-secondary hover:text-text-primary",
+                : "hover-chip text-text-secondary",
             ].join(" ")}
           >
             <Icon className="h-space-4 w-space-4" strokeWidth={1.75} />

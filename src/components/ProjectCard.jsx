@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { projects } from "../data/profile";
-import { cardEntrance, staggerContainer, tileTap } from "../lib/motion";
+import { cardEntrance, staggerContainer, hoverLift } from "../lib/motion";
 import GlassCard from "./ui/GlassCard";
 import ExternalLinkIcon from "./ui/ExternalLinkIcon";
 
@@ -9,9 +9,9 @@ export function ProjectCard({ project }) {
   return (
     <motion.a
       href={project.href}
-      {...tileTap}
+      {...hoverLift}
       variants={cardEntrance}
-      className="relative min-w-project-card flex-1 overflow-hidden rounded-lg"
+      className="hover-media relative min-w-project-card flex-1 overflow-hidden rounded-lg"
     >
       <img
         src={project.image}
@@ -40,7 +40,7 @@ export default function FeaturedProjects() {
         <h2 className="font-display text-h2 text-text-primary">
           Featured Projects
         </h2>
-        <a href="#projects" className="text-caption text-accent-violet">
+        <a href="#projects" className="hover-link text-caption text-accent-violet">
           View all projects
         </a>
       </div>

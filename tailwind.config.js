@@ -119,6 +119,12 @@ export default {
         avatar: "0 4px 20px rgba(245, 166, 35, 0.25)",
         icon: "0 10px 18px rgba(0, 0, 0, 0.28)",
       },
+      transitionDuration: {
+        motion: "280ms",
+      },
+      transitionTimingFunction: {
+        motion: "cubic-bezier(0.16, 1, 0.3, 1)",
+      },
       backdropBlur: {
         glass: "24px",
       },

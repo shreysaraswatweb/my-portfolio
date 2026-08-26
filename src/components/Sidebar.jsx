@@ -13,6 +13,7 @@ import { navItems, profile } from "../data/profile";
 import AvatarFrame from "./AvatarFrame";
 import ThemeToggle from "./ThemeToggle";
 import GlassCard from "./ui/GlassCard";
+import SmoothOverflow from "./SmoothOverflow";
 import {
   FacebookMark,
   FigmaMark,
@@ -83,7 +84,11 @@ export default function Sidebar({
         <AvatarFrame size="desktop" showBadge />
       </div>
 
-      <nav className="min-h-0 flex-1 space-y-space-1 overflow-y-auto pr-space-1 scrollbar-none">
+      <SmoothOverflow
+        axis="y"
+        className="min-h-0 flex-1 overflow-y-auto pr-space-1 scrollbar-none"
+      >
+        <nav className="space-y-space-1">
         {navItems.map((item) => {
           const Icon = navIcons[item.id];
           const isActive = active === item.id;
@@ -96,7 +101,7 @@ export default function Sidebar({
                 "flex items-center gap-space-3 rounded-lg px-space-4 py-space-3 text-body",
                 isActive
                   ? "bg-nav-active-fill text-text-primary"
-                  : "text-text-secondary hover:bg-surface-secondary",
+                  : "hover-nav text-text-secondary",
               ].join(" ")}
             >
               <Icon
@@ -110,7 +115,8 @@ export default function Sidebar({
             </a>
           );
         })}
-      </nav>
+        </nav>
+      </SmoothOverflow>
 
       <div className="mt-space-4 shrink-0 border-t border-border-hairline pt-space-4">
         <p className="mb-space-2 text-caption text-text-secondary">Theme</p>
@@ -125,7 +131,7 @@ export default function Sidebar({
             <a
               key={id}
               href={href}
-              className="flex h-space-10 w-space-10 items-center justify-center rounded-md border border-border-hairline bg-surface-secondary text-text-primary transition-colors hover:bg-surface-pill"
+              className="hover-icon flex h-space-10 w-space-10 items-center justify-center rounded-md border border-border-hairline bg-surface-secondary text-text-primary"
             >
               <Mark className="h-space-5 w-space-5" />
             </a>

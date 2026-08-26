@@ -24,7 +24,7 @@ export default function SegmentedTabBar({ value, onChange }) {
           onClick={() => onChange(tab)}
           className={[
             "pb-space-2 text-body",
-            value === tab ? "text-text-primary" : "text-text-secondary",
+            value === tab ? "text-text-primary" : "hover-link text-text-secondary",
           ].join(" ")}
         >
           {tab}

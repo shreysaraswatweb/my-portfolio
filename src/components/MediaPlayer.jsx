@@ -11,7 +11,7 @@ export default function MediaPlayer() {
     <GlassCard className="rounded-xl p-space-5">
       <div className="mb-space-4 flex items-center justify-between">
         <h2 className="font-display text-h2 text-text-primary">My Vibes</h2>
-        <span className="text-caption text-accent-violet">View all</span>
+        <span className="hover-link text-caption text-accent-violet">View all</span>
       </div>
       <div className="grid gap-space-4 desktop:grid-cols-[minmax(0,1fr)_minmax(0,1fr)]">
         <div>
@@ -28,7 +28,7 @@ export default function MediaPlayer() {
         </div>
         <ul className="space-y-space-3">
           {tracks.map((track) => (
-            <li key={track.id} className="flex items-center gap-space-3">
+            <li key={track.id} className="hover-chip flex items-center gap-space-3 rounded-md px-space-2 py-space-1">
               <img
                 src={track.cover}
                 alt=""
@@ -58,7 +58,7 @@ export default function MediaPlayer() {
           <button
             type="button"
             onClick={() => setPlaying((value) => !value)}
-            className="flex h-space-10 w-space-10 items-center justify-center rounded-full bg-text-primary text-text-on-accent"
+            className="hover-lift flex h-space-10 w-space-10 items-center justify-center rounded-full bg-text-primary text-text-on-accent"
             aria-label={playing ? "Pause" : "Play"}
           >
             {playing ? (

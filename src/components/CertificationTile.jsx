@@ -1,14 +1,14 @@
 import { motion } from "framer-motion";
 import { Award } from "lucide-react";
 import { certifications } from "../data/profile";
-import { cardEntrance, staggerContainer, tileTap } from "../lib/motion";
+import { cardEntrance, staggerContainer, hoverLift } from "../lib/motion";
 import GlassCard from "./ui/GlassCard";
 
 export function CertificationTile({ cert }) {
   return (
     <motion.article
       variants={cardEntrance}
-      {...tileTap}
+      {...hoverLift}
       className="rounded-lg bg-surface-secondary p-space-4"
     >
       <div className="mb-space-3 flex h-space-10 w-space-10 items-center justify-center rounded-md bg-surface-pill text-accent-primary">

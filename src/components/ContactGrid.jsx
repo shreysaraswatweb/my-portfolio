@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import { profile, socials } from "../data/profile";
-import { cardEntrance, staggerContainer, tileTap } from "../lib/motion";
+import { cardEntrance, staggerContainer, hoverLift } from "../lib/motion";
 import GlassCard from "./ui/GlassCard";
 import ExternalLinkIcon from "./ui/ExternalLinkIcon";
 import PillButton from "./ui/PillButton";
@@ -50,7 +50,7 @@ function BentoTile({ item, className = "" }) {
     <motion.a
       href={item.href}
       variants={cardEntrance}
-      {...tileTap}
+      {...hoverLift}
       className={[
         "relative flex min-h-tile min-w-0 flex-col justify-between rounded-xl p-space-5 shadow-card",
         bentoSurfaces[item.variant] || "bg-surface-card border-border-glass",
@@ -100,7 +100,7 @@ function DesktopTile({ item }) {
     <motion.a
       href={item.href}
       variants={cardEntrance}
-      {...tileTap}
+      {...hoverLift}
       className={[
         "relative flex min-h-tile min-w-0 flex-col justify-between rounded-lg p-space-5 shadow-card",
         bentoSurfaces[item.variant] || "bg-surface-card border-border-glass",
@@ -208,7 +208,7 @@ export function QuickLinks() {
             <a
               key={item.id}
               href={item.href}
-              className="flex min-w-0 flex-col items-center gap-space-2 rounded-lg bg-surface-secondary px-space-3 py-space-4"
+              className="hover-lift flex min-w-0 flex-col items-center gap-space-2 rounded-lg bg-surface-secondary px-space-3 py-space-4"
             >
               <Mark className="h-space-8 w-space-8 text-text-primary" />
               <span className="text-caption text-text-secondary">
@@ -221,7 +221,7 @@ export function QuickLinks() {
       <div className="mt-space-3 flex flex-col gap-space-3">
         <a
           href={devto.href}
-          className="flex items-center justify-center rounded-lg bg-text-primary py-space-3 text-caption font-bold text-text-on-accent"
+          className="hover-lift flex items-center justify-center rounded-lg bg-text-primary py-space-3 text-caption font-bold text-text-on-accent"
         >
           DEV.to
         </a>

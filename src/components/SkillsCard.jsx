@@ -7,7 +7,7 @@ function SkillChips({ items }) {
       {items.map((skill) => (
         <span
           key={skill}
-          className="rounded-full bg-surface-pill px-space-3 py-space-2 text-caption text-text-secondary"
+          className="hover-chip rounded-full bg-surface-pill px-space-3 py-space-2 text-caption text-text-secondary"
         >
           {skill}
         </span>
@@ -23,7 +23,7 @@ export default function SkillsCard() {
         <h2 className="font-display text-h2 text-text-primary">
           Skills & Tools
         </h2>
-        <a href="#skills" className="text-caption text-accent-violet">
+        <a href="#skills" className="hover-link text-caption text-accent-violet">
           View all
         </a>
       </div>

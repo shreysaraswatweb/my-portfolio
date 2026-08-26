@@ -1,7 +1,7 @@
 import { Briefcase, CalendarDays, Cake, MapPin } from "lucide-react";
 import { motion } from "framer-motion";
 import { infoStats, socials } from "../data/profile";
-import { cardEntrance, staggerContainer, tileTap } from "../lib/motion";
+import { cardEntrance, staggerContainer, hoverLift } from "../lib/motion";
 import GlassCard from "./ui/GlassCard";
 import IconChip from "./ui/IconChip";
 import {
@@ -75,7 +75,7 @@ function SocialRow() {
             key={item.id}
             href={item.href}
             variants={cardEntrance}
-            {...tileTap}
+            {...hoverLift}
             className="flex min-w-chip flex-col items-center gap-space-2"
           >
             <IconChip>

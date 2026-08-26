@@ -5,7 +5,7 @@ export const cardEntrance = {
   visible: {
     opacity: 1,
     y: 0,
-    transition: { duration: 0.28, ease: "easeOut" },
+    transition: { duration: 0.28, ease: easeOut },
   },
 };
 
@@ -20,8 +20,14 @@ export const tileTap = {
   whileTap: { scale: 0.97 },
 };
 
+export const hoverLift = {
+  whileHover: { y: -4 },
+  whileTap: { scale: 0.97 },
+  transition: { duration: 0.28, ease: easeOut },
+};
+
 export const fadeUp = (delay = 0) => ({
   initial: { opacity: 0, y: 10 },
   animate: { opacity: 1, y: 0 },
-  transition: { duration: 0.28, ease: "easeOut", delay },
+  transition: { duration: 0.28, ease: easeOut, delay },
 });
