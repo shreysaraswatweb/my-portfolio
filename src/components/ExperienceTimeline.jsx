@@ -74,7 +74,7 @@ function ExperienceDescriptionCard({ blurb, cardClass }) {
           transition={CARD_HEIGHT_TRANSITION}
           className="overflow-hidden"
         >
-          <p className="break-words text-caption leading-[19.5px] text-text-secondary [overflow-wrap:anywhere]">
+          <p className="wrap-anywhere text-caption leading-[19.5px] text-text-secondary">
             {blurb}
           </p>
         </motion.div>
