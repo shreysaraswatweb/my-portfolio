@@ -91,9 +91,9 @@ function EdgeArrow({ label, onClick, side }) {
       type="button"
       aria-label={label}
       onClick={onClick}
-      className="flex h-space-8 w-[15px] items-center justify-center overflow-visible text-text-tertiary transition-colors duration-200 hover:text-text-primary"
+      className="flex h-space-8 w-3.75 items-center justify-center overflow-visible text-text-tertiary transition-colors duration-200 hover:text-text-primary"
     >
-      <Icon className="h-[18px] w-[18px] shrink-0" strokeWidth={2} />
+      <Icon className="h-4.5 w-4.5 shrink-0" strokeWidth={2} />
     </button>
   );
 }
@@ -183,7 +183,7 @@ export default function ExperienceTimeline() {
       </div>
 
       <div className="-mx-space-6 flex items-center">
-        <div className="mx-[2px] flex w-[15px] shrink-0 items-center justify-center overflow-visible">
+        <div className="mx-0.5 flex w-3.75 shrink-0 items-center justify-center overflow-visible">
           {canScroll.left ? (
             <EdgeArrow
               label="Show earlier roles"
@@ -197,7 +197,7 @@ export default function ExperienceTimeline() {
           ref={scrollerRef}
           className="min-w-0 flex-1 overflow-x-auto overflow-y-visible pb-space-2 scrollbar-none"
         >
-          <div className="min-w-[56rem]">
+          <div className="min-w-4xl">
             <div className="grid grid-cols-4">
               {journey.map((item, index) => {
                 const tone = tones[index] ?? tones[0];
@@ -218,7 +218,7 @@ export default function ExperienceTimeline() {
             <div className="relative my-space-3 grid grid-cols-4">
               <span
                 aria-hidden
-                className="pointer-events-none absolute left-[12.5%] right-[12.5%] top-1/2 h-[3px] -translate-y-1/2 rounded-full bg-timeline-track"
+                className="pointer-events-none absolute left-[12.5%] right-[12.5%] top-1/2 h-0.75 -translate-y-1/2 rounded-full bg-timeline-track"
               />
               {journey.map((item, index) => {
                 const tone = tones[index] ?? tones[0];
@@ -257,11 +257,12 @@ export default function ExperienceTimeline() {
                   <motion.li
                     key={item.id}
                     variants={cardEntrance}
+                    
                     className={[
                       "relative flex flex-col items-center px-space-3 text-center",
                       last ? "" : "border-r border-dashed border-border-hairline",
-                      "has-[:hover]:z-30 has-[:focus-visible]:z-30",
-                    ].join(" ")}
+                      "has-[:hover,:focus-visible]:z-30",
+                    ].filter(Boolean).join(" ")}
                   >
                     <div className="flex h-space-12 w-full items-center justify-center px-space-1">
                       <h3 className="text-center text-caption font-medium leading-tight text-text-primary">
@@ -297,7 +298,7 @@ export default function ExperienceTimeline() {
           </div>
         </SmoothOverflow>
 
-        <div className="mx-[2px] flex w-[15px] shrink-0 items-center justify-center overflow-visible">
+        <div className="mx-0.5 flex w-3.75 shrink-0 items-center justify-center overflow-visible">
           {canScroll.right ? (
             <EdgeArrow
               label="Show later roles"
