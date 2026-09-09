@@ -40,12 +40,6 @@ npm run preview  # preview the build
 npm run lint     # ESLint
 ```
 
-## Customize
-
-Most copy, links, skills, projects, and experience live in [`src/data/profile.jsx`](src/data/profile.jsx).
-
-Replace the avatar later by swapping [`src/assets/avatar.png`](src/assets/avatar.png). Visual tokens stay in [`design-system.json`](design-system.json) and [`tailwind.config.js`](tailwind.config.js).
-
 ## License
 
 Private project — all rights reserved.
