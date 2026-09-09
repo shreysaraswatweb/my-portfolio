@@ -4,7 +4,7 @@ Personal developer portfolio for **Shrey Saraswat**, a frontend-focused software
 
 Professional copy is sourced from [`PORTFOLIO_INTELLIGENCE.md`](PORTFOLIO_INTELLIGENCE.md) — do not invent employers, metrics, skills, or contact details.
 
-**Live site:** [https://portfolioweb-shrey-saraswat-portfolio.vercel.app/](https://portfolioweb-shrey-saraswat-portfolio.vercel.app/)
+**Live site:** [https://shrey-saraswat-portfolio.vercel.app/](https://shrey-saraswat-portfolio.vercel.app/)
 
 ## Features
 
