@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { SpeedInsights } from "@vercel/speed-insights/react";
+import { Analytics } from "@vercel/analytics/react";
 
 import Sidebar from "./components/Sidebar";
 import MobileApp from "./layouts/MobileApp";
@@ -29,6 +30,7 @@ export default function App() {
       )}
 
       <SpeedInsights />
+      <Analytics />
     </>
   );
 }
