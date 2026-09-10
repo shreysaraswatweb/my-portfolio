@@ -5,7 +5,7 @@ import Sidebar from "./components/Sidebar";
 import MobileApp from "./layouts/MobileApp";
 import DesktopDashboard from "./layouts/DesktopDashboard";
 import useDesktop from "./hooks/useDesktop";
-
+import { Analytics } from "@vercel/analytics/react";
 export default function App() {
   const isDesktop = useDesktop();
   const [active, setActive] = useState("home");
@@ -29,6 +29,7 @@ export default function App() {
       )}
 
       <SpeedInsights />
+      <Analytics />
     </>
   );
 }
