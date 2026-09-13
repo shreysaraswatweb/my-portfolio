@@ -18,7 +18,7 @@ export default function TopBar({ onMenu }) {
       <button
         type="button"
         onClick={onMenu}
-        className="text-text-primary"
+        className="flex min-h-[44px] min-w-[44px] items-center justify-center -mr-2 text-text-primary"
         aria-label="Open navigation"
       >
         <Menu className="h-space-6 w-space-6" strokeWidth={1.75} />

@@ -37,11 +37,17 @@ export default function AvatarFrame({
           src={assets.avatar}
           alt=""
           aria-hidden
+          width={256}
+          height={256}
+          loading="lazy"
           className="absolute inset-0 h-full w-full object-contain"
         />
         <motion.img
           src={assets.avatar}
-          alt={`${profile.displayName} avatar`}
+          alt={`${profile.displayName} — Frontend Developer profile avatar`}
+          width={256}
+          height={256}
+          loading="lazy"
           className="relative h-full w-full object-contain"
           animate={float ? imageMotion : false}
         />

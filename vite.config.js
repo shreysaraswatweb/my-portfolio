@@ -10,5 +10,31 @@ export default defineConfig({
       "@": fileURLToPath(new URL("./src", import.meta.url)),
     },
   },
+  optimizeDeps: {
+    include: ["react", "react-dom", "framer-motion", "lenis"],
+  },
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks(id) {
+          if (id.includes("node_modules")) {
+            if (id.includes("react") || id.includes("react-dom")) {
+              return "vendor-react";
+            }
+            if (id.includes("framer-motion")) {
+              return "vendor-framer";
+            }
+            if (
+              id.includes("lenis") ||
+              id.includes("lucide-react") ||
+              id.includes("@vercel")
+            ) {
+              return "vendor-misc";
+            }
+          }
+        },
+      },
+    },
+  },
 });
 

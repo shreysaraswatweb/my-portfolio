@@ -31,7 +31,7 @@
   border-radius: 50%;
   background: rgba(105, 46, 190, 0.12);
   filter: blur(100px);
-  opacity: 0.6;
+  opacity: 0;
   pointer-events: none;
   transition:
     background 0.75s ease,

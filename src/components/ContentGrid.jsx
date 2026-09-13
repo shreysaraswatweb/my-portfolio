@@ -18,8 +18,13 @@ export default function ContentGrid({ items }) {
           className="hover-media aspect-square overflow-hidden rounded-lg"
         >
           <img
-            src={item.src}
+            src={item.srcSmall || item.src}
+            srcSet={item.srcSmall ? `${item.srcSmall} 200w, ${item.src} 400w` : undefined}
+            sizes="(max-width: 640px) 120px, 200px"
             alt={item.alt}
+            width={200}
+            height={200}
+            loading="lazy"
             className="h-full w-full object-cover"
           />
         </motion.button>

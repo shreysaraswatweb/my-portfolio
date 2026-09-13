@@ -32,10 +32,10 @@ const navIcons = {
 };
 
 const connect = [
-  { id: "facebook", href: "#", Mark: FacebookMark },
-  { id: "github", href: "#", Mark: GithubMark },
-  { id: "figma", href: "#", Mark: FigmaMark },
-  { id: "instagram", href: "#", Mark: InstagramMark },
+  { id: "facebook", label: "Facebook", href: "#", Mark: FacebookMark },
+  { id: "github", label: "GitHub", href: "#", Mark: GithubMark },
+  { id: "figma", label: "Figma", href: "#", Mark: FigmaMark },
+  { id: "instagram", label: "Instagram", href: "#", Mark: InstagramMark },
 ];
 
 export default function Sidebar({
@@ -70,7 +70,7 @@ export default function Sidebar({
           <button
             type="button"
             onClick={onClose}
-            className="text-text-secondary"
+            className="flex min-h-[44px] min-w-[44px] items-center justify-center -mr-2 text-text-secondary"
             aria-label="Close menu"
           >
             <X className="h-space-5 w-space-5" />
@@ -118,7 +118,7 @@ export default function Sidebar({
         </nav>
       </SmoothOverflow>
 
-      <div className="mt-space-4 shrink-0 border-t border-border-hairline pt-space-4">
+      <footer className="mt-space-4 shrink-0 border-t border-border-hairline pt-space-4">
         <p className="mb-space-2 text-caption text-text-secondary">Theme</p>
         <div className="mb-space-4">
           <ThemeToggle compact />
@@ -127,10 +127,11 @@ export default function Sidebar({
           Let&apos;s Connect
         </p>
         <div className="mb-space-4 flex gap-space-2">
-          {connect.map(({ id, href, Mark }) => (
+          {connect.map(({ id, label, href, Mark }) => (
             <a
               key={id}
               href={href}
+              aria-label={label}
               className="hover-icon flex h-space-10 w-space-10 items-center justify-center rounded-md border border-border-hairline bg-surface-secondary text-text-primary"
             >
               <Mark className="h-space-5 w-space-5" />
@@ -138,9 +139,9 @@ export default function Sidebar({
           ))}
         </div>
         <p className="text-micro text-text-tertiary">
-          © {new Date().getFullYear()} {profile.displayName}
+          © {new Date().getFullYear()} {profile.displayName} — {profile.role}
         </p>
-      </div>
+      </footer>
     </GlassCard>
   );
 }

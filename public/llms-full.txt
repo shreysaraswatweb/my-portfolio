@@ -1,0 +1,33 @@
+# Shrey Saraswat — Product-UI Engineer Portfolio (Full Document)
+
+> Comprehensive background, technical skill set, work history, and project portfolio for Shrey Saraswat.
+
+## Overview
+- Name: Shrey Saraswat
+- Profession: Software Developer / Product-UI Engineer
+- Location: Gurugram, India
+- Experience: ~4.5 years in software engineering
+- Education: B.Tech in Mechanical Engineering, GLA University (2015–2019)
+- Focus: Turning design specifications and Figma into production-ready, accessible, API-integrated interfaces with React and Angular.
+
+## Core Competencies
+- Frontend Frameworks: React 19, Angular, Next.js, Vite
+- Languages: TypeScript, JavaScript (ESNext), HTML5, CSS3
+- Styling & Design Systems: Tailwind CSS v4, Vanilla CSS, CSS Modules, Framer Motion, responsive design, WCAG accessibility
+- State & APIs: REST API integration, state management, WebSocket / SSE
+- Developer Experience & Tooling: Git, Webpack, ESLint, Node.js, Vercel
+
+## Professional Experience
+- Senior Software Developer (2021–Present): Frontend engineering across client products in telecom-regulatory, payments, blockchain, supply-chain, EdTech, and mortgage-lending domains. Currently delivering high-fidelity design-system and responsive UI for fintech lending products.
+- Senior Executive 3D Design, UNO Minda Groups (2019–2021): 3D modeling, engineering design, and specification analysis before transitioning to software development.
+
+## Featured Projects
+1. Enterprise Analytics Dashboard: Telemetry data visualization, live metric cards, interactive charts, and real-time alerts. Built with React and Tailwind CSS.
+2. Finance Management Platform: Expense logging, multi-currency wallet tracking, and transaction categorization. Built with modern component architecture.
+3. Agile Kanban Board: Task management interface with drag-and-drop workflows, milestone tracking, and team activity streams.
+
+## Contact & Links
+- Website: https://shrey-saraswat-portfolio.vercel.app/
+- GitHub: https://github.com/
+- Figma: https://figma.com/
+- DEV.to: https://dev.to/

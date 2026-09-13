@@ -1,23 +1,37 @@
-import avatar from "../assets/avatar.png";
-import workstation from "../assets/workstation.png";
-import projectAnalytics from "../assets/project-analytics.png";
-import projectFinance from "../assets/project-finance.png";
-import projectKanban from "../assets/project-kanban.png";
-import galleryPortrait from "../assets/gallery-portrait.png";
-import galleryHouse from "../assets/gallery-house.png";
-import galleryGeo from "../assets/gallery-geo.png";
-import gallerySign from "../assets/gallery-sign.png";
-import galleryHeart from "../assets/gallery-heart.png";
-import gallerySunset from "../assets/gallery-sunset.png";
-import albumLofi from "../assets/album-lofi.png";
+import avatar from "../assets/webp/avatar.webp";
+import workstation from "../assets/webp/workstation.webp";
+import workstation400 from "../assets/webp/workstation-400.webp";
+import projectAnalytics from "../assets/webp/project-analytics.webp";
+import projectAnalytics320 from "../assets/webp/project-analytics-320.webp";
+import projectFinance from "../assets/webp/project-finance.webp";
+import projectFinance320 from "../assets/webp/project-finance-320.webp";
+import projectKanban from "../assets/webp/project-kanban.webp";
+import projectKanban320 from "../assets/webp/project-kanban-320.webp";
+import galleryPortrait from "../assets/webp/gallery-portrait.webp";
+import galleryPortrait200 from "../assets/webp/gallery-portrait-200.webp";
+import galleryHouse from "../assets/webp/gallery-house.webp";
+import galleryHouse200 from "../assets/webp/gallery-house-200.webp";
+import galleryGeo from "../assets/webp/gallery-geo.webp";
+import galleryGeo200 from "../assets/webp/gallery-geo-200.webp";
+import galleryGeo80 from "../assets/webp/gallery-geo-80.webp";
+import gallerySign from "../assets/webp/gallery-sign.webp";
+import gallerySign200 from "../assets/webp/gallery-sign-200.webp";
+import galleryHeart from "../assets/webp/gallery-heart.webp";
+import galleryHeart200 from "../assets/webp/gallery-heart-200.webp";
+import gallerySunset from "../assets/webp/gallery-sunset.webp";
+import gallerySunset200 from "../assets/webp/gallery-sunset-200.webp";
+import gallerySunset80 from "../assets/webp/gallery-sunset-80.webp";
+import albumLofi from "../assets/webp/album-lofi.webp";
+import albumLofi200 from "../assets/webp/album-lofi-200.webp";
+import albumLofi80 from "../assets/webp/album-lofi-80.webp";
 
 export const profile = {
   firstName: "Shrey",
   lastName: "Saraswat",
   displayName: "Shrey Saraswat",
-  handle: "React & Angular",
+  handle: "Frontend Developer — React & Angular",
   initials: "SS",
-  role: "Software Developer — JavaScript / TypeScript",
+  role: "Frontend Developer — React & Angular",
   tagline: "Product-UI engineer — specs and Figma to working, API-integrated interfaces.",
   greeting: "Hello, I'm",
   description:
@@ -231,6 +245,7 @@ export const projects = [
     summary:
       "Telecom DLT platform for Principal Entities, Telemarketers, and templates — PE-TM chain approval, Razorpay + dynamic TDS, and a 10-scenario PAN/TAN resubmission matrix.",
     image: projectAnalytics,
+    imageSmall: projectAnalytics320,
     href: "#",
   },
   {
@@ -240,6 +255,7 @@ export const projects = [
     summary:
       "0-to-1 textile traceability UI — repo scaffolding, routing, Redux, manufacturer/retailer dashboards, and QR batch provenance, through client demos and later revival.",
     image: projectKanban,
+    imageSmall: projectKanban320,
     href: "#",
   },
   {
@@ -249,17 +265,18 @@ export const projects = [
     summary:
       "UI-fidelity and bug-resolution on an established US mortgage LOS/POS product — VA/FHA/HECM desktop-to-mobile conversion and Document Folders drag-and-drop classification.",
     image: projectFinance,
+    imageSmall: projectFinance320,
     href: "#",
   },
 ];
 
 export const gallery = [
-  { id: "g1", src: galleryPortrait, alt: "Portrait study", tab: "photos" },
-  { id: "g2", src: galleryHouse, alt: "House under open sky", tab: "photos" },
-  { id: "g3", src: galleryGeo, alt: "Geometric composition", tab: "photos" },
-  { id: "g4", src: gallerySign, alt: "Minimal signage", tab: "photos" },
-  { id: "g5", src: galleryHeart, alt: "Soft heart study", tab: "photos" },
-  { id: "g6", src: gallerySunset, alt: "Sunset clouds", tab: "photos" },
+  { id: "g1", src: galleryPortrait, srcSmall: galleryPortrait200, alt: "Portrait study", tab: "photos" },
+  { id: "g2", src: galleryHouse, srcSmall: galleryHouse200, alt: "House under open sky", tab: "photos" },
+  { id: "g3", src: galleryGeo, srcSmall: galleryGeo200, alt: "Geometric composition", tab: "photos" },
+  { id: "g4", src: gallerySign, srcSmall: gallerySign200, alt: "Minimal signage", tab: "photos" },
+  { id: "g5", src: galleryHeart, srcSmall: galleryHeart200, alt: "Soft heart study", tab: "photos" },
+  { id: "g6", src: gallerySunset, srcSmall: gallerySunset200, alt: "Sunset clouds", tab: "photos" },
 ];
 
 export const videos = [
@@ -278,6 +295,8 @@ export const tracks = [
     artist: "Night Desk",
     duration: "2:48",
     cover: albumLofi,
+    coverMedium: albumLofi200,
+    coverThumb: albumLofi80,
     playing: true,
   },
   {
@@ -286,6 +305,8 @@ export const tracks = [
     artist: "Amber Hours",
     duration: "3:12",
     cover: gallerySunset,
+    coverMedium: gallerySunset200,
+    coverThumb: gallerySunset80,
   },
   {
     id: "t3",
@@ -293,6 +314,8 @@ export const tracks = [
     artist: "Violet Room",
     duration: "2:05",
     cover: galleryGeo,
+    coverMedium: galleryGeo200,
+    coverThumb: galleryGeo80,
   },
 ];
 
@@ -301,6 +324,7 @@ export const tabs = ["All", "Photos", "Music", "Videos"];
 export const assets = {
   avatar,
   workstation,
+  workstation400,
   albumLofi,
 };
 

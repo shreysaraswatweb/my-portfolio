@@ -15,7 +15,12 @@ export function ProjectCard({ project }) {
     >
       <img
         src={project.image}
-        alt={project.title}
+        srcSet={project.imageSmall ? `${project.imageSmall} 320w, ${project.image} 640w` : undefined}
+        sizes="(max-width: 640px) 280px, 320px"
+        alt={`${project.title} — Frontend project by Shrey Saraswat`}
+        width={640}
+        height={427}
+        loading="lazy"
         className="h-project-thumb w-full object-cover"
       />
       <div className="absolute right-space-3 top-space-3">
@@ -35,7 +40,7 @@ export default function FeaturedProjects() {
   const [active, setActive] = useState(0);
 
   return (
-    <GlassCard id="projects" className="rounded-xl p-space-6">
+    <GlassCard as="section" id="projects" className="rounded-xl p-space-6">
       <div className="mb-space-4 flex items-center justify-between">
         <h2 className="font-display text-h2 text-text-primary">
           Featured Projects
@@ -55,25 +60,29 @@ export default function FeaturedProjects() {
           <ProjectCard key={project.id} project={project} />
         ))}
       </motion.div>
-      <div className="mt-space-4 flex justify-center gap-space-2">
+      <div className="mt-space-4 flex justify-center gap-space-1">
         {projects.map((project, index) => (
-          <motion.button
+          <button
             key={project.id}
             type="button"
             aria-label={`Show ${project.title}`}
             onClick={() => setActive(index)}
-            animate={{
-              scale: active === index ? 1.15 : 1,
-              opacity: active === index ? 1 : 0.4,
-            }}
-            transition={{ duration: 0.15 }}
-            className={[
-              "h-space-2 rounded-full",
-              active === index
-                ? "w-space-6 bg-accent-primary"
-                : "w-space-2 bg-text-tertiary",
-            ].join(" ")}
-          />
+            className="flex min-h-[44px] min-w-[44px] items-center justify-center p-1.5"
+          >
+            <motion.span
+              animate={{
+                scale: active === index ? 1.15 : 1,
+                opacity: active === index ? 1 : 0.4,
+              }}
+              transition={{ duration: 0.15 }}
+              className={[
+                "block h-space-2 rounded-full",
+                active === index
+                  ? "w-space-6 bg-accent-primary"
+                  : "w-space-2 bg-text-tertiary",
+              ].join(" ")}
+            />
+          </button>
         ))}
       </div>
     </GlassCard>

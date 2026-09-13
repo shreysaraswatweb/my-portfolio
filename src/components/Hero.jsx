@@ -8,14 +8,14 @@ import "../assets/styles/Hero.css";
 
 export function IdentityHeader({ align = "center" }) {
   return (
-    <div className={align === "left" ? "text-left" : "text-center"}>
+    <header className={align === "left" ? "text-left" : "text-center"}>
       <h1 className="font-display text-h1 text-text-primary">
         {profile.displayName}
       </h1>
       <p className="mt-space-1 text-body text-text-secondary">
         {profile.handle}
       </p>
-    </div>
+    </header>
   );
 }
 
@@ -468,6 +468,7 @@ function DashboardHero() {
 
   return (
     <GlassCard
+      as="header"
       id="home"
       className={`hero-card relative overflow-hidden rounded-xl p-space-8 ${lightOn ? "light-on" : "light-off"
         }`}
@@ -530,8 +531,14 @@ function DashboardHero() {
         <div className="relative hidden w-full items-end justify-center tablet:flex">
           <div className="desk-light" />
           <img
-            src={assets.workstation}
-            alt="Developer workstation"
+            src={assets.workstation400}
+            srcSet={`${assets.workstation400} 400w, ${assets.workstation} 800w`}
+            sizes="(max-width: 600px) 400px, 800px"
+            alt="Developer workstation desk setup with code on screen"
+            width={400}
+            height={267}
+            loading="eager"
+            fetchPriority="high"
             className="developer-desk w-full rounded-lg object-cover"
           />
         </div>

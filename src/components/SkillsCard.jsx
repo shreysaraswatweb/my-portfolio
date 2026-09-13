@@ -18,7 +18,7 @@ function SkillChips({ items }) {
 
 export default function SkillsCard() {
   return (
-    <GlassCard id="skills" className="rounded-xl p-space-6">
+    <GlassCard as="section" id="skills" className="rounded-xl p-space-6">
       <div className="mb-space-4 flex items-center justify-between">
         <h2 className="font-display text-h2 text-text-primary">
           Skills & Tools

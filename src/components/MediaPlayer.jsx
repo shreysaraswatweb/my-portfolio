@@ -16,8 +16,13 @@ export default function MediaPlayer() {
       <div className="grid gap-space-4 desktop:grid-cols-[minmax(0,1fr)_minmax(0,1fr)]">
         <div>
           <img
-            src={current.cover}
+            src={current.coverMedium || current.cover}
+            srcSet={current.coverMedium ? `${current.coverMedium} 200w, ${current.cover} 400w` : undefined}
+            sizes="(max-width: 640px) 200px, 200px"
             alt={current.title}
+            width={200}
+            height={200}
+            loading="lazy"
             className="mb-space-3 aspect-square w-full rounded-lg object-cover"
           />
           <p className="text-body-lg text-text-primary">{current.title}</p>
@@ -30,8 +35,11 @@ export default function MediaPlayer() {
           {tracks.map((track) => (
             <li key={track.id} className="hover-chip flex items-center gap-space-3 rounded-md px-space-2 py-space-1">
               <img
-                src={track.cover}
+                src={track.coverThumb || track.cover}
                 alt=""
+                width={80}
+                height={80}
+                loading="lazy"
                 className="h-space-10 w-space-10 rounded-sm object-cover"
               />
               <div className="min-w-0 flex-1">

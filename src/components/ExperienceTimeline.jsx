@@ -158,7 +158,7 @@ function EdgeArrow({ label, onClick, side }) {
       type="button"
       aria-label={label}
       onClick={onClick}
-      className="flex h-space-8 w-3.75 items-center justify-center overflow-visible text-text-tertiary transition-colors duration-200 hover:text-text-primary"
+      className="flex min-h-[32px] min-w-[28px] items-center justify-center overflow-visible text-text-tertiary transition-colors duration-200 hover:text-text-primary"
     >
       <Icon className="h-4.5 w-4.5 shrink-0" strokeWidth={2} />
     </button>
@@ -348,7 +348,7 @@ export default function ExperienceTimeline() {
   };
 
   return (
-    <GlassCard id="experience" className="rounded-xl p-space-6">
+    <GlassCard as="section" id="experience" className="rounded-xl p-space-6">
       {/* ── Header ──────────────────────────────────────── */}
       <div className="mb-space-8 flex items-center justify-between gap-space-4">
         <div className="flex min-w-0 items-center gap-space-3">

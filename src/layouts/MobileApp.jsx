@@ -1,18 +1,20 @@
-import { useMemo, useState } from "react";
-import { gallery, videos } from "../data/profile";
+import { lazy, Suspense, useMemo, useState } from "react";
+import { gallery, profile, videos } from "../data/profile";
 import GlassCard from "../components/ui/GlassCard";
 import Hero from "../components/Hero";
 import StatRow from "../components/StatRow";
 import SegmentedTabBar from "../components/SegmentedTabBar";
 import ContentGrid from "../components/ContentGrid";
 import ContactGrid from "../components/ContactGrid";
+import AboutCard from "../components/AboutCard";
 import FeaturedProjects from "../components/ProjectCard";
 import SkillsCard from "../components/SkillsCard";
-import AchievementCard from "../components/AchievementCard";
-import CertificationGrid from "../components/CertificationTile";
-import ExperienceTimeline from "../components/ExperienceTimeline";
-import MediaPlayer from "../components/MediaPlayer";
 import ThemeToggle from "../components/ThemeToggle";
+
+const AchievementCard = lazy(() => import("../components/AchievementCard"));
+const CertificationGrid = lazy(() => import("../components/CertificationTile"));
+const ExperienceTimeline = lazy(() => import("../components/ExperienceTimeline"));
+const MediaPlayer = lazy(() => import("../components/MediaPlayer"));
 
 export default function MobileApp() {
   const [tab, setTab] = useState("Photos");
@@ -34,6 +36,10 @@ export default function MobileApp() {
           <ContactGrid layout="mobile" />
         </section>
 
+        <section className="mt-space-4">
+          <AboutCard />
+        </section>
+
         <section className="mt-space-8">
           <GlassCard className="rounded-xl px-space-5 py-space-5">
             <StatRow variant="social" />
@@ -44,7 +50,11 @@ export default function MobileApp() {
           <div className="mt-space-4">
             {tab === "All" ? <FeaturedProjects /> : null}
             {tab === "Photos" ? <ContentGrid items={gridItems} /> : null}
-            {tab === "Music" ? <MediaPlayer /> : null}
+            {tab === "Music" ? (
+              <Suspense fallback={null}>
+                <MediaPlayer />
+              </Suspense>
+            ) : null}
             {tab === "Videos" ? <ContentGrid items={gridItems} /> : null}
           </div>
         </section>
@@ -52,10 +62,20 @@ export default function MobileApp() {
         <div className="mt-space-5 space-y-space-4">
           {tab !== "All" ? <FeaturedProjects /> : null}
           <SkillsCard />
-          <AchievementCard />
-          <ExperienceTimeline />
-          <CertificationGrid />
+          <Suspense fallback={null}>
+            <AchievementCard />
+          </Suspense>
+          <Suspense fallback={null}>
+            <ExperienceTimeline />
+          </Suspense>
+          <Suspense fallback={null}>
+            <CertificationGrid />
+          </Suspense>
         </div>
+
+        <footer className="mt-space-8 text-center text-micro text-text-tertiary">
+          © {new Date().getFullYear()} {profile.displayName} — {profile.role}
+        </footer>
       </div>
     </div>
   );

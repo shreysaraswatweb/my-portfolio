@@ -1,0 +1,13 @@
+# Shrey Saraswat
+
+> Product-UI engineer specializing in React and Angular, turning specs and Figma into working, API-integrated web applications with ~4.5 years of experience.
+
+## Main Pages
+- [Portfolio Home](https://shrey-saraswat-portfolio.vercel.app/): Main portfolio site showcasing projects, experience, skills, and contact information.
+- [Projects](https://shrey-saraswat-portfolio.vercel.app/#projects): Featured software projects including Analytics Dashboard, Finance Management, and Kanban Board.
+- [Skills](https://shrey-saraswat-portfolio.vercel.app/#skills): Technical skills covering React, Angular, TypeScript, Tailwind CSS, and frontend architecture.
+- [Experience](https://shrey-saraswat-portfolio.vercel.app/#experience): Career history and delivery across fintech, telecom, blockchain, and supply-chain domains.
+- [Contact](https://shrey-saraswat-portfolio.vercel.app/#contact): Contact channels including GitHub, Figma, and DEV.to.
+
+## Optional
+- [Full Documentation](https://shrey-saraswat-portfolio.vercel.app/llms-full.txt): Complete resume, skill inventory, project details, and professional background for LLM ingestion.

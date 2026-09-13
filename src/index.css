@@ -217,15 +217,6 @@ html[data-magicui-theme-vt="active"]::view-transition-new(root) {
 
 /* Magic UI Smooth Cursor */
 @media (any-hover: hover) and (any-pointer: fine) {
-
-  html.custom-cursor-active,
-  html.custom-cursor-active * {
-    cursor: none !important;
-  }
-}
-
-@media (any-hover: hover) and (any-pointer: fine) {
-
   html.custom-cursor-active,
   html.custom-cursor-active * {
     cursor: none !important;
