@@ -469,9 +469,8 @@ function DashboardHero() {
   return (
     <GlassCard
       id="home"
-      className={`hero-card relative overflow-hidden rounded-xl p-space-8 ${
-        lightOn ? "light-on" : "light-off"
-      }`}
+      className={`hero-card relative overflow-hidden rounded-xl p-space-8 ${lightOn ? "light-on" : "light-off"
+        }`}
       style={{
         "--bulb-glow": currentTheme.bulbGlow,
         "--bulb-deep": currentTheme.bulbDeep,

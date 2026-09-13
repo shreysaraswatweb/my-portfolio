@@ -481,12 +481,10 @@ html[data-theme="light"] .bulb-cord-svg path {
     opacity 0.75s ease,
     background 0.75s ease,
     transform 0.75s ease;
-  background: radial-gradient(
-    ellipse at 50% 0%,
-    rgba(var(--beam-primary, 255, 211, 140), 0.24),
-    rgba(var(--beam-secondary, 255, 180, 80), 0.11) 30%,
-    transparent 75%
-  );
+  background: radial-gradient(ellipse at 50% 0%,
+      rgba(var(--beam-primary, 255, 211, 140), 0.24),
+      rgba(var(--beam-secondary, 255, 180, 80), 0.11) 30%,
+      transparent 75%);
   filter: blur(16px);
 }
 
@@ -549,10 +547,13 @@ html[data-theme="light"] .bulb-cord-svg path {
 }
 
 @keyframes hint-float {
-  0%, 100% {
+
+  0%,
+  100% {
     opacity: 0.6;
     transform: translateY(0);
   }
+
   50% {
     opacity: 1;
     transform: translateY(3px);
@@ -568,12 +569,15 @@ html[data-theme="light"] .bulb-cord-svg path {
     min-height: 580px;
     padding: 38px 28px;
   }
+
   .hero-content {
     width: 100%;
   }
+
   .hero-content h1 {
     font-size: 46px;
   }
+
   .hero-visual {
     width: 70%;
     height: 290px;
@@ -581,10 +585,12 @@ html[data-theme="light"] .bulb-cord-svg path {
     transform: translateX(50%);
     bottom: -15px;
   }
+
   .bulb-system,
   .light-beam {
     left: 74%;
   }
+
   .bulb-hint {
     left: calc(74% + 30px);
   }
@@ -596,31 +602,39 @@ html[data-theme="light"] .bulb-cord-svg path {
     margin: 20px 12px;
     padding: 26px 20px;
   }
+
   .hero-content h1 {
     font-size: 36px;
     letter-spacing: -1.2px;
   }
+
   .hero-content h2 {
     font-size: 16px;
   }
+
   .hero-content p {
     font-size: 13.5px;
   }
+
   .desktop-break {
     display: none;
   }
+
   .hero-buttons {
     gap: 10px;
   }
+
   .hero-visual {
     width: 100%;
     height: 260px;
     bottom: -15px;
   }
+
   .bulb-system,
   .light-beam {
     left: 70%;
   }
+
   .bulb-hint {
     display: none;
   }

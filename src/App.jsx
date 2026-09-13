@@ -6,7 +6,6 @@ import MobileApp from "./layouts/MobileApp";
 import DesktopDashboard from "./layouts/DesktopDashboard";
 import useDesktop from "./hooks/useDesktop";
 import { Analytics } from "@vercel/analytics/react";
-import { SmoothCursor } from "@/registry/magicui/smooth-cursor";
 
 export default function App() {
   const isDesktop = useDesktop();
@@ -14,7 +13,6 @@ export default function App() {
 
   return (
     <>
-      <SmoothCursor />
       {!isDesktop ? (
         <div className="min-h-screen bg-canvas-mid bg-canvas-glow text-text-primary">
           <MobileApp />
