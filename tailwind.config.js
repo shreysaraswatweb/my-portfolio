@@ -9,6 +9,7 @@ export default {
     screens: {
       tablet: "480px",
       desktop: "1024px",
+      laptop: "1280px",
     },
     borderRadius: {
       sm: "8px",

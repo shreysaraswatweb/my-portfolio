@@ -164,7 +164,7 @@ export default function ContactGrid({ layout = "mobile" }) {
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true }}
-        className="grid grid-cols-2 gap-space-3 desktop:grid-cols-4"
+        className="grid grid-cols-2 gap-space-3 laptop:grid-cols-4"
       >
         {[email, facebook, github, figma].map((item) => (
           <DesktopTile key={item.id} item={item} />

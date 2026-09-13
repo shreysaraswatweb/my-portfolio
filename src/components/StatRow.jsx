@@ -31,7 +31,7 @@ function InfoRow() {
       variants={staggerContainer}
       initial="hidden"
       animate="visible"
-      className="grid grid-cols-2 gap-space-3 desktop:grid-cols-4"
+      className="grid grid-cols-2 gap-space-3 laptop:grid-cols-4"
     >
       {infoStats.map((stat) => {
         const Icon = infoIcons[stat.icon];

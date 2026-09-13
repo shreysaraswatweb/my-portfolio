@@ -1,5 +1,7 @@
 import { createContext, useContext, useEffect, useMemo, useState } from "react";
 
+import { executeThemeTransition } from "../lib/theme-transition";
+
 export const THEME_STORAGE_KEY = "shrey-portfolio-theme";
 export const THEME_OPTIONS = ["light", "dark", "system"];
 
@@ -20,9 +22,10 @@ export function applyResolvedTheme(preference) {
   const root = document.documentElement;
   root.dataset.theme = resolved;
   root.style.colorScheme = resolved;
+  root.classList.toggle("dark", resolved === "dark");
 }
 
-const ThemeContext = createContext(null);
+export const ThemeContext = createContext(null);
 
 export function ThemeProvider({ children }) {
   const [preference, setPreferenceState] = useState(() => {
@@ -50,6 +53,49 @@ export function ThemeProvider({ children }) {
       setPreference: (next) => {
         if (!THEME_OPTIONS.includes(next)) return;
         setPreferenceState(next);
+      },
+      setPreferenceWithTransition: (next, triggerOrEvent, options = {}) => {
+        if (!THEME_OPTIONS.includes(next)) return;
+        const currentResolved = resolveTheme(preference);
+        const nextResolved = resolveTheme(next);
+        if (nextResolved === currentResolved) {
+          setPreferenceState(next);
+          return;
+        }
+        executeThemeTransition({
+          triggerElement:
+            triggerOrEvent?.currentTarget ||
+            (typeof Element !== "undefined" && triggerOrEvent instanceof Element
+              ? triggerOrEvent
+              : null),
+          event: triggerOrEvent?.clientX !== undefined ? triggerOrEvent : null,
+          duration: options.duration ?? 400,
+          variant: options.variant ?? "circle",
+          fromCenter: options.fromCenter ?? false,
+          updateCallback: () => {
+            applyResolvedTheme(next);
+            setPreferenceState(next);
+          },
+        });
+      },
+      toggleThemeWithTransition: (triggerOrEvent, options = {}) => {
+        const currentResolved = resolveTheme(preference);
+        const next = currentResolved === "dark" ? "light" : "dark";
+        executeThemeTransition({
+          triggerElement:
+            triggerOrEvent?.currentTarget ||
+            (typeof Element !== "undefined" && triggerOrEvent instanceof Element
+              ? triggerOrEvent
+              : null),
+          event: triggerOrEvent?.clientX !== undefined ? triggerOrEvent : null,
+          duration: options.duration ?? 400,
+          variant: options.variant ?? "circle",
+          fromCenter: options.fromCenter ?? false,
+          updateCallback: () => {
+            applyResolvedTheme(next);
+            setPreferenceState(next);
+          },
+        });
       },
     }),
     [preference],

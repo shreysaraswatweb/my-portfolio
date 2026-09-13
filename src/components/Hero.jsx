@@ -37,7 +37,7 @@ export function BioList() {
 
 export function MetaRow() {
   return (
-    <div className="mt-space-6 flex items-start justify-between gap-space-3 text-caption text-text-secondary">
+    <div className="mt-space-6 flex items-start justify-between gap-space-3 tablet:justify-center tablet:gap-space-8 text-caption text-text-secondary">
       <span className="inline-flex min-w-0 items-center gap-space-2">
         <MapPin className="h-space-4 w-space-4 shrink-0" strokeWidth={1.75} />
         <span className="truncate">{profile.location}</span>

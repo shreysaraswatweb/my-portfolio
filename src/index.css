@@ -1,6 +1,12 @@
 @import "tailwindcss";
 @config "../tailwind.config.js";
 
+@theme {
+  --breakpoint-tablet: 480px;
+  --breakpoint-desktop: 1024px;
+  --breakpoint-laptop: 1280px;
+}
+
 :root {
   color-scheme: dark;
   --rgb-canvas-top: 42 26 31;
@@ -204,3 +210,28 @@ body {
     transform: none;
   }
 }
+
+/* Magic UI Animated Theme Toggler & View Transitions API */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+
+html[data-magicui-theme-vt="active"]::view-transition-group(root) {
+  animation-duration: var(--magicui-theme-toggle-vt-duration, 400ms);
+}
+
+html[data-magicui-theme-vt="active"]::view-transition-new(root) {
+  clip-path: var(--magicui-theme-vt-clip-from);
+}
+
+/* Magic UI Smooth Cursor */
+@media (any-hover: hover) and (any-pointer: fine) {
+  html.custom-cursor-active,
+  html.custom-cursor-active * {
+    cursor: none !important;
+  }
+}
+
+
