@@ -20,6 +20,7 @@ import {
   GithubMark,
   InstagramMark,
 } from "./icons/BrandIcons";
+import Tooltip from "./ui/Tooltip";
 
 const navIcons = {
   home: Home,
@@ -128,14 +129,15 @@ export default function Sidebar({
         </p>
         <div className="mb-space-4 flex gap-space-2">
           {connect.map(({ id, label, href, Mark }) => (
-            <a
-              key={id}
-              href={href}
-              aria-label={label}
-              className="hover-icon flex h-space-10 w-space-10 items-center justify-center rounded-md border border-border-hairline bg-surface-secondary text-text-primary"
-            >
-              <Mark className="h-space-5 w-space-5" />
-            </a>
+            <Tooltip key={id} content={label} side="top">
+              <a
+                href={href}
+                aria-label={label}
+                className="hover-icon flex h-space-10 w-space-10 items-center justify-center rounded-md border border-border-hairline bg-surface-secondary text-text-primary"
+              >
+                <Mark className="h-space-5 w-space-5" />
+              </a>
+            </Tooltip>
           ))}
         </div>
         <p className="text-micro text-text-tertiary">

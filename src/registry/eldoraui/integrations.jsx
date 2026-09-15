@@ -2,11 +2,15 @@ import { useEffect, useId, useRef } from "react";
 import { motion, useAnimation, useInView } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { Marquee } from "@/registry/eldoraui/marquee";
+import { Tooltip } from "@/components/ui/Tooltip";
 
 const skillTiles = [
   // Line 1 - Core Frontend
   {
     name: "React JS",
+    tag: "Frontend Core",
+    description: "Component-driven SPA architecture, custom hooks, and high-performance reactive UI rendering.",
+    action: "Primary Production Stack",
     icon: (
       <svg viewBox="-11.5 -10.23174 23 20.46348" className="size-full" fill="none" aria-hidden="true">
         <circle cx="0" cy="0" r="2.05" fill="#61DAFB" />
@@ -20,6 +24,9 @@ const skillTiles = [
   },
   {
     name: "JavaScript",
+    tag: "Core Language",
+    description: "Modern ES6+, asynchronous event loops, Web APIs, and high-efficiency DOM operations.",
+    action: "Core Foundation",
     icon: (
       <svg viewBox="0 0 24 24" className="size-full" aria-hidden="true">
         <rect width="24" height="24" rx="4" fill="#F7DF1E" />
@@ -29,6 +36,9 @@ const skillTiles = [
   },
   {
     name: "TypeScript",
+    tag: "Type Safety",
+    description: "Robust type contracts, interfaces, compile-time safety, and scalable frontend codebases.",
+    action: "Strict Mode Standard",
     icon: (
       <svg viewBox="0 0 24 24" className="size-full" aria-hidden="true">
         <rect width="24" height="24" rx="4" fill="#3178C6" />
@@ -38,6 +48,9 @@ const skillTiles = [
   },
   {
     name: "Redux Toolkit",
+    tag: "State Management",
+    description: "Predictable centralized state pipelines with normalized slices and asynchronous RTK thunks.",
+    action: "Complex State Workflows",
     icon: (
       <svg viewBox="0 0 24 24" className="size-full" fill="none" aria-hidden="true">
         <path d="M14.5 17.5a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5z" fill="#764ABC" />
@@ -49,6 +62,9 @@ const skillTiles = [
   },
   {
     name: "HTML5",
+    tag: "Semantic Web",
+    description: "Accessible markup hierarchy, SEO-compliant semantics, and modern responsive structures.",
+    action: "Web Standards & A11y",
     icon: (
       <svg viewBox="0 0 24 24" className="size-full" aria-hidden="true">
         <path d="M2.5 2l1.7 18.5L12 23l7.8-2.5L21.5 2H2.5z" fill="#E34F26" />
@@ -62,6 +78,9 @@ const skillTiles = [
   // Line 2 - Modern UI & Architecture
   {
     name: "CSS3",
+    tag: "Layout & Motion",
+    description: "Advanced CSS Grid, Flexbox, custom design tokens, and fluid responsive micro-animations.",
+    action: "Fluid Design Systems",
     icon: (
       <svg viewBox="0 0 24 24" className="size-full" aria-hidden="true">
         <path d="M2.5 2l1.7 18.5L12 23l7.8-2.5L21.5 2H2.5z" fill="#1572B6" />
@@ -73,6 +92,9 @@ const skillTiles = [
   },
   {
     name: "Angular",
+    tag: "Enterprise Framework",
+    description: "Enterprise single-page apps with RxJS reactive streams, dependency injection, and modular services.",
+    action: "Enterprise Architecture",
     icon: (
       <svg viewBox="0 0 250 250" className="size-full" aria-hidden="true">
         <polygon points="125,30 125,30 125,30 31.9,63.2 46.1,186.3 125,230 125,230 125,230 203.9,186.3 218.1,63.2" fill="#DD0031" />
@@ -83,6 +105,9 @@ const skillTiles = [
   },
   {
     name: "Node.js",
+    tag: "Backend Runtime",
+    description: "Asynchronous backend REST APIs, serverless handlers, and developer tooling automation.",
+    action: "Backend & Microservices",
     icon: (
       <svg viewBox="0 0 24 24" className="size-full" aria-hidden="true">
         <path d="M12 2l9.5 5.5v11L12 24l-9.5-5.5v-11L12 2z" fill="#339933" />
@@ -93,6 +118,9 @@ const skillTiles = [
   },
   {
     name: "Tailwind CSS",
+    tag: "Design System",
+    description: "Utility-first design token workflow for fast, scalable, and responsive component UI.",
+    action: "Rapid UI Development",
     icon: (
       <svg viewBox="0 0 24 24" className="size-full" fill="#06B6D4" aria-hidden="true">
         <path d="M12.001 4.8c-3.2 0-5.2 1.6-6 4.8 1.2-1.6 2.6-2.2 4.2-1.8.913.228 1.565.89 2.288 1.624C13.666 10.618 15.027 12 18.001 12c3.2 0 5.2-1.6 6-4.8-1.2 1.6-2.6 2.2-4.2 1.8-.913-.228-1.565-.89-2.288-1.624C16.336 6.182 14.975 4.8 12.001 4.8zm-6 7.2c-3.2 0-5.2 1.6-6 4.8 1.2-1.6 2.6-2.2 4.2-1.8.913.228 1.565.89 2.288 1.624 1.177 1.194 2.538 2.576 5.512 2.576 3.2 0 5.2-1.6 6-4.8-1.2 1.6-2.6 2.2-4.2 1.8-.913-.228-1.565-.89-2.288-1.624C10.336 13.382 8.975 12 6.001 12z" />
@@ -101,6 +129,9 @@ const skillTiles = [
   },
   {
     name: "Git",
+    tag: "Version Control",
+    description: "Distributed source control, trunk-based branching strategies, and atomic commit workflows.",
+    action: "Repository Management",
     icon: (
       <svg viewBox="0 0 24 24" className="size-full" fill="#F05032" aria-hidden="true">
         <path d="M21.62 10.59l-8.21-8.21a2.08 2.08 0 0 0-2.95 0L8.52 4.33l3.71 3.71a2.47 2.47 0 0 1 3.12 3.14l3.58 3.58a2.47 2.47 0 1 1-1.48 1.44l-3.34-3.34v4.54a2.48 2.48 0 1 1-2.08 0V12.7a2.47 2.47 0 0 1-1.32-3.24L6.5 7.24 2.38 11.36a2.08 2.08 0 0 0 0 2.95l8.21 8.21a2.08 2.08 0 0 0 2.95 0l8.08-8.08a2.08 2.08 0 0 0 0-2.95z" />
@@ -111,6 +142,9 @@ const skillTiles = [
   // Line 3 - Development, API & Databases
   {
     name: "GitLab",
+    tag: "CI/CD & DevOps",
+    description: "Automated test integration, CI/CD pipeline automation, and code review governance.",
+    action: "Automated Deployment",
     icon: (
       <svg viewBox="0 0 24 24" className="size-full" aria-hidden="true">
         <path d="M23.6 9.8l-1.3-4.1a.9.9 0 0 0-1.7 0l-1.3 4.1H4.7L3.4 5.7a.9.9 0 0 0-1.7 0L.4 9.8a1.6 1.6 0 0 0 .6 1.8l11 8a.7.7 0 0 0 .8 0l11-8a1.6 1.6 0 0 0 .6-1.8z" fill="#E24329" />
@@ -124,6 +158,9 @@ const skillTiles = [
   },
   {
     name: "Postman",
+    tag: "API Testing",
+    description: "Endpoint mocking, REST contract verification, automated test suites, and regression checks.",
+    action: "Contract & API Testing",
     icon: (
       <svg viewBox="0 0 24 24" className="size-full" aria-hidden="true">
         <circle cx="12" cy="12" r="11" fill="#FF6C37" />
@@ -133,6 +170,9 @@ const skillTiles = [
   },
   {
     name: "PostgreSQL",
+    tag: "Relational DB",
+    description: "Relational schema design, ACID transactions, complex joins, and query indexing optimization.",
+    action: "Transactional Storage",
     icon: (
       <svg viewBox="0 0 24 24" className="size-full" fill="none" aria-hidden="true">
         <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z" fill="#336791" />
@@ -142,6 +182,9 @@ const skillTiles = [
   },
   {
     name: "MongoDB",
+    tag: "NoSQL DB",
+    description: "Document-oriented NoSQL storage, aggregation pipelines, and flexible document models.",
+    action: "Document Databases",
     icon: (
       <svg viewBox="0 0 24 24" className="size-full" aria-hidden="true">
         <path d="M12 1.5c-.3 0-.5.2-.6.4C10.1 4.7 6 10.6 6 15c0 3.5 2.5 6.7 6 7.5 3.5-.8 6-4 6-7.5 0-4.4-4.1-10.3-5.4-13.1-.1-.2-.3-.4-.6-.4z" fill="#47A248" />
@@ -152,6 +195,9 @@ const skillTiles = [
   },
   {
     name: "REST APIs",
+    tag: "Integration",
+    description: "RESTful HTTP resource architecture with token authentication, caching, and error resilience.",
+    action: "API Integration",
     icon: (
       <svg viewBox="0 0 24 24" className="size-full" fill="none" stroke="#00A389" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
         <path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z" />
@@ -167,6 +213,9 @@ const skillTiles = [
   // Line 4 - Ecosystem, Web3 & UI Tools
   {
     name: "Web3.js",
+    tag: "Blockchain",
+    description: "Decentralized Ethereum provider connectivity, smart contract RPC queries, and cryptographic signing.",
+    action: "DApp Interaction",
     icon: (
       <svg viewBox="0 0 24 24" className="size-full" aria-hidden="true">
         <polygon points="12,1.5 4.5,12.5 12,16.5 19.5,12.5" fill="#627EEA" />
@@ -178,6 +227,9 @@ const skillTiles = [
   },
   {
     name: "MetaMask",
+    tag: "Web3 Auth",
+    description: "Non-custodial wallet onboarding, chain switching, and user transaction confirmation flows.",
+    action: "Wallet Integration",
     icon: (
       <svg viewBox="0 0 24 24" className="size-full" aria-hidden="true">
         <polygon points="21.5,2 14.5,7 16.5,3" fill="#E2761B" />
@@ -194,6 +246,9 @@ const skillTiles = [
   },
   {
     name: "Material UI",
+    tag: "Component Library",
+    description: "Accessible component libraries, custom theme overrides, and modular enterprise dashboards.",
+    action: "Component Architecture",
     icon: (
       <svg viewBox="0 0 24 24" className="size-full" aria-hidden="true">
         <path d="M0 2.475v10.39l3 1.733V7.674l6 3.466 6-3.466v6.924l-3 1.733v3.465l6 3.466 6-3.466V8.98L12 2.054 0 2.475zm12 6.932l-3-1.733 3-1.733 3 1.733-3 1.733z" fill="#007FFF" />
@@ -202,6 +257,9 @@ const skillTiles = [
   },
   {
     name: "Recharts",
+    tag: "Data Visualization",
+    description: "Declarative SVG charting, responsive data trends, interactive tooltips, and analytics.",
+    action: "Interactive Charts",
     icon: (
       <svg viewBox="0 0 24 24" className="size-full" fill="none" stroke="#22C55E" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
         <path d="M3 3v18h18" />
@@ -211,6 +269,9 @@ const skillTiles = [
   },
   {
     name: "React Hook Form",
+    tag: "Form Engine",
+    description: "High-performance uncontrolled form state, schema validation with Zod, and instant validation.",
+    action: "Performant Forms",
     icon: (
       <svg viewBox="0 0 24 24" className="size-full" fill="none" stroke="#EC5990" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
         <rect x="5" y="4" width="14" height="17" rx="2" />
@@ -226,7 +287,7 @@ const row2 = skillTiles.slice(5, 10);
 const row3 = skillTiles.slice(10, 15);
 const row4 = skillTiles.slice(15, 20);
 
-function Card({ icon, name }) {
+function Card({ icon, name, tag, description, action }) {
   const id = useId();
   const controls = useAnimation();
   const ref = useRef(null);
@@ -242,26 +303,33 @@ function Card({ icon, name }) {
   }, [controls, inView]);
 
   return (
-    <motion.div
-      key={id}
-      ref={ref}
-      initial={{ opacity: 0.85 }}
-      animate={controls}
-      className={cn(
-        // Clean theme-adaptive squircle card, no clashing colored blur
-        "group/card relative size-12 sm:size-14 cursor-pointer overflow-hidden rounded-xl p-2.5 sm:p-3 flex items-center justify-center shrink-0",
-        "bg-surface-secondary/70 hover:bg-surface-secondary/90 transition-all duration-300 ease-out",
-        "hover:scale-110 hover:shadow-card active:scale-95",
-        "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-violet/60"
-      )}
+    <Tooltip
       title={name}
-      aria-label={name}
-      tabIndex={0}
+      tag={tag}
+      content={description}
+      action={action}
+      side="top"
     >
-      <div className="relative z-10 size-full flex items-center justify-center pointer-events-none">
-        {icon}
-      </div>
-    </motion.div>
+      <motion.div
+        key={id}
+        ref={ref}
+        initial={{ opacity: 0.85 }}
+        animate={controls}
+        className={cn(
+          // Clean theme-adaptive squircle card, no clashing colored blur
+          "group/card relative size-12 sm:size-14 cursor-pointer overflow-hidden rounded-xl p-2.5 sm:p-3 flex items-center justify-center shrink-0",
+          "bg-surface-secondary/70 hover:bg-surface-secondary/90 transition-all duration-300 ease-out",
+          "hover:scale-110 hover:shadow-card active:scale-95",
+          "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-violet/60"
+        )}
+        aria-label={name}
+        tabIndex={0}
+      >
+        <div className="relative z-10 size-full flex items-center justify-center pointer-events-none">
+          {icon}
+        </div>
+      </motion.div>
+    </Tooltip>
   );
 }
 

@@ -5,6 +5,7 @@ import { flushSync } from "react-dom";
 import { cn } from "@/lib/utils";
 import { getThemeTransitionClipPaths } from "@/lib/theme-transition";
 import { ThemeContext } from "@/theme/ThemeProvider";
+import Tooltip from "@/components/ui/Tooltip";
 
 /**
  * AnimatedThemeToggler - Magic UI
@@ -220,41 +221,44 @@ export function AnimatedThemeToggler({
     ],
   );
 
+  const tooltipLabel = isDark ? "Switch to light theme" : "Switch to dark theme";
+
   return (
-    <button
-      type="button"
-      ref={buttonRef}
-      onClick={toggleTheme}
-      aria-label={`Switch to ${isDark ? "light" : "dark"} theme`}
-      title={`Switch to ${isDark ? "light" : "dark"} theme`}
-      className={cn(
-        "group relative inline-flex h-space-9 w-space-9 items-center justify-center rounded-full border border-border-hairline bg-surface-pill/80 text-text-primary backdrop-blur-md transition-all duration-300 hover:scale-105 hover:bg-surface-elevated hover:shadow-card focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-text-primary/50",
-        className,
-      )}
-      {...props}
-    >
-      <div className="relative flex items-center justify-center">
-        <Sun
-          className={cn(
-            "h-space-4 w-space-4 transition-all duration-300",
-            isDark
-              ? "rotate-0 scale-100 opacity-100 text-amber-400"
-              : "-rotate-90 scale-0 opacity-0 absolute",
-          )}
-          strokeWidth={2}
-        />
-        <Moon
-          className={cn(
-            "h-space-4 w-space-4 transition-all duration-300",
-            isDark
-              ? "rotate-90 scale-0 opacity-0 absolute"
-              : "rotate-0 scale-100 opacity-100 text-indigo-400",
-          )}
-          strokeWidth={2}
-        />
-      </div>
-      <span className="sr-only">Toggle theme</span>
-    </button>
+    <Tooltip content={tooltipLabel} side="bottom">
+      <button
+        type="button"
+        ref={buttonRef}
+        onClick={toggleTheme}
+        aria-label={tooltipLabel}
+        className={cn(
+          "group relative inline-flex h-space-9 w-space-9 items-center justify-center rounded-full border border-border-hairline bg-surface-pill/80 text-text-primary backdrop-blur-md transition-all duration-300 hover:scale-105 hover:bg-surface-elevated hover:shadow-card focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-text-primary/50",
+          className,
+        )}
+        {...props}
+      >
+        <div className="relative flex items-center justify-center">
+          <Sun
+            className={cn(
+              "h-space-4 w-space-4 transition-all duration-300",
+              isDark
+                ? "rotate-0 scale-100 opacity-100 text-amber-400"
+                : "-rotate-90 scale-0 opacity-0 absolute",
+            )}
+            strokeWidth={2}
+          />
+          <Moon
+            className={cn(
+              "h-space-4 w-space-4 transition-all duration-300",
+              isDark
+                ? "rotate-90 scale-0 opacity-0 absolute"
+                : "rotate-0 scale-100 opacity-100 text-indigo-400",
+            )}
+            strokeWidth={2}
+          />
+        </div>
+        <span className="sr-only">Toggle theme</span>
+      </button>
+    </Tooltip>
   );
 }
 
