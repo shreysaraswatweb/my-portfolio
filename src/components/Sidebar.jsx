@@ -53,7 +53,7 @@ export default function Sidebar({
   });
 
   useEffect(() => {
-    let cleanup = () => {};
+    let cleanup = () => { };
     let frame = 0;
 
     const bind = () => {
@@ -151,11 +151,11 @@ export default function Sidebar({
         <AvatarFrame size="desktop" showBadge />
       </div>
 
-      <div className="relative min-h-0 flex-1 overflow-hidden rounded-xl">
+      <div className="relative min-h-0 flex-1 overflow-hidden rounded-md">
         {/* Top Faded Blur — appears only on scrolling side when scrolled down */}
         <div
           className={[
-            "pointer-events-none absolute inset-x-0 top-0 z-20 h-12 rounded-xl",
+            "pointer-events-none absolute inset-x-0 top-0 z-20 h-12 rounded-md",
             "transition-opacity duration-500 ease-in-out",
             scrollState.canScrollUp ? "opacity-100" : "opacity-0",
           ].join(" ")}
@@ -176,7 +176,7 @@ export default function Sidebar({
         <SmoothOverflow
           ref={scrollerRef}
           axis="y"
-          className="h-full overflow-y-auto pr-space-1 scrollbar-none"
+          className="h-full overflow-y-auto scrollbar-none"
         >
           <nav className="space-y-space-1 py-space-1">
             {navItems.map((item) => {
@@ -211,7 +211,7 @@ export default function Sidebar({
         {/* Bottom Faded Blur — appears only on scrolling side when content can scroll down */}
         <div
           className={[
-            "pointer-events-none absolute inset-x-0 bottom-0 z-20 h-12 rounded-xl",
+            "pointer-events-none absolute inset-x-0 bottom-0 z-20 h-12 rounded-md",
             "transition-opacity duration-500 ease-in-out",
             scrollState.canScrollDown ? "opacity-100" : "opacity-0",
           ].join(" ")}
