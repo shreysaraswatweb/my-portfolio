@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import { assets, profile } from "../data/profile";
+import useFinePointer from "../hooks/useFinePointer";
 
 const boxMotion = {
   y: [0, -5, 0],
@@ -18,6 +19,12 @@ export default function AvatarFrame({
   float = true,
   className = "",
 }) {
+  const isFinePointer = useFinePointer();
+  const prefersReducedMotion =
+    typeof window !== "undefined" &&
+    window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const shouldFloat = float && isFinePointer && !prefersReducedMotion;
+
   const box = compact
     ? "h-avatar-compact w-avatar-compact"
     : size === "desktop"
@@ -31,7 +38,7 @@ export default function AvatarFrame({
           box,
           "relative isolate overflow-hidden rounded-xl shadow-avatar",
         ].join(" ")}
-        animate={float ? boxMotion : false}
+        animate={shouldFloat ? boxMotion : false}
       >
         <img
           src={assets.avatar}
@@ -51,7 +58,7 @@ export default function AvatarFrame({
           loading="eager"
           fetchPriority="high"
           className="relative h-full w-full object-contain"
-          animate={float ? imageMotion : false}
+          animate={shouldFloat ? imageMotion : false}
         />
       </motion.div>
       {showBadge && profile.available ? (

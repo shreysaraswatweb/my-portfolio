@@ -2,6 +2,7 @@ import { forwardRef, useRef, useImperativeHandle, useEffect } from "react";
 import { ReactLenis } from "lenis/react";
 import { nestedScrollOptions, easeOutExpo } from "../lib/scroll";
 import { cn } from "@/lib/utils";
+import useFinePointer from "../hooks/useFinePointer";
 
 /**
  * Frame-rate independent viscous damping function.
@@ -41,6 +42,7 @@ const SmoothOverflow = forwardRef(function SmoothOverflow(
   const startScrollLeftRef = useRef(0);
   const velocityHistoryRef = useRef([]);
   const hasDraggedRef = useRef(false);
+  const isFinePointer = useFinePointer();
 
   // Stop all active physics animations
   const stopAllAnimations = () => {
@@ -106,7 +108,7 @@ const SmoothOverflow = forwardRef(function SmoothOverflow(
 
   // Horizontal Wheel & Trackpad Physics (Axis === "x")
   useEffect(() => {
-    if (axis !== "x") return;
+    if (axis !== "x" || !isFinePointer) return;
     const container = domRef.current;
     if (!container) return;
 
@@ -169,11 +171,11 @@ const SmoothOverflow = forwardRef(function SmoothOverflow(
       container.removeEventListener("wheel", onWheel);
       stopAllAnimations();
     };
-  }, [axis]);
+  }, [axis, isFinePointer]);
 
-  // Pointer (Mouse & Touch) Drag Momentum Physics (Axis === "x")
+  // Pointer drag is desktop-only. On Android, capture + pan-y fights native scroll.
   useEffect(() => {
-    if (axis !== "x") return;
+    if (axis !== "x" || !isFinePointer) return;
     const container = domRef.current;
     if (!container) return;
 
@@ -316,7 +318,7 @@ const SmoothOverflow = forwardRef(function SmoothOverflow(
       window.removeEventListener("pointercancel", onPointerUp);
       stopAllAnimations();
     };
-  }, [axis]);
+  }, [axis, isFinePointer]);
 
   // Click capture to prevent activating cards/buttons when dragging
   const handleClickCapture = (e) => {
@@ -346,7 +348,7 @@ const SmoothOverflow = forwardRef(function SmoothOverflow(
           WebkitOverflowScrolling: "touch",
           overscrollBehaviorX: "contain",
           overscrollBehaviorY: "auto",
-          touchAction: "pan-y",
+          touchAction: isFinePointer ? "pan-y" : "pan-x pan-y",
         }}
         {...props}
       >

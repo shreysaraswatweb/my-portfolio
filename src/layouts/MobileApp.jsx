@@ -25,7 +25,7 @@ export default function MobileApp() {
   }, [tab]);
 
   return (
-    <div className="relative min-h-screen w-full overflow-x-hidden px-space-4 pb-space-12 pt-space-6 tablet:px-space-6">
+    <div className="relative min-h-screen w-full overflow-x-clip px-space-4 pb-space-12 pt-space-6 tablet:px-space-6">
       <div className="mx-auto w-full max-w-mobile tablet:max-w-2xl min-[768px]:max-w-3xl">
         <div className="mb-space-4 flex justify-end">
           <ThemeToggle compact />

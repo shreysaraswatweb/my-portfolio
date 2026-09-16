@@ -1,8 +1,8 @@
 /** 
  * Physics Inertia Settings for Lenis Smooth Scroll
  * Aligned with modern high-performance design-systems (Apple/Awwwards).
- * Provides responsive immediate-pickup on desktop wheels/trackpads
- * and authentic momentum decay (exponential ease-out) on mobile touch.
+ * Provides responsive immediate-pickup on desktop wheels/trackpads.
+ * Touch devices use native scrolling (root Lenis is not mounted).
  */
 
 // Exponential ease-out physics curve: rapid launch, prolonged silky glide
@@ -18,11 +18,10 @@ export const rootScrollOptions = {
   wheelMultiplier: 1.0, // 1:1 natural input distance
   autoRaf: true,
 
-  // Mobile & Touchscreen Inertial Physics
-  syncTouch: true, // Enables full touch virtualization and inertial physics on mobile
-  syncTouchLerp: 0.075, // Prolonged momentum decay factor on finger release
-  touchInertiaExponent: 1.75, // Dynamic velocity scaling (swift flick = farther glide)
-  touchMultiplier: 1.2, // Generous travel per swipe distance for comfortable mobile navigation
+  // Native compositor scrolling on touch. Lenis syncTouch virtualizes
+  // Android/iOS gestures and causes stutter; root Lenis is desktop-only.
+  syncTouch: false,
+  touchMultiplier: 1,
 
   // Anchor Navigation with Smooth Inertia
   anchors: {
@@ -48,11 +47,8 @@ export const nestedScrollOptions = {
   wheelMultiplier: 1.0,
   autoRaf: true,
 
-  // Touch physics for vertical sidebar
-  syncTouch: true,
-  syncTouchLerp: 0.08,
-  touchInertiaExponent: 1.7,
-  touchMultiplier: 1.2,
+  syncTouch: false,
+  touchMultiplier: 1,
 
   overscroll: false,
 };
