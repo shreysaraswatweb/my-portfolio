@@ -13,18 +13,20 @@ export default function ContentGrid({ items }) {
         <motion.button
           type="button"
           key={item.id}
+          aria-label={item.alt}
           variants={cardEntrance}
           {...hoverLift}
-          className="hover-media aspect-square overflow-hidden rounded-lg"
+          className="hover-media aspect-square min-h-[44px] min-w-[44px] overflow-hidden rounded-lg"
         >
           <img
             src={item.srcSmall || item.src}
             srcSet={item.srcSmall ? `${item.srcSmall} 200w, ${item.src} 400w` : undefined}
-            sizes="(max-width: 640px) 120px, 200px"
+            sizes="(max-width: 640px) 110px, 150px"
             alt={item.alt}
-            width={200}
-            height={200}
+            width={150}
+            height={150}
             loading="lazy"
+            decoding="async"
             className="h-full w-full object-cover"
           />
         </motion.button>

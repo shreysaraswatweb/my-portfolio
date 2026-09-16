@@ -82,7 +82,7 @@ function BentoTile({ item, className = "" }) {
         <p
           className={[
             "mt-space-1 truncate text-caption",
-            isLight ? "text-text-tertiary" : "text-text-fixed-light/80",
+            isLight ? "text-text-fixed-dark/80" : "text-text-fixed-light/80",
           ].join(" ")}
         >
           {item.handle}
@@ -133,7 +133,7 @@ function DesktopTile({ item }) {
           <p
             className={[
               "truncate text-caption",
-              isLight ? "text-text-tertiary" : "text-text-fixed-light/75",
+              isLight ? "text-text-fixed-dark/80" : "text-text-fixed-light/75",
             ].join(" ")}
           >
             {item.handle}

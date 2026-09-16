@@ -55,8 +55,8 @@ html[data-theme="light"] {
   --rgb-surface-pill: 232 226 216;
   --rgb-surface-elevated: 255 255 255;
   --rgb-text-primary: 22 24 31;
-  --rgb-text-secondary: 92 99 115;
-  --rgb-text-tertiary: 138 144 156;
+  --rgb-text-secondary: 75 85 99;
+  --rgb-text-tertiary: 95 105 120;
   --rgb-text-on-accent: 255 255 255;
   --rgb-status-playing: 124 58 237;
   --color-surface-card: rgb(255 255 255 / 0.72);
@@ -82,6 +82,23 @@ html[data-theme="light"] {
 
 html {
   background-color: rgb(var(--rgb-canvas-mid));
+}
+
+/* Lenis Inertial Smooth Scrolling Enhancements */
+html.lenis,
+html.lenis body {
+  overscroll-behavior-y: none;
+}
+
+[data-nested-scroll="x"] {
+  overscroll-behavior-x: contain;
+  overscroll-behavior-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+[data-nested-scroll="y"] {
+  overscroll-behavior-y: contain;
+  -webkit-overflow-scrolling: touch;
 }
 
 body {

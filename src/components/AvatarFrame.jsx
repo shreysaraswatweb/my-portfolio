@@ -39,7 +39,8 @@ export default function AvatarFrame({
           aria-hidden
           width={256}
           height={256}
-          loading="lazy"
+          loading="eager"
+          fetchPriority="high"
           className="absolute inset-0 h-full w-full object-contain"
         />
         <motion.img
@@ -47,7 +48,8 @@ export default function AvatarFrame({
           alt={`${profile.displayName} — Frontend Developer profile avatar`}
           width={256}
           height={256}
-          loading="lazy"
+          loading="eager"
+          fetchPriority="high"
           className="relative h-full w-full object-contain"
           animate={float ? imageMotion : false}
         />

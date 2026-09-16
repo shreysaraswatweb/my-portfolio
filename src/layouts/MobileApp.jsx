@@ -7,10 +7,10 @@ import SegmentedTabBar from "../components/SegmentedTabBar";
 import ContentGrid from "../components/ContentGrid";
 import ContactGrid from "../components/ContactGrid";
 import AboutCard from "../components/AboutCard";
-import FeaturedProjects from "../components/ProjectCard";
-import SkillsCard from "../components/SkillsCard";
 import ThemeToggle from "../components/ThemeToggle";
 
+const FeaturedProjects = lazy(() => import("../components/ProjectCard"));
+const SkillsCard = lazy(() => import("../components/SkillsCard"));
 const AchievementCard = lazy(() => import("../components/AchievementCard"));
 const CertificationGrid = lazy(() => import("../components/CertificationTile"));
 const ExperienceTimeline = lazy(() => import("../components/ExperienceTimeline"));
@@ -36,9 +36,7 @@ export default function MobileApp() {
           <ContactGrid layout="mobile" />
         </section>
 
-        <section className="mt-space-4">
-          <AboutCard />
-        </section>
+        <AboutCard />
 
         <section className="mt-space-8">
           <GlassCard className="rounded-xl px-space-5 py-space-5">
@@ -48,7 +46,11 @@ export default function MobileApp() {
             </div>
           </GlassCard>
           <div className="mt-space-4">
-            {tab === "All" ? <FeaturedProjects /> : null}
+            {tab === "All" ? (
+              <Suspense fallback={null}>
+                <FeaturedProjects />
+              </Suspense>
+            ) : null}
             {tab === "Photos" ? <ContentGrid items={gridItems} /> : null}
             {tab === "Music" ? (
               <Suspense fallback={null}>
@@ -60,15 +62,11 @@ export default function MobileApp() {
         </section>
 
         <div className="mt-space-5 space-y-space-4">
-          {tab !== "All" ? <FeaturedProjects /> : null}
-          <SkillsCard />
           <Suspense fallback={null}>
+            {tab !== "All" ? <FeaturedProjects /> : null}
+            <SkillsCard />
             <AchievementCard />
-          </Suspense>
-          <Suspense fallback={null}>
             <ExperienceTimeline />
-          </Suspense>
-          <Suspense fallback={null}>
             <CertificationGrid />
           </Suspense>
         </div>

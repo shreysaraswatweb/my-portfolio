@@ -11,7 +11,7 @@ export default defineConfig({
     },
   },
   optimizeDeps: {
-    include: ["react", "react-dom", "framer-motion", "lenis"],
+    include: ["react", "react-dom", "framer-motion", "lenis", "lucide-react"],
   },
   build: {
     rollupOptions: {

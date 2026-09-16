@@ -280,12 +280,12 @@ export const gallery = [
 ];
 
 export const videos = [
-  { id: "v1", src: projectAnalytics, alt: "Product walkthrough" },
-  { id: "v2", src: workstation, alt: "Desk setup" },
-  { id: "v3", src: projectKanban, alt: "Workspace demo" },
-  { id: "v4", src: gallerySunset, alt: "Mood reel" },
-  { id: "v5", src: projectFinance, alt: "App preview" },
-  { id: "v6", src: galleryGeo, alt: "Motion study" },
+  { id: "v1", src: projectAnalytics, srcSmall: projectAnalytics320, alt: "Product walkthrough" },
+  { id: "v2", src: workstation, srcSmall: workstation400, alt: "Desk setup" },
+  { id: "v3", src: projectKanban, srcSmall: projectKanban320, alt: "Workspace demo" },
+  { id: "v4", src: gallerySunset, srcSmall: gallerySunset200, alt: "Mood reel" },
+  { id: "v5", src: projectFinance, srcSmall: projectFinance320, alt: "App preview" },
+  { id: "v6", src: galleryGeo, srcSmall: galleryGeo200, alt: "Motion study" },
 ];
 
 export const tracks = [

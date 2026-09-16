@@ -18,6 +18,8 @@ export function Marquee({
   const lastTimeRef = useRef(0);
   const rafIdRef = useRef(null);
 
+  const updateAnimationsRef = useRef(null);
+
   // Smooth playbackRate deceleration/acceleration engine via WAAPI
   const updateAnimations = useCallback(() => {
     if (!containerRef.current) return;
@@ -61,12 +63,18 @@ export function Marquee({
     });
 
     if (nextRate !== target) {
-      rafIdRef.current = requestAnimationFrame(updateAnimations);
+      rafIdRef.current = requestAnimationFrame(() => {
+        updateAnimationsRef.current?.();
+      });
     } else {
       rafIdRef.current = null;
       lastTimeRef.current = 0;
     }
   }, []);
+
+  useEffect(() => {
+    updateAnimationsRef.current = updateAnimations;
+  }, [updateAnimations]);
 
   const setTargetRate = useCallback(
     (rate) => {

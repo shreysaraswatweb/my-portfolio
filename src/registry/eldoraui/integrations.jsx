@@ -313,6 +313,8 @@ function Card({ icon, name, tag, description, action }) {
       <motion.div
         key={id}
         ref={ref}
+        role="button"
+        tabIndex={0}
         initial={{ opacity: 0.85 }}
         animate={controls}
         className={cn(
@@ -323,7 +325,6 @@ function Card({ icon, name, tag, description, action }) {
           "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-violet/60"
         )}
         aria-label={name}
-        tabIndex={0}
       >
         <div className="relative z-10 size-full flex items-center justify-center pointer-events-none">
           {icon}

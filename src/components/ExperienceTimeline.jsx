@@ -158,7 +158,7 @@ function EdgeArrow({ label, onClick, side }) {
       type="button"
       aria-label={label}
       onClick={onClick}
-      className="flex min-h-[32px] min-w-[28px] items-center justify-center overflow-visible text-text-tertiary transition-colors duration-200 hover:text-text-primary"
+      className="flex min-h-[44px] min-w-[44px] items-center justify-center overflow-visible text-text-tertiary transition-colors duration-200 hover:text-text-primary"
     >
       <Icon className="h-4.5 w-4.5 shrink-0" strokeWidth={2} />
     </button>
@@ -262,9 +262,9 @@ function MobileCard({ item, tone, align }) {
       </span>
 
       {/* Role */}
-      <h3 className="text-caption font-medium leading-tight text-text-primary">
+      <span className="block text-caption font-medium leading-tight text-text-primary">
         {item.shortRole || item.role}
-      </h3>
+      </span>
 
       {/* Company */}
       <p className="mt-space-1 text-micro text-text-secondary">{item.company}</p>
@@ -328,23 +328,37 @@ export default function ExperienceTimeline() {
     };
   }, [updateScroll]);
 
+  const targetXRef = useRef(0);
+
   const scrollByPage = (direction) => {
     const wrapper = scrollerRef.current?.wrapper;
-    const lenis = scrollerRef.current?.lenis;
     if (!wrapper) return;
 
-    const distance = direction * Math.min(wrapper.clientWidth * 0.7, 320);
-    const start = wrapper.scrollLeft;
-    const end = Math.max(
-      0,
-      Math.min(wrapper.scrollWidth - wrapper.clientWidth, start + distance),
-    );
+    const max = wrapper.scrollWidth - wrapper.clientWidth;
+    const distance = direction * Math.min(wrapper.clientWidth * 0.65, 280);
+    const base =
+      Math.abs(wrapper.scrollLeft - targetXRef.current) < 35
+        ? targetXRef.current
+        : wrapper.scrollLeft;
 
-    if (lenis) {
-      lenis.scrollTo(end, { duration: 0.85, easing: easeOutExpo });
+    const end = Math.max(0, Math.min(max, base + distance));
+    targetXRef.current = end;
+
+    if (scrollerRef.current?.scrollTo) {
+      scrollerRef.current.scrollTo(end, { duration: 650, easing: easeOutExpo });
       return;
     }
     wrapper.scrollTo({ left: end, behavior: "smooth" });
+  };
+
+  const handleKeyDown = (e) => {
+    if (e.key === "ArrowLeft") {
+      e.preventDefault();
+      scrollByPage(-1);
+    } else if (e.key === "ArrowRight") {
+      e.preventDefault();
+      scrollByPage(1);
+    }
   };
 
   return (
@@ -390,7 +404,11 @@ export default function ExperienceTimeline() {
 
           <SmoothOverflow
             ref={scrollerRef}
-            className="min-w-0 flex-1 overflow-x-auto overflow-y-visible pb-space-2 scrollbar-none"
+            tabIndex={0}
+            role="region"
+            aria-label="Experience timeline scrollable cards"
+            onKeyDown={handleKeyDown}
+            className="min-w-0 flex-1 overflow-x-auto overflow-y-visible pb-space-2 scrollbar-none rounded-lg focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent-violet/40"
           >
             <div className="min-w-4xl">
               <div className="grid grid-cols-4">

@@ -4,8 +4,6 @@ import {
   useEffect,
   useLayoutEffect,
   useCallback,
-  isValidElement,
-  cloneElement,
 } from "react";
 import { createPortal } from "react-dom";
 import { motion, AnimatePresence } from "framer-motion";
@@ -15,19 +13,6 @@ import { cn } from "@/lib/utils";
 const useIsomorphicLayoutEffect =
   typeof window !== "undefined" ? useLayoutEffect : useEffect;
 
-// Utility to merge multiple refs (callback refs and RefObjects)
-function mergeRefs(...refs) {
-  return (node) => {
-    refs.forEach((ref) => {
-      if (!ref) return;
-      if (typeof ref === "function") {
-        ref(node);
-      } else if (typeof ref === "object" && "current" in ref) {
-        ref.current = node;
-      }
-    });
-  };
-}
 
 // Global state for rapid hover coordination (e.g. moving across button groups)
 let globalActiveTooltipsCount = 0;
@@ -79,7 +64,8 @@ export function Tooltip({
 
   const updatePosition = useCallback(() => {
     if (!triggerRef.current) return;
-    const triggerRect = triggerRef.current.getBoundingClientRect();
+    const triggerEl = triggerRef.current.firstElementChild || triggerRef.current;
+    const triggerRect = triggerEl.getBoundingClientRect();
 
     let actualSide = side;
     // Auto flip to bottom if too close to viewport top (< 130px for detailed, < 50px for simple)
@@ -229,54 +215,20 @@ export function Tooltip({
       ? `tooltip-${String(title || content).toLowerCase().replace(/\s+/g, "-")}`
       : undefined;
 
-  // Render trigger: use cloneElement if single React element to preserve design and DOM hierarchy
-  let triggerElement;
-  if (isValidElement(children)) {
-    const child = children;
-    const childRef =
-      child.props?.ref !== undefined ? child.props.ref : child.ref;
-
-    triggerElement = cloneElement(child, {
-      ref: mergeRefs(triggerRef, childRef),
-      onPointerEnter: (e) => {
-        child.props.onPointerEnter?.(e);
-        handlePointerEnter(e);
-      },
-      onPointerLeave: (e) => {
-        child.props.onPointerLeave?.(e);
-        handlePointerLeave(e);
-      },
-      onFocus: (e) => {
-        child.props.onFocus?.(e);
-        handlePointerEnter(e);
-      },
-      onBlur: (e) => {
-        child.props.onBlur?.(e);
-        handlePointerLeave(e);
-      },
-      "aria-describedby": isOpen
-        ? [child.props["aria-describedby"], tooltipId]
-            .filter(Boolean)
-            .join(" ")
-        : child.props["aria-describedby"],
-      // Suppress native OS tooltip so only our styled design-system tooltip renders
-      title: undefined,
-    });
-  } else {
-    triggerElement = (
-      <span
-        ref={triggerRef}
-        onPointerEnter={handlePointerEnter}
-        onPointerLeave={handlePointerLeave}
-        onFocus={handlePointerEnter}
-        onBlur={handlePointerLeave}
-        aria-describedby={isOpen ? tooltipId : undefined}
-        className="inline-flex"
-      >
-        {children}
-      </span>
-    );
-  }
+  // Render trigger: use display contents span to preserve exact design and layout without mutating child props
+  const triggerElement = (
+    <span
+      ref={triggerRef}
+      onPointerEnter={handlePointerEnter}
+      onPointerLeave={handlePointerLeave}
+      onFocus={handlePointerEnter}
+      onBlur={handlePointerLeave}
+      aria-describedby={isOpen ? tooltipId : undefined}
+      className="contents"
+    >
+      {children}
+    </span>
+  );
 
   return (
     <>

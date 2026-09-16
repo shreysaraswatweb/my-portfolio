@@ -74,9 +74,10 @@ function SocialRow() {
           <motion.a
             key={item.id}
             href={item.href}
+            aria-label={`${item.label} profile`}
             variants={cardEntrance}
             {...hoverLift}
-            className="flex min-w-chip flex-col items-center gap-space-2"
+            className="flex min-w-chip min-h-[44px] min-w-[44px] flex-col items-center justify-center gap-space-2"
           >
             <IconChip>
               <Mark className="h-space-6 w-space-6" />

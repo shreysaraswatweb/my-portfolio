@@ -3,7 +3,7 @@ import { SpeedInsights } from "@vercel/speed-insights/react";
 import { Analytics } from "@vercel/analytics/react";
 import useDesktop from "./hooks/useDesktop";
 
-const MobileApp = lazy(() => import("./layouts/MobileApp"));
+import MobileApp from "./layouts/MobileApp";
 const DesktopDashboard = lazy(() => import("./layouts/DesktopDashboard"));
 const Sidebar = lazy(() => import("./components/Sidebar"));
 

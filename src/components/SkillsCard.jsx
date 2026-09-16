@@ -51,7 +51,14 @@ export default function SkillsCard() {
           <span className="text-accent-primary font-medium">Design</span>
           <span className="text-accent-violet font-medium">Development</span>
         </div>
-        <div className="relative h-space-2 rounded-full bg-surface-pill">
+        <div
+          role="progressbar"
+          aria-label="Design and development balance"
+          aria-valuenow={skillBalance.design}
+          aria-valuemin={0}
+          aria-valuemax={100}
+          className="relative h-space-2 rounded-full bg-surface-pill"
+        >
           <div className="h-full w-full rounded-full bg-accent-gradient" />
           <span
             className="absolute top-1/2 h-space-4 w-space-4 -translate-x-1/2 -translate-y-1/2 rounded-full border border-border-glass bg-text-primary shadow-card"
