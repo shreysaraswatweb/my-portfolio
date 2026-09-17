@@ -1,61 +1,51 @@
 import { useEffect, useState } from "react";
+import { ReactLenis } from "lenis/react";
+import "lenis/dist/lenis.css";
 import { rootScrollOptions } from "../lib/scroll";
 
-const DESKTOP_LENIS_QUERY =
-  "(hover: hover) and (pointer: fine) and (min-width: 1024px)";
+/** Matches `--breakpoint-tablet` so tablet and desktop share Lenis wheel smoothing. */
+const TABLET_UP_QUERY = "(min-width: 480px)";
+const FINE_POINTER_QUERY = "(hover: hover) and (pointer: fine)";
 const REDUCE_MOTION_QUERY = "(prefers-reduced-motion: reduce)";
 
-function shouldUseLenis() {
+export function shouldUseLenis() {
   if (typeof window === "undefined") return false;
+  if (window.matchMedia(REDUCE_MOTION_QUERY).matches) return false;
   return (
-    window.matchMedia(DESKTOP_LENIS_QUERY).matches &&
-    !window.matchMedia(REDUCE_MOTION_QUERY).matches
+    window.matchMedia(TABLET_UP_QUERY).matches ||
+    window.matchMedia(FINE_POINTER_QUERY).matches
   );
 }
 
 export default function SmoothScroll({ children }) {
   const [useLenis, setUseLenis] = useState(shouldUseLenis);
-  const [LenisRoot, setLenisRoot] = useState(null);
 
   useEffect(() => {
-    const desktop = window.matchMedia(DESKTOP_LENIS_QUERY);
+    const tabletUp = window.matchMedia(TABLET_UP_QUERY);
+    const finePointer = window.matchMedia(FINE_POINTER_QUERY);
     const reduce = window.matchMedia(REDUCE_MOTION_QUERY);
     const update = () =>
-      setUseLenis(desktop.matches && !reduce.matches);
+      setUseLenis(
+        !reduce.matches && (tabletUp.matches || finePointer.matches),
+      );
     update();
-    desktop.addEventListener("change", update);
+    tabletUp.addEventListener("change", update);
+    finePointer.addEventListener("change", update);
     reduce.addEventListener("change", update);
     return () => {
-      desktop.removeEventListener("change", update);
+      tabletUp.removeEventListener("change", update);
+      finePointer.removeEventListener("change", update);
       reduce.removeEventListener("change", update);
     };
   }, []);
 
-  useEffect(() => {
-    if (!useLenis) {
-      setLenisRoot(null);
-      return undefined;
-    }
-
-    let cancelled = false;
-    Promise.all([import("lenis/react"), import("lenis/dist/lenis.css")]).then(
-      ([mod]) => {
-        if (!cancelled) setLenisRoot(() => mod.ReactLenis);
-      },
-    );
-
-    return () => {
-      cancelled = true;
-    };
-  }, [useLenis]);
-
-  if (!useLenis || !LenisRoot) {
+  if (!useLenis) {
     return children;
   }
 
   return (
-    <LenisRoot root options={rootScrollOptions}>
+    <ReactLenis root options={rootScrollOptions}>
       {children}
-    </LenisRoot>
+    </ReactLenis>
   );
 }

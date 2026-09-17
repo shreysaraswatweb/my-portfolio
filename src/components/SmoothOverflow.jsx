@@ -339,8 +339,8 @@ const SmoothOverflow = forwardRef(function SmoothOverflow(
         ref={domRef}
         className={cn(
           className,
-          "cursor-grab select-none active:cursor-grabbing",
-          "overflow-x-auto overflow-y-hidden"
+          "overflow-x-auto overflow-y-hidden",
+          isFinePointer && "cursor-grab select-none active:cursor-grabbing",
         )}
         data-nested-scroll="x"
         onClickCapture={handleClickCapture}
