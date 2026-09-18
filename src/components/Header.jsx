@@ -39,12 +39,12 @@ export default function Header({ className = "" }) {
 
   return (
     <header
-      className={`sticky top-0 z-50 flex w-full items-center justify-between px-space-6 py-space-3 pointer-events-none ${className}`}
+      className={`sticky top-0 z-50 flex w-full items-center justify-between px-space-3 sm:px-space-6 py-space-2.5 sm:py-space-3 pointer-events-none relative ${className}`}
     >
       {/* Top Faded Blur Atmosphere — dissolves scrolled content into the top haze */}
       <div
         className={[
-          "pointer-events-none absolute inset-x-2 sm:inset-x-3 top-0 -z-10 h-24 sm:h-26 rounded-b-2xl overflow-hidden",
+          "pointer-events-none absolute inset-x-0 sm:inset-x-3 top-0 -z-10 h-22 sm:h-26 sm:rounded-b-2xl overflow-hidden",
           "transition-opacity duration-300 ease-out",
           isScrolled ? "opacity-100" : "opacity-0",
         ].join(" ")}
@@ -61,25 +61,13 @@ export default function Header({ className = "" }) {
         aria-hidden="true"
       />
 
-      {/* Left Status Badges (visible on desktop/tablet) */}
-      <div className="pointer-events-auto hidden md:flex items-center gap-space-2.5">
-        {/* Operational status badge */}
-        {/* <div className="inline-flex h-9 items-center gap-space-2 rounded-lg border border-border-hairline bg-surface-pill/80 px-3.5 text-micro font-semibold uppercase tracking-wider text-text-primary backdrop-blur-md shadow-card">
-          <span className="relative flex h-2 w-2">
-            <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75" />
-            <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-500" />
-          </span>
-          <span>OPERATIONAL</span>
-          <span className="text-text-tertiary">·</span>
-          <span className="font-normal text-text-secondary">v2.4</span>
-        </div> */}
-
-        {/* Live Digital Clock with Animata Ticker Animation */}
+      {/* Desktop Left: DigitalClock (hidden on mobile/tablet < 1024px) */}
+      <div className="pointer-events-auto hidden lg:flex items-center gap-space-2.5">
         <DigitalClock />
       </div>
 
-      {/* Right Header Controls Capsule */}
-      <div className="pointer-events-auto flex flex-1 md:flex-none justify-end">
+      {/* Header Controls Capsule (Dead-centered on mobile/tablet with w-full justify-center, Right-aligned on desktop with lg:ml-auto) */}
+      <div className="pointer-events-auto flex w-full lg:w-auto lg:ml-auto items-center justify-center lg:justify-end">
         <HeaderControls />
       </div>
     </header>

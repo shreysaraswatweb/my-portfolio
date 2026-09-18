@@ -69,7 +69,7 @@ const mobileNodeVariant = {
   visible: {
     scale: 1,
     opacity: 1,
-    transition: { duration: 0.4, ease: mobileEase },
+    transition: { duration: 0.5, ease: mobileEase },
   },
 };
 
@@ -78,7 +78,7 @@ const mobileIconSpin = {
   visible: {
     rotate: 0,
     opacity: 1,
-    transition: { duration: 0.5, ease: mobileEase, delay: 0.15 },
+    transition: { duration: 0.5, ease: mobileEase, delay: 0.1 },
   },
 };
 
@@ -87,7 +87,7 @@ const mobileCardLeft = {
   visible: {
     opacity: 1,
     x: 0,
-    transition: { duration: 0.45, ease: mobileEase },
+    transition: { duration: 0.5, ease: mobileEase },
   },
 };
 
@@ -96,7 +96,7 @@ const mobileCardRight = {
   visible: {
     opacity: 1,
     x: 0,
-    transition: { duration: 0.45, ease: mobileEase },
+    transition: { duration: 0.5, ease: mobileEase },
   },
 };
 
@@ -104,14 +104,15 @@ const mobileTrackGrow = {
   hidden: { scaleY: 0 },
   visible: {
     scaleY: 1,
-    transition: { duration: 0.6, ease: mobileEase },
+    transition: { duration: 0.5, ease: mobileEase },
   },
 };
 
-const mobileStagger = {
+/* No staggerChildren — all children of each item animate together */
+const mobileItemSync = {
   hidden: {},
   visible: {
-    transition: { staggerChildren: 0.18 },
+    transition: { staggerChildren: 0 },
   },
 };
 
@@ -169,42 +170,28 @@ function EdgeArrow({ label, onClick, side }) {
 
 function MobileTimelineItem({ item, index, total }) {
   const tone = tones[index] ?? tones[0];
-  const nextTone = tones[index + 1] ?? tones[0];
   const Icon = nodeIcons[index] ?? Check;
   const isLeft = index % 2 === 0;
-  const isLast = index === total - 1;
-  const lineGradient = `linear-gradient(180deg, ${tone.hex} 0%, ${nextTone.hex} 100%)`;
 
   return (
     <motion.li
-      variants={mobileStagger}
+      variants={mobileItemSync}
       initial="hidden"
       whileInView="visible"
       viewport={{ once: true, amount: 0.25 }}
-      className="relative grid grid-cols-[1fr_40px_1fr] items-start"
+      className="relative grid grid-cols-[1fr_48px_1fr] gap-x-1 items-start"
     >
       {/* ── Left column ────────────────────────────────── */}
-      <div className={isLeft ? "flex justify-end pr-space-3" : ""}>
+      <div className={isLeft ? "flex justify-end" : ""}>
         {isLeft && (
           <motion.div variants={mobileCardLeft} className="w-full">
-            <MobileCard item={item} tone={tone} align="right" />
+            <MobileCard item={item} tone={tone} align="left" />
           </motion.div>
         )}
       </div>
 
-      {/* ── Center: node + connecting line ─────────────── */}
-      <div className="relative flex flex-col items-center self-stretch">
-        {/* Connecting line below node */}
-        {!isLast && (
-          <motion.span
-            variants={mobileTrackGrow}
-            aria-hidden
-            className="absolute left-1/2 top-10 bottom-0 w-[3px] -translate-x-1/2 origin-top rounded-full opacity-50"
-            style={{ background: lineGradient }}
-          />
-        )}
-
-        {/* Node circle with icon motion */}
+      {/* ── Center: node circle ───────────────────── */}
+      <div className="relative flex flex-col items-center self-stretch pt-[10px]">
         <motion.span
           variants={mobileNodeVariant}
           className={[
@@ -220,7 +207,7 @@ function MobileTimelineItem({ item, index, total }) {
       </div>
 
       {/* ── Right column ───────────────────────────────── */}
-      <div className={!isLeft ? "flex justify-start pl-space-3" : ""}>
+      <div className={!isLeft ? "flex justify-start" : ""}>
         {!isLeft && (
           <motion.div variants={mobileCardRight} className="w-full">
             <MobileCard item={item} tone={tone} align="left" />
@@ -243,9 +230,8 @@ function MobileCard({ item, tone, align }) {
       onBlur={() => setExpanded(false)}
       onClick={() => setExpanded((v) => !v)}
       className={[
-        "mb-space-5 w-full rounded-lg border bg-surface-secondary px-space-4 py-space-3 text-left transition-shadow duration-motion",
+        "mb-space-2 w-full rounded-lg border bg-surface-secondary px-space-3 py-space-3 text-left transition-shadow duration-motion",
         tone.card,
-        align === "right" ? "text-right" : "text-left",
         expanded ? tone.glow : "",
       ]
         .filter(Boolean)
@@ -528,12 +514,23 @@ export default function ExperienceTimeline() {
           (shown on mobile only, hidden from tablet and up)
           ═══════════════════════════════════════════════════ */}
       <motion.ol
-        variants={mobileStagger}
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true, amount: 0.05 }}
+        initial="visible"
         className="relative tablet:hidden"
       >
+        {/* Single continuous vertical line behind all nodes */}
+        <motion.span
+          initial={{ scaleY: 0 }}
+          whileInView={{ scaleY: 1 }}
+          viewport={{ once: true, amount: 0.05 }}
+          transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
+          aria-hidden
+          className="pointer-events-none absolute left-1/2 w-[3px] -translate-x-1/2 origin-top rounded-full opacity-50"
+          style={{
+            top: "30px",
+            bottom: "30px",
+            background: `linear-gradient(180deg, ${tones[0].hex} 0%, ${tones[1].hex} 33%, ${tones[2].hex} 66%, ${tones[3].hex} 100%)`,
+          }}
+        />
         {experience.map((item, index) => (
           <MobileTimelineItem
             key={item.id}

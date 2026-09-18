@@ -7,7 +7,7 @@ import SegmentedTabBar from "../components/SegmentedTabBar";
 import ContentGrid from "../components/ContentGrid";
 import ContactGrid from "../components/ContactGrid";
 import AboutCard from "../components/AboutCard";
-import HeaderControls from "../components/HeaderControls";
+import Header from "../components/Header";
 
 const FeaturedProjects = lazy(() => import("../components/ProjectCard"));
 const SkillsCard = lazy(() => import("../components/SkillsCard"));
@@ -25,11 +25,11 @@ export default function MobileApp() {
   }, [tab]);
 
   return (
-    <div className="relative min-h-screen w-full overflow-x-clip px-space-4 pb-space-12 pt-space-6 tablet:px-space-6">
-      <div className="mx-auto w-full max-w-mobile tablet:max-w-2xl min-[768px]:max-w-3xl">
-        <div className="mb-space-4 flex justify-end">
-          <HeaderControls />
-        </div>
+    <div className="relative min-h-screen w-full overflow-x-clip pb-space-12">
+      {/* Sticky Top Header with Faded Blur Atmosphere & Centered Clock/Controls */}
+      <Header />
+
+      <div className="mx-auto w-full max-w-mobile tablet:max-w-2xl min-[768px]:max-w-3xl px-space-4 pt-space-2 tablet:px-space-6">
         <Hero variant="identity" />
 
         <section className="mt-space-4">
