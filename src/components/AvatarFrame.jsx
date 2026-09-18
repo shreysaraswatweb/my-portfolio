@@ -62,7 +62,7 @@ export default function AvatarFrame({
         />
       </motion.div>
       {showBadge && profile.available ? (
-        <span className="absolute -bottom-space-2 left-space-3 inline-flex items-center gap-space-2 rounded-full bg-surface-elevated px-space-3 py-space-1 text-micro text-text-primary shadow-card">
+        <span className="absolute -bottom-space-2 left-space-3 inline-flex items-center gap-space-2 rounded-md bg-surface-elevated px-space-3 py-space-1 text-micro text-text-primary shadow-card">
           <span className="h-space-2 w-space-2 rounded-full bg-status-available" />
           Available
         </span>

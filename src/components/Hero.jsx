@@ -622,7 +622,7 @@ function DashboardHero() {
 export default function Hero({ variant = "dashboard" }) {
   if (variant === "identity") {
     return (
-      <div className="relative pt-avatar-lift">
+      <div id="home" className="relative pt-avatar-lift">
         <div className="absolute left-1/2 top-0 z-10 -translate-x-1/2">
           <AvatarFrame size="mobile" />
         </div>

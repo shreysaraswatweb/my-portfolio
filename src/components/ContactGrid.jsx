@@ -61,7 +61,7 @@ function BentoTile({ item, className = "" }) {
         <div className="flex min-w-0 items-center gap-space-3">
           {Mark ? <Mark className="h-icon-3d w-icon-3d shrink-0" /> : null}
           {isGithub && item.action ? (
-            <span className="inline-flex rounded-full bg-text-primary px-space-4 py-space-2 text-caption font-medium text-text-on-accent">
+            <span className="inline-flex rounded-md bg-text-primary px-space-4 py-space-2 text-caption font-medium text-text-on-accent">
               {item.action}
             </span>
           ) : null}
@@ -140,7 +140,7 @@ function DesktopTile({ item }) {
           </p>
         </div>
         {item.action ? (
-          <span className="inline-flex shrink-0 rounded-full bg-text-primary px-space-4 py-space-2 text-caption font-medium text-text-on-accent">
+          <span className="inline-flex shrink-0 rounded-md bg-text-primary px-space-4 py-space-2 text-caption font-medium text-text-on-accent">
             {item.action}
           </span>
         ) : null}

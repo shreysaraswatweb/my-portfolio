@@ -27,7 +27,7 @@ export default function MediaPlayer() {
           />
           <p className="text-body-lg text-text-primary">{current.title}</p>
           <p className="text-caption text-text-secondary">{current.artist}</p>
-          <span className="mt-space-2 inline-flex rounded-full bg-status-playing/20 px-space-3 py-space-1 text-micro text-status-playing">
+          <span className="mt-space-2 inline-flex rounded-md bg-status-playing/20 px-space-3 py-space-1 text-micro text-status-playing">
             Playing now
           </span>
         </div>

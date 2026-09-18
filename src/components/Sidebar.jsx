@@ -12,7 +12,6 @@ import {
 } from "lucide-react";
 import { navItems, profile } from "../data/profile";
 import AvatarFrame from "./AvatarFrame";
-import ThemeToggle from "./ThemeToggle";
 import GlassCard from "./ui/GlassCard";
 import SmoothOverflow from "./SmoothOverflow";
 import {
@@ -231,10 +230,6 @@ export default function Sidebar({
       </div>
 
       <footer className="mt-space-4 shrink-0 border-t border-border-hairline pt-space-4">
-        <p className="mb-space-2 text-caption text-text-secondary">Theme</p>
-        <div className="mb-space-4">
-          <ThemeToggle compact />
-        </div>
         <p className="mb-space-2 text-caption text-text-secondary">
           Let&apos;s Connect
         </p>

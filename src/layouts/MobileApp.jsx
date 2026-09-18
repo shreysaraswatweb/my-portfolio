@@ -7,7 +7,7 @@ import SegmentedTabBar from "../components/SegmentedTabBar";
 import ContentGrid from "../components/ContentGrid";
 import ContactGrid from "../components/ContactGrid";
 import AboutCard from "../components/AboutCard";
-import ThemeToggle from "../components/ThemeToggle";
+import HeaderControls from "../components/HeaderControls";
 
 const FeaturedProjects = lazy(() => import("../components/ProjectCard"));
 const SkillsCard = lazy(() => import("../components/SkillsCard"));
@@ -28,7 +28,7 @@ export default function MobileApp() {
     <div className="relative min-h-screen w-full overflow-x-clip px-space-4 pb-space-12 pt-space-6 tablet:px-space-6">
       <div className="mx-auto w-full max-w-mobile tablet:max-w-2xl min-[768px]:max-w-3xl">
         <div className="mb-space-4 flex justify-end">
-          <ThemeToggle compact />
+          <HeaderControls />
         </div>
         <Hero variant="identity" />
 

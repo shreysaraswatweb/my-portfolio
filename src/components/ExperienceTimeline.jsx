@@ -546,11 +546,11 @@ export default function ExperienceTimeline() {
 
       {/* ── Footer summary chips ────────────────────────── */}
       <div className="mt-space-6 flex flex-wrap items-center justify-center gap-space-2">
-        <span className="inline-flex items-center gap-space-2 rounded-full border border-border-hairline bg-surface-secondary px-space-4 py-space-2 text-caption text-text-secondary">
+        <span className="inline-flex items-center gap-space-2 rounded-lg border border-border-hairline bg-surface-secondary px-space-4 py-space-2 text-caption text-text-secondary">
           <Cuboid className="h-space-4 w-space-4 text-accent-violet" strokeWidth={1.75} />
           ~1.5 years mechanical / automotive
         </span>
-        <span className="inline-flex items-center gap-space-2 rounded-full border border-border-hairline bg-surface-secondary px-space-4 py-space-2 text-caption text-text-secondary">
+        <span className="inline-flex items-center gap-space-2 rounded-lg border border-border-hairline bg-surface-secondary px-space-4 py-space-2 text-caption text-text-secondary">
           <Clock className="h-space-4 w-space-4 text-accent-primary" strokeWidth={1.75} />
           ~4.5 years in software
         </span>

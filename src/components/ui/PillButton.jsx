@@ -19,7 +19,7 @@ export default function PillButton({
     <motion.div {...hoverLift} className="inline-flex">
       <Tag
         className={[
-          "inline-flex items-center justify-center gap-space-2 rounded-full px-space-6 py-space-3 text-body font-medium",
+          "inline-flex items-center justify-center gap-space-2 rounded-lg px-space-6 py-space-3 text-body font-medium",
           variants[variant],
           className,
         ].join(" ")}
