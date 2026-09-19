@@ -39,12 +39,12 @@ export default function Header({ className = "" }) {
 
   return (
     <header
-      className={`sticky top-0 z-50 flex w-full items-center justify-between px-space-3 sm:px-space-6 py-space-2.5 sm:py-space-3 pointer-events-none relative ${className}`}
+      className={`sticky top-0 z-50 flex w-full items-center justify-between px-space-4 tablet:px-space-6 py-space-2 tablet:py-space-3 pointer-events-none relative ${className}`}
     >
       {/* Top Faded Blur Atmosphere — dissolves scrolled content into the top haze */}
       <div
         className={[
-          "pointer-events-none absolute inset-x-0 sm:inset-x-3 top-0 -z-10 h-22 sm:h-26 sm:rounded-b-2xl overflow-hidden",
+          "pointer-events-none absolute inset-x-0 tablet:inset-x-3 top-0 -z-10 h-20 tablet:h-24 tablet:rounded-b-2xl overflow-hidden",
           "transition-opacity duration-300 ease-out",
           isScrolled ? "opacity-100" : "opacity-0",
         ].join(" ")}

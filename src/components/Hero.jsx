@@ -21,13 +21,13 @@ export function IdentityHeader({ align = "center" }) {
 
 export function BioList() {
   return (
-    <ul className="mt-space-5 space-y-space-2 text-center">
+    <ul className="mt-space-5 flex flex-col items-center gap-space-2">
       {bioLines.map((line) => (
         <li
           key={line.text}
-          className="flex items-center justify-center gap-space-2 text-body-lg text-text-primary"
+          className="flex items-start gap-space-2 text-body-lg text-text-primary"
         >
-          <span aria-hidden>{line.emoji}</span>
+          <span aria-hidden className="shrink-0 leading-[1.5]">{line.emoji}</span>
           <span>{line.text}</span>
         </li>
       ))}
@@ -37,14 +37,14 @@ export function BioList() {
 
 export function MetaRow() {
   return (
-    <div className="mt-space-6 flex items-start justify-between gap-space-3 tablet:justify-center tablet:gap-space-8 text-caption text-text-secondary">
-      <span className="inline-flex min-w-0 items-center gap-space-2">
+    <div className="mt-space-6 flex flex-wrap items-center justify-center gap-x-space-6 gap-y-space-2 text-caption text-text-secondary">
+      <span className="inline-flex items-center gap-space-2">
         <MapPin className="h-space-4 w-space-4 shrink-0" strokeWidth={1.75} />
-        <span className="truncate">{profile.location}</span>
+        <span>{profile.location}</span>
       </span>
-      <span className="inline-flex min-w-0 items-center gap-space-2">
+      <span className="inline-flex items-center gap-space-2">
         <Cake className="h-space-4 w-space-4 shrink-0" strokeWidth={1.75} />
-        <span className="truncate">{profile.joinedOn}</span>
+        <span>{profile.joinedOn}</span>
       </span>
     </div>
   );
