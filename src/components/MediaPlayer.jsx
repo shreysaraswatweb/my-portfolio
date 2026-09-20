@@ -392,12 +392,20 @@ export default function MediaPlayer() {
                   title="Spotify Playlist Embed"
                 />
               </div>
-              {/* Lower Section Illustration: High-res doodle displayed only in Spotify view */}
+              {/* Lower Section Illustration: High-res doodle displayed only in Spotify view, theme-aware */}
               <div className="spotify-lower-illustration-wrap">
                 <img
                   src={spotifyDoodleDark}
                   alt="Good music, good code, good food, same playlist, different day"
-                  className="spotify-lower-illustration-img"
+                  className="spotify-lower-illustration-img dark-theme-only"
+                  loading="lazy"
+                  width="1024"
+                  height="600"
+                />
+                <img
+                  src={spotifyDoodleLight}
+                  alt="Good music, good code, good food, same playlist, different day"
+                  className="spotify-lower-illustration-img light-theme-only"
                   loading="lazy"
                   width="1024"
                   height="600"

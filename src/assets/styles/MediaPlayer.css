@@ -560,3 +560,142 @@
   filter: drop-shadow(0 6px 18px rgba(0, 0, 0, 0.65))
           drop-shadow(0 0 16px rgba(29, 185, 84, 0.2));
 }
+
+/* ==========================================================================
+   Theme Adaptations (Card background and content follow active theme)
+   ========================================================================== */
+
+/* Dark Theme Image / Component Defaults */
+.spotify-music-card .dark-theme-only {
+  display: block;
+}
+.spotify-music-card .light-theme-only {
+  display: none;
+}
+
+/* Light Theme Overrides */
+html[data-theme="light"] .spotify-music-card {
+  --player-card-bg: rgba(255, 255, 255, 0.88);
+  --cyan-accent: #0d9488;
+  --cyan-glow: rgba(13, 148, 136, 0.45);
+}
+
+html[data-theme="light"] .spotify-music-card .app-container {
+  background-color: var(--player-card-bg);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(22, 24, 31, 0.08);
+  box-shadow: 0 18px 42px rgba(22, 24, 31, 0.08),
+              0 2px 8px rgba(22, 24, 31, 0.04);
+  color: #16181f;
+}
+
+/* Light Theme: Top Live Status */
+html[data-theme="light"] .spotify-music-card .spotify-live-status-top .live-status-label {
+  color: rgba(22, 24, 31, 0.72);
+}
+
+/* Light Theme: Top Mode Switcher */
+html[data-theme="light"] .spotify-music-card .mode-switcher-top {
+  background: rgba(255, 255, 255, 0.88);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(22, 24, 31, 0.1);
+  box-shadow: 0 2px 8px rgba(22, 24, 31, 0.06);
+}
+
+html[data-theme="light"] .spotify-music-card .mode-tab-btn {
+  color: rgba(22, 24, 31, 0.65);
+}
+
+html[data-theme="light"] .spotify-music-card .mode-tab-btn.is-active {
+  color: #16181f;
+}
+
+html[data-theme="light"] .spotify-music-card .active-pill-bg {
+  background: rgba(22, 24, 31, 0.08);
+  border: 1px solid rgba(22, 24, 31, 0.06);
+  box-shadow: 0 1px 4px rgba(22, 24, 31, 0.08);
+}
+
+html[data-theme="light"] .spotify-music-card .active-pill-bg.spotify-active {
+  background: #1DB954;
+  border-color: rgba(255, 255, 255, 0.3);
+  box-shadow: 0 2px 8px rgba(29, 185, 84, 0.35);
+}
+
+html[data-theme="light"] .spotify-music-card .mode-tab-btn.is-active:has(.spotify-active) {
+  color: #ffffff;
+}
+
+/* Light Theme: Spotify Embed Card */
+html[data-theme="light"] .spotify-music-card .spotify-embed-card {
+  box-shadow: 0 8px 24px rgba(22, 24, 31, 0.12);
+  border: 1px solid rgba(22, 24, 31, 0.06);
+}
+
+/* Light Theme: Doodle Illustration switching */
+html[data-theme="light"] .spotify-music-card .dark-theme-only {
+  display: none !important;
+}
+html[data-theme="light"] .spotify-music-card .light-theme-only {
+  display: block !important;
+}
+
+html[data-theme="light"] .spotify-music-card .spotify-lower-illustration-img {
+  filter: drop-shadow(0 2px 8px rgba(22, 24, 31, 0.06));
+}
+
+html[data-theme="light"] .spotify-music-card .spotify-lower-illustration-img:hover {
+  filter: drop-shadow(0 4px 14px rgba(22, 24, 31, 0.12))
+          drop-shadow(0 0 12px rgba(29, 185, 84, 0.15));
+}
+
+/* Light Theme: Player Deck */
+html[data-theme="light"] .spotify-music-card #fade {
+  background: linear-gradient(to bottom, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.85) 75%, var(--player-card-bg) 100%);
+}
+
+html[data-theme="light"] .spotify-music-card #trackTitle {
+  color: #16181f;
+}
+
+html[data-theme="light"] .spotify-music-card #bandName {
+  color: rgba(22, 24, 31, 0.65);
+}
+
+html[data-theme="light"] .spotify-music-card .like-btn {
+  color: rgba(22, 24, 31, 0.55);
+}
+
+html[data-theme="light"] .spotify-music-card .seek-timestamps span {
+  color: rgba(22, 24, 31, 0.55);
+}
+
+html[data-theme="light"] .spotify-music-card .seek-bar-bg {
+  background: rgba(22, 24, 31, 0.12);
+}
+
+html[data-theme="light"] .spotify-music-card button.neumorph-btn {
+  background: #ffffff;
+  color: #16181f;
+  border: 1px solid rgba(22, 24, 31, 0.07);
+  box-shadow: 4px 4px 10px rgba(22, 24, 31, 0.07),
+              -3px -3px 8px rgba(255, 255, 255, 0.95);
+}
+
+html[data-theme="light"] .spotify-music-card button.neumorph-btn:active {
+  background: #f1f5f9;
+  box-shadow: inset 3px 3px 6px rgba(22, 24, 31, 0.1),
+              inset -2px -2px 5px rgba(255, 255, 255, 0.8);
+}
+
+html[data-theme="light"] .spotify-music-card #loopBtn,
+html[data-theme="light"] .spotify-music-card #shuffleBtn {
+  color: rgba(22, 24, 31, 0.55);
+}
+
+html[data-theme="light"] .spotify-music-card #loopBtn.active,
+html[data-theme="light"] .spotify-music-card #shuffleBtn.active {
+  color: var(--cyan-accent);
+}
