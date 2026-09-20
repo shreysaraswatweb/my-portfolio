@@ -444,3 +444,119 @@
   border-radius: 18px;
   background: transparent;
 }
+
+/* ==========================================================================
+   Spotify Live Status (Top-left blank space beside toggle button)
+   Clean format matching photo: blinking green dot + subtle text (no pill container)
+   ========================================================================== */
+
+.spotify-music-card .spotify-live-status-top {
+  position: absolute;
+  top: 18px;
+  left: 14px;
+  z-index: 25;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  padding: 0;
+  user-select: none;
+  pointer-events: none;
+}
+
+.spotify-music-card .live-beacon {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 8px;
+  height: 8px;
+  flex-shrink: 0;
+}
+
+.spotify-music-card .live-beacon-ping {
+  position: absolute;
+  inset: -1px;
+  border-radius: 50%;
+  background-color: #1DB954;
+  animation: liveGreenPing 1.8s cubic-bezier(0, 0, 0.2, 1) infinite;
+  pointer-events: none;
+}
+
+.spotify-music-card .live-beacon-core {
+  position: relative;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: #1ed760;
+  box-shadow: 0 0 5px #1ed760, 0 0 9px rgba(30, 215, 96, 0.7);
+  animation: liveGreenBlink 1.4s ease-in-out infinite;
+  pointer-events: none;
+}
+
+.spotify-music-card .live-status-label {
+  font-size: 0.6875rem;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.6);
+  letter-spacing: 0.01em;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+@keyframes liveGreenBlink {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+    box-shadow: 0 0 6px #1ed760, 0 0 12px rgba(30, 215, 96, 0.85);
+  }
+  50% {
+    opacity: 0.3;
+    transform: scale(0.85);
+    box-shadow: 0 0 2px #1ed760;
+  }
+}
+
+@keyframes liveGreenPing {
+  0% {
+    transform: scale(0.85);
+    opacity: 0.85;
+  }
+  70%, 100% {
+    transform: scale(2.4);
+    opacity: 0;
+  }
+}
+
+/* ==========================================================================
+   Spotify Lower Section Illustration (Theme-Adapted High-Resolution Doodle)
+   ========================================================================== */
+
+.spotify-music-card .spotify-lower-illustration-wrap {
+  margin-top: 10px;
+  padding: 4px 4px 6px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  user-select: none;
+}
+
+.spotify-music-card .spotify-lower-illustration-img {
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+  display: block;
+  filter: drop-shadow(0 4px 14px rgba(0, 0, 0, 0.45));
+  transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1),
+              filter 0.35s ease;
+  will-change: transform;
+}
+
+.spotify-music-card .spotify-lower-illustration-img:hover {
+  transform: scale(1.02);
+  filter: drop-shadow(0 6px 18px rgba(0, 0, 0, 0.65))
+          drop-shadow(0 0 16px rgba(29, 185, 84, 0.2));
+}

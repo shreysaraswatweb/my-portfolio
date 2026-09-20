@@ -14,6 +14,8 @@ import {
 } from "lucide-react";
 import { tracks } from "../data/profile";
 import "../assets/styles/MediaPlayer.css";
+import spotifyDoodleDark from "../assets/webp/spotify-doodle-dark.webp";
+import spotifyDoodleLight from "../assets/webp/spotify-doodle-light.webp";
 
 // Helper to convert "3:09" -> seconds
 function parseDuration(timeStr) {
@@ -362,6 +364,20 @@ export default function MediaPlayer() {
               transition={{ type: "spring", stiffness: 380, damping: 28 }}
               className="spotify-embed-wrap"
             >
+              {/* Spotify Live Status: Clean format matching bottom style (blinking green dot + text, no pill container) */}
+              <motion.div
+                initial={{ opacity: 0, x: -6 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: 0.05, duration: 0.2 }}
+                className="spotify-live-status-top"
+              >
+                <span className="live-beacon">
+                  <span className="live-beacon-ping" />
+                  <span className="live-beacon-core" />
+                </span>
+                <span className="live-status-label">Spotify is live</span>
+              </motion.div>
+
               <div className="spotify-embed-card">
                 <iframe
                   data-testid="embed-iframe"
@@ -376,19 +392,16 @@ export default function MediaPlayer() {
                   title="Spotify Playlist Embed"
                 />
               </div>
-              <div className="mt-2.5 flex items-center justify-between px-2 pb-1">
-                <span className="text-micro text-white/50 flex items-center gap-1.5">
-                  <span className="inline-block h-1.5 w-1.5 rounded-full bg-[#1DB954]" />
-                  Playlist on Spotify
-                </span>
-                <a
-                  href="https://open.spotify.com/playlist/1jfLDmuldcs3bbQ0ofeUSu"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-micro font-medium text-[#1DB954] hover:text-[#1ed760] transition-colors"
-                >
-                  Open in App ↗
-                </a>
+              {/* Lower Section Illustration: High-res doodle displayed only in Spotify view */}
+              <div className="spotify-lower-illustration-wrap">
+                <img
+                  src={spotifyDoodleDark}
+                  alt="Good music, good code, good food, same playlist, different day"
+                  className="spotify-lower-illustration-img"
+                  loading="lazy"
+                  width="1024"
+                  height="600"
+                />
               </div>
             </motion.div>
           )}
