@@ -16,6 +16,8 @@ import { tracks } from "../data/profile";
 import "../assets/styles/MediaPlayer.css";
 import spotifyDoodleDark from "../assets/webp/spotify-doodle-dark.webp";
 import spotifyDoodleLight from "../assets/webp/spotify-doodle-light.webp";
+import { useTheme } from "../theme/ThemeProvider";
+import { Particles } from "@/registry/magicui/particles";
 
 // Helper to convert "3:09" -> seconds
 function parseDuration(timeStr) {
@@ -35,6 +37,13 @@ function formatTime(seconds) {
 }
 
 export default function MediaPlayer() {
+  const { resolved } = useTheme();
+  const [color, setColor] = useState("#ffffff");
+
+  useEffect(() => {
+    setColor(resolved === "dark" ? "#ffffff" : "#000000");
+  }, [resolved]);
+
   const [viewMode, setViewMode] = useState("player"); // "player" | "spotify"
   const [trackIndex, setTrackIndex] = useState(0);
   const [isPlaying, setIsPlaying] = useState(true);
@@ -394,6 +403,13 @@ export default function MediaPlayer() {
               </div>
               {/* Lower Section Illustration: High-res doodle displayed only in Spotify view, theme-aware */}
               <div className="spotify-lower-illustration-wrap">
+                <Particles
+                  className="spotify-doodle-particles absolute inset-0 z-0 pointer-events-none"
+                  quantity={80}
+                  ease={80}
+                  color={color}
+                  refresh={resolved}
+                />
                 <img
                   src={spotifyDoodleDark}
                   alt="Good music, good code, good food, same playlist, different day"
