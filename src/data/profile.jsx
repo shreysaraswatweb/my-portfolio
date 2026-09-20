@@ -24,6 +24,7 @@ import gallerySunset80 from "../assets/webp/gallery-sunset-80.webp";
 import albumLofi from "../assets/webp/album-lofi.webp";
 import albumLofi200 from "../assets/webp/album-lofi-200.webp";
 import albumLofi80 from "../assets/webp/album-lofi-80.webp";
+import albumArtFluid from "../assets/webp/album-art-fluid.jpg";
 
 export const profile = {
   firstName: "Shrey",
@@ -294,12 +295,12 @@ export const videos = [
 export const tracks = [
   {
     id: "t1",
-    title: "Chill Lofi Beats",
-    artist: "Night Desk",
-    duration: "2:48",
-    cover: albumLofi,
-    coverMedium: albumLofi200,
-    coverThumb: albumLofi80,
+    title: "Track 1",
+    artist: "Band 1",
+    duration: "3:09",
+    cover: albumArtFluid,
+    coverMedium: albumArtFluid,
+    coverThumb: albumArtFluid,
     playing: true,
   },
   {
