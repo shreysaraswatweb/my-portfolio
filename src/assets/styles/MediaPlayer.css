@@ -1,0 +1,346 @@
+/* ==========================================================================
+   Spotify Media Player Component Styles (Neumorphic Soft-Glass Architecture)
+   Complies with design-system.json tokens across Dark & Light Modes.
+   ========================================================================== */
+
+.spotify-music-card {
+  --color-accent: rgb(var(--rgb-text-primary));
+  --backgroundcolor: rgb(var(--rgb-surface-elevated));
+  --fade-gradient: linear-gradient(180deg, rgba(19, 23, 34, 0) 0%, rgb(var(--rgb-surface-elevated)) 85%);
+  --shadow-dark: rgba(0, 0, 0, 0.42);
+  --shadow-light: rgba(255, 255, 255, 0.05);
+  --blue: #8B5CF6;
+  --spotify-green: #1DB954;
+}
+
+html[data-theme="light"] .spotify-music-card {
+  --color-accent: rgb(var(--rgb-text-primary));
+  --backgroundcolor: rgb(var(--rgb-surface-elevated));
+  --fade-gradient: linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgb(var(--rgb-surface-elevated)) 85%);
+  --shadow-dark: rgba(22, 24, 31, 0.12);
+  --shadow-light: rgba(255, 255, 255, 0.9);
+  --blue: #7C3AED;
+}
+
+.spotify-music-card .app-container {
+  position: relative;
+  background-color: var(--backgroundcolor);
+  border-radius: 28px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25),
+              inset 0 1px 0 var(--color-border-glass);
+  text-align: center;
+  overflow: hidden;
+  box-sizing: border-box;
+  padding-bottom: 20px;
+  width: 100%;
+  border: 1px solid var(--color-border-hairline);
+  transition: background-color 200ms ease, border-color 200ms ease;
+}
+
+.spotify-music-card #albumArt {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  border-radius: 26px 26px 0 0;
+  margin-bottom: -80px;
+  transition: transform 300ms ease;
+}
+
+.spotify-music-card #fade {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  height: 100px;
+  background: var(--fade-gradient);
+  pointer-events: none;
+}
+
+.spotify-music-card #uiWrap {
+  position: relative;
+  padding: 0 20px;
+  box-sizing: border-box;
+  z-index: 3;
+  margin-top: -55px;
+}
+
+.spotify-music-card #trackTitle {
+  font-size: 1.35rem;
+  font-weight: 700;
+  line-height: 1.2;
+  color: rgb(var(--rgb-text-primary));
+  letter-spacing: -0.01em;
+}
+
+.spotify-music-card #bandName {
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: rgb(var(--rgb-text-secondary));
+  margin-top: 2px;
+}
+
+/* Neumorphic Control Buttons */
+.spotify-music-card button.neumorph-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-accent);
+  font-size: 1em;
+  font-weight: 400;
+  border: none;
+  border-radius: 9999px;
+  height: 2.5rem;
+  width: 2.5rem;
+  background: var(--backgroundcolor);
+  box-shadow: 4px 4px 8px var(--shadow-dark),
+              -4px -4px 8px var(--shadow-light);
+  cursor: pointer;
+  transition: all 180ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.spotify-music-card button.neumorph-btn:hover {
+  box-shadow: 2px 2px 5px var(--shadow-dark),
+              -2px -2px 5px var(--shadow-light);
+  transform: translateY(-1px);
+}
+
+.spotify-music-card button.neumorph-btn:active {
+  background: var(--backgroundcolor);
+  box-shadow: inset 2px 2px 5px var(--shadow-dark),
+              inset -2px -2px 5px var(--shadow-light);
+  transform: translateY(0);
+}
+
+.spotify-music-card #playPauseBtn {
+  height: 56px;
+  width: 56px;
+  margin: 0 16px 16px;
+}
+
+.spotify-music-card #shuffleBtn.active,
+.spotify-music-card #loopBtn.active {
+  color: var(--blue);
+}
+
+/* Volume Overlay */
+.spotify-music-card #volume {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 0;
+  top: 14px;
+  left: 14px;
+  z-index: 10;
+  background: rgba(0, 0, 0, 0.45);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border-radius: 9999px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  padding: 4px 8px 4px 4px;
+}
+
+.spotify-music-card #volume-bar {
+  position: relative;
+  width: 0;
+  overflow: hidden;
+  height: 6px;
+  transform: translateY(0);
+  opacity: 0;
+  transition: width 240ms ease, opacity 240ms ease;
+  margin-left: 2px;
+}
+
+.spotify-music-card #volume:hover #volume-bar,
+.spotify-music-card #volume:focus-within #volume-bar {
+  width: 72px;
+  opacity: 1;
+}
+
+.spotify-music-card #muteBtn {
+  box-shadow: none;
+  background: none;
+  border: none;
+  color: #fff;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  cursor: pointer;
+  padding: 0;
+}
+
+.spotify-music-card #volumeSlider {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 6px;
+  margin: 0;
+  -webkit-appearance: none;
+  appearance: none;
+  background: rgba(255, 255, 255, 0.2);
+  outline: none;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.spotify-music-card .volume-indicator {
+  position: absolute;
+  height: 6px;
+  background: #ffffff;
+  border-radius: 5px;
+  pointer-events: none;
+  top: 0;
+  left: 0;
+}
+
+.spotify-music-card #volumeSlider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  cursor: pointer;
+  background: white;
+  position: relative;
+  z-index: 2;
+}
+
+.spotify-music-card #volumeSlider::-moz-range-thumb {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  cursor: pointer;
+  background: white;
+  border: none;
+  position: relative;
+  z-index: 2;
+}
+
+/* Seek Bar */
+.spotify-music-card .seek-bar {
+  position: relative;
+  height: 40px;
+  margin-top: 14px;
+}
+
+.spotify-music-card .seek-track-bg {
+  position: absolute;
+  top: 8px;
+  left: 0;
+  width: 100%;
+  height: 6px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.14);
+  pointer-events: none;
+  z-index: 1;
+}
+
+html[data-theme="light"] .spotify-music-card .seek-track-bg {
+  background: rgba(0, 0, 0, 0.1);
+}
+
+.spotify-music-card .seek-indicator {
+  position: absolute;
+  top: 8px;
+  left: 0;
+  height: 6px;
+  background: var(--blue);
+  border-radius: 10px;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.spotify-music-card #seekSlider {
+  position: absolute;
+  top: 8px;
+  left: 0;
+  width: 100%;
+  height: 6px;
+  margin: 0;
+  -webkit-appearance: none;
+  appearance: none;
+  background: transparent;
+  outline: none;
+  border-radius: 10px;
+  cursor: pointer;
+  z-index: 3;
+}
+
+.spotify-music-card #seekSlider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  cursor: pointer;
+  position: relative;
+  z-index: 4;
+  background: var(--blue);
+  box-shadow: 2px 2px 6px var(--shadow-dark),
+              -2px -2px 6px var(--shadow-light);
+}
+
+.spotify-music-card #seekSlider::-moz-range-thumb {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  cursor: pointer;
+  background: var(--blue);
+  border: none;
+  box-shadow: 2px 2px 6px var(--shadow-dark),
+              -2px -2px 6px var(--shadow-light);
+}
+
+.spotify-music-card #currentTime,
+.spotify-music-card #trackTime {
+  position: absolute;
+  top: 18px;
+  font-size: 0.72rem;
+  font-weight: 500;
+  color: rgb(var(--rgb-text-tertiary));
+  font-family: var(--font-mono, monospace);
+}
+
+.spotify-music-card #currentTime {
+  left: 0;
+}
+
+.spotify-music-card #trackTime {
+  right: 0;
+}
+
+.spotify-music-card #likeBtn {
+  box-shadow: none;
+  background: none;
+  border: none;
+  margin: 8px auto 0;
+  cursor: pointer;
+  transition: transform 220ms cubic-bezier(.17, -0.99, .61, 1.73), color 200ms ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.spotify-music-card #likeBtn:hover {
+  transform: scale(1.25);
+}
+
+.spotify-music-card #loopBtn,
+.spotify-music-card #shuffleBtn {
+  box-shadow: none;
+  background: none;
+  border: none;
+  margin: 0 8px;
+  font-size: 0.95rem;
+  cursor: pointer;
+  color: rgb(var(--rgb-text-tertiary));
+  transition: color 180ms ease, transform 180ms ease;
+}
+
+.spotify-music-card #loopBtn:hover,
+.spotify-music-card #shuffleBtn:hover {
+  color: rgb(var(--rgb-text-primary));
+  transform: scale(1.1);
+}
