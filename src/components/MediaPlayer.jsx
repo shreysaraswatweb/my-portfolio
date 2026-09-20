@@ -119,50 +119,6 @@ export default function MediaPlayer() {
   return (
     <div className="spotify-music-card w-full">
       <div className="app-container">
-        {/* Top-Left: Volume Overlay directly over Artwork matching photo */}
-        <div className={`volume-widget-top ${isVolumeDragging ? "is-dragging" : ""}`}>
-          <motion.button
-            id="muteBtn"
-            type="button"
-            onClick={toggleMute}
-            whileHover={{ scale: 1.15 }}
-            whileTap={{ scale: 0.85, transition: { type: "spring", stiffness: 500, damping: 15 } }}
-            aria-label={volume === 0 ? "Unmute" : "Mute"}
-            className="volume-widget-btn"
-            title={volume === 0 ? "Unmute" : "Mute"}
-          >
-            {volume === 0 ? (
-              <VolumeX className="h-4 w-4 text-rose-400" />
-            ) : (
-              <Volume2 className="h-4 w-4 text-white" />
-            )}
-          </motion.button>
-          <div className="volume-widget-slider-box">
-            <input
-              type="range"
-              id="volumeSlider"
-              min="0"
-              max="1"
-              step="0.01"
-              value={volume}
-              onChange={(e) => setVolume(parseFloat(e.target.value))}
-              onMouseDown={() => setIsVolumeDragging(true)}
-              onTouchStart={() => setIsVolumeDragging(true)}
-              aria-label="Volume slider"
-            />
-            <div className="volume-line-bg" />
-            <div
-              id="volumeIndicator"
-              className="volume-line-fill"
-              style={{ width: `calc(${volume} * (100% - 8px))` }}
-            />
-            <div
-              className="volume-line-dot"
-              style={{ left: `calc(4px + ${volume} * (100% - 8px))` }}
-            />
-          </div>
-        </div>
-
         {/* Top-Right: Smooth Inertial Player to Spotify Mode Switcher */}
         <div className="mode-switcher-top">
           <button
@@ -210,6 +166,50 @@ export default function MediaPlayer() {
               transition={{ type: "spring", stiffness: 380, damping: 28 }}
               className="player-view-wrap"
             >
+              {/* Top-Left: Volume Overlay directly over Artwork (Dedicated ONLY to Player) */}
+              <div className={`volume-widget-top ${isVolumeDragging ? "is-dragging" : ""}`}>
+                <motion.button
+                  id="muteBtn"
+                  type="button"
+                  onClick={toggleMute}
+                  whileHover={{ scale: 1.15 }}
+                  whileTap={{ scale: 0.85, transition: { type: "spring", stiffness: 500, damping: 15 } }}
+                  aria-label={volume === 0 ? "Unmute" : "Mute"}
+                  className="volume-widget-btn"
+                  title={volume === 0 ? "Unmute" : "Mute"}
+                >
+                  {volume === 0 ? (
+                    <VolumeX className="h-4 w-4 text-rose-400" />
+                  ) : (
+                    <Volume2 className="h-4 w-4 text-white" />
+                  )}
+                </motion.button>
+                <div className="volume-widget-slider-box">
+                  <input
+                    type="range"
+                    id="volumeSlider"
+                    min="0"
+                    max="1"
+                    step="0.01"
+                    value={volume}
+                    onChange={(e) => setVolume(parseFloat(e.target.value))}
+                    onMouseDown={() => setIsVolumeDragging(true)}
+                    onTouchStart={() => setIsVolumeDragging(true)}
+                    aria-label="Volume slider"
+                  />
+                  <div className="volume-line-bg" />
+                  <div
+                    id="volumeIndicator"
+                    className="volume-line-fill"
+                    style={{ width: `calc(${volume} * (100% - 8px))` }}
+                  />
+                  <div
+                    className="volume-line-dot"
+                    style={{ left: `calc(4px + ${volume} * (100% - 8px))` }}
+                  />
+                </div>
+              </div>
+
               {/* Artwork (Extends fully to top of card) */}
               <div className="album-art-wrap">
                 <img
