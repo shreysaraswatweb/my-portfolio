@@ -242,6 +242,7 @@ export const projects = [
     id: "qtl-dlt",
     title: "QTL-DLT",
     stack: "Angular · TypeScript · TRAI DLT compliance",
+    techIcons: ["Angular", "TypeScript"],
     summary:
       "Telecom DLT platform for Principal Entities, Telemarketers, and templates — PE-TM chain approval, Razorpay + dynamic TDS, and a 10-scenario PAN/TAN resubmission matrix.",
     image: projectAnalytics,
@@ -252,6 +253,7 @@ export const projects = [
     id: "traceyarn",
     title: "TRACEYARN",
     stack: "React · Redux · Supply-chain QR traceability",
+    techIcons: ["React", "Redux"],
     summary:
       "0-to-1 textile traceability UI — repo scaffolding, routing, Redux, manufacturer/retailer dashboards, and QR batch provenance, through client demos and later revival.",
     image: projectKanban,
@@ -262,6 +264,7 @@ export const projects = [
     id: "arive",
     title: "ARIVE (Wizni)",
     stack: "Angular · TypeScript · Mortgage LOS/POS",
+    techIcons: ["Angular", "TypeScript"],
     summary:
       "UI-fidelity and bug-resolution on an established US mortgage LOS/POS product — VA/FHA/HECM desktop-to-mobile conversion and Document Folders drag-and-drop classification.",
     image: projectFinance,

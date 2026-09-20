@@ -4,6 +4,20 @@ import { projects } from "../data/profile";
 import { cardEntrance, staggerContainer, hoverLift } from "../lib/motion";
 import GlassCard from "./ui/GlassCard";
 import ExternalLinkIcon from "./ui/ExternalLinkIcon";
+import Tooltip from "./ui/Tooltip";
+import {
+  AngularIcon,
+  TypeScriptIcon,
+  ReactIcon,
+  ReduxIcon,
+} from "./icons/TechIcons";
+
+const techIconMap = {
+  Angular: AngularIcon,
+  TypeScript: TypeScriptIcon,
+  React: ReactIcon,
+  Redux: ReduxIcon,
+};
 
 export function ProjectCard({ project }) {
   return (
@@ -28,9 +42,26 @@ export function ProjectCard({ project }) {
       </div>
       <div className="bg-surface-elevated p-space-4">
         <h3 className="text-body-lg text-text-primary">{project.title}</h3>
-        <p className="mt-space-1 text-caption text-text-secondary">
-          {project.stack}
-        </p>
+        {/* Tech stack icons */}
+        {project.techIcons?.length > 0 ? (
+          <div className="mt-space-2 flex items-center gap-space-2">
+            {project.techIcons.map((tech) => {
+              const Icon = techIconMap[tech];
+              if (!Icon) return null;
+              return (
+                <Tooltip key={tech} content={tech} side="top">
+                  <span className="flex h-7 w-7 items-center justify-center rounded-md border border-border-hairline bg-surface-secondary transition-colors duration-200 hover:border-accent-violet/40">
+                    <Icon className="h-4.5 w-4.5" />
+                  </span>
+                </Tooltip>
+              );
+            })}
+          </div>
+        ) : (
+          <p className="mt-space-1 text-caption text-text-secondary">
+            {project.stack}
+          </p>
+        )}
       </div>
     </motion.a>
   );
