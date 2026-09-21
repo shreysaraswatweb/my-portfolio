@@ -36,6 +36,49 @@ function formatTime(seconds) {
   return `${m}:${s < 10 ? "0" : ""}${s}`;
 }
 
+// Exponential Inertial 3D Card FLIP Variants
+const cardFlipVariants = {
+  enter: (direction) => ({
+    x: direction > 0 ? 52 : -52,
+    rotateY: direction > 0 ? 18 : -18,
+    scale: 0.94,
+    opacity: 0,
+    filter: "blur(4px)",
+    transformPerspective: 1200,
+    zIndex: 2,
+  }),
+  center: {
+    x: 0,
+    rotateY: 0,
+    scale: 1,
+    opacity: 1,
+    filter: "blur(0px)",
+    transformPerspective: 1200,
+    zIndex: 1,
+    transition: {
+      type: "spring",
+      stiffness: 250,
+      damping: 25,
+      mass: 0.85,
+      restSpeed: 0.05,
+      restDelta: 0.001,
+    },
+  },
+  exit: (direction) => ({
+    x: direction > 0 ? -48 : 48,
+    rotateY: direction > 0 ? -16 : 16,
+    scale: 0.94,
+    opacity: 0,
+    filter: "blur(4px)",
+    transformPerspective: 1200,
+    zIndex: 0,
+    transition: {
+      duration: 0.38,
+      ease: [0.16, 1, 0.3, 1], // Exponential deceleration curve
+    },
+  }),
+};
+
 export default function MediaPlayer() {
   const { resolved } = useTheme();
   const [color, setColor] = useState("#ffffff");
@@ -45,6 +88,13 @@ export default function MediaPlayer() {
   }, [resolved]);
 
   const [viewMode, setViewMode] = useState("player"); // "player" | "spotify"
+  const [direction, setDirection] = useState(1); // 1 = forward (to spotify), -1 = backward (to player)
+
+  const switchViewMode = (newMode) => {
+    if (newMode === viewMode) return;
+    setDirection(newMode === "spotify" ? 1 : -1);
+    setViewMode(newMode);
+  };
   const [trackIndex, setTrackIndex] = useState(0);
   const [isPlaying, setIsPlaying] = useState(true);
   const [isLiked, setIsLiked] = useState(false);
@@ -129,12 +179,35 @@ export default function MediaPlayer() {
 
   return (
     <div className="spotify-music-card w-full">
-      <div className="app-container">
+      <motion.div
+        layout
+        className="app-container"
+        transition={{
+          layout: {
+            type: "spring",
+            stiffness: 250,
+            damping: 28,
+            mass: 0.85,
+          },
+        }}
+      >
+        {/* Specular Light Sweep Effect during Flip */}
+        <AnimatePresence>
+          <motion.div
+            key={`sheen-${viewMode}`}
+            initial={{ opacity: 0.7, x: direction > 0 ? "-120%" : "120%", skewX: -20 }}
+            animate={{ opacity: 0, x: direction > 0 ? "120%" : "-120%", skewX: -20 }}
+            transition={{ duration: 0.52, ease: [0.16, 1, 0.3, 1] }}
+            className="card-flip-sheen"
+            aria-hidden="true"
+          />
+        </AnimatePresence>
+
         {/* Top-Right: Smooth Inertial Player to Spotify Mode Switcher */}
-        <div className="mode-switcher-top">
+        <motion.div layout="position" className="mode-switcher-top">
           <button
             type="button"
-            onClick={() => setViewMode("player")}
+            onClick={() => switchViewMode("player")}
             className={`mode-tab-btn ${viewMode === "player" ? "is-active" : ""}`}
           >
             {viewMode === "player" && (
@@ -149,7 +222,7 @@ export default function MediaPlayer() {
           </button>
           <button
             type="button"
-            onClick={() => setViewMode("spotify")}
+            onClick={() => switchViewMode("spotify")}
             className={`mode-tab-btn ${viewMode === "spotify" ? "is-active" : ""}`}
           >
             {viewMode === "spotify" && (
@@ -164,17 +237,18 @@ export default function MediaPlayer() {
             </svg>
             <span className="relative z-10">Spotify</span>
           </button>
-        </div>
+        </motion.div>
 
-        {/* View Switching with Smooth Inertial Crossfade */}
-        <AnimatePresence mode="wait" initial={false}>
+        {/* Exponential Shared Layout & 3D Card FLIP Transition */}
+        <AnimatePresence mode="popLayout" initial={false} custom={direction}>
           {viewMode === "player" ? (
             <motion.div
               key="player-view"
-              initial={{ opacity: 0, scale: 0.98, y: 6 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.98, y: -6 }}
-              transition={{ type: "spring", stiffness: 380, damping: 28 }}
+              custom={direction}
+              variants={cardFlipVariants}
+              initial="enter"
+              animate="center"
+              exit="exit"
               className="player-view-wrap"
             >
               {/* Top-Left: Volume Overlay directly over Artwork (Dedicated ONLY to Player) */}
@@ -367,10 +441,11 @@ export default function MediaPlayer() {
           ) : (
             <motion.div
               key="spotify-view"
-              initial={{ opacity: 0, scale: 0.98, y: 6 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.98, y: -6 }}
-              transition={{ type: "spring", stiffness: 380, damping: 28 }}
+              custom={direction}
+              variants={cardFlipVariants}
+              initial="enter"
+              animate="center"
+              exit="exit"
               className="spotify-embed-wrap"
             >
               {/* Spotify Live Status: Clean format matching bottom style (blinking green dot + text, no pill container) */}
@@ -430,7 +505,7 @@ export default function MediaPlayer() {
             </motion.div>
           )}
         </AnimatePresence>
-      </div>
+      </motion.div>
     </div>
   );
 }

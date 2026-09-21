@@ -25,6 +25,8 @@
   box-sizing: border-box;
   width: 100%;
   color: #ffffff;
+  perspective: 1200px;
+  transform-style: preserve-3d;
   transition: background-color 200ms ease, border-color 200ms ease;
 }
 
@@ -452,11 +454,55 @@
 }
 
 /* ==========================================================================
-   Spotify Embed View (Clean, borderless, seamless integration)
+   Spotify Embed & Shared Layout 3D FLIP Views
    ========================================================================== */
+
+.spotify-music-card .player-view-wrap,
+.spotify-music-card .spotify-embed-wrap {
+  width: 100%;
+  position: relative;
+  backface-visibility: hidden;
+  will-change: transform, opacity, filter;
+}
+
+.spotify-music-card .player-view-wrap {
+  display: flex;
+  flex-direction: column;
+}
 
 .spotify-music-card .spotify-embed-wrap {
   padding: 48px 12px 14px;
+}
+
+/* Specular Light Sweep Effect during Flip */
+.spotify-music-card .card-flip-sheen {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    115deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.04) 40%,
+    rgba(255, 255, 255, 0.22) 50%,
+    rgba(255, 255, 255, 0.04) 60%,
+    transparent 100%
+  );
+  pointer-events: none;
+  z-index: 22;
+  border-radius: 30px;
+}
+
+html[data-theme="light"] .spotify-music-card .card-flip-sheen {
+  background: linear-gradient(
+    115deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.15) 40%,
+    rgba(255, 255, 255, 0.5) 50%,
+    rgba(255, 255, 255, 0.15) 60%,
+    transparent 100%
+  );
 }
 
 .spotify-music-card .spotify-embed-card {
