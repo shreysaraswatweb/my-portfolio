@@ -1,14 +1,31 @@
+import { useMemo } from "react";
+import { ReactLenis } from "lenis/react";
+import { rootScrollOptions } from "../lib/scroll";
+import useFinePointer from "../hooks/useFinePointer";
+
 /**
  * SmoothScroll:
- * Provides the same native compositor momentum and fluid deceleration
- * across all screen sizes (mobile, tablet, desktop) without synthetic
- * wheel hijacking, rounding snaps, or stopping jerks.
+ * Inertial physical scrolling via Lenis for desktop mouse/trackpad viewports.
+ * Strict native compositor scrolling for mobile/tablet touch screens (syncTouch: false).
  */
-
-export function shouldUseLenis() {
-  return false;
-}
-
 export default function SmoothScroll({ children }) {
-  return children;
+  const isFinePointer = useFinePointer();
+
+  const options = useMemo(() => {
+    // Only smooth wheel on devices with a fine pointer (mouse/trackpad).
+    // On coarse touch devices (phones/tablets without mouse), smoothWheel is false
+    // and syncTouch is false, guaranteeing 100% native compositor scrolling.
+    return {
+      ...rootScrollOptions,
+      smoothWheel: isFinePointer,
+      autoRaf: isFinePointer,
+    };
+  }, [isFinePointer]);
+
+  return (
+    <ReactLenis root options={options}>
+      {children}
+    </ReactLenis>
+  );
 }
+

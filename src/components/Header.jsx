@@ -17,7 +17,8 @@ export default function Header({ className = "" }) {
   useEffect(() => {
     const handleScroll = () => {
       const scrollY = window.scrollY || document.documentElement.scrollTop || 0;
-      setIsScrolled(scrollY > 4);
+      const nextScrolled = scrollY > 4;
+      setIsScrolled((prev) => (prev !== nextScrolled ? nextScrolled : prev));
     };
 
     handleScroll();
@@ -25,7 +26,8 @@ export default function Header({ className = "" }) {
 
     if (lenis && typeof lenis.on === "function") {
       lenis.on("scroll", (e) => {
-        setIsScrolled((e.scroll || 0) > 4);
+        const nextScrolled = (e.scroll || 0) > 4;
+        setIsScrolled((prev) => (prev !== nextScrolled ? nextScrolled : prev));
       });
     }
 

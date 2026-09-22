@@ -89,6 +89,28 @@ html {
   overscroll-behavior-y: auto;
 }
 
+/* Lenis smooth scrolling integration */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+
+html.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+
+.lenis.lenis-stopped {
+  overflow: clip;
+}
+
+.lenis.lenis-smooth iframe {
+  pointer-events: none;
+}
+
 [data-nested-scroll="x"] {
   overscroll-behavior-x: contain;
   overscroll-behavior-y: auto;

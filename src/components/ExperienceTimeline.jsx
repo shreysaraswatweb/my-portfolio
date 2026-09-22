@@ -100,14 +100,6 @@ const mobileCardRight = {
   },
 };
 
-const mobileTrackGrow = {
-  hidden: { scaleY: 0 },
-  visible: {
-    scaleY: 1,
-    transition: { duration: 0.5, ease: mobileEase },
-  },
-};
-
 /* No staggerChildren — all children of each item animate together */
 const mobileItemSync = {
   hidden: {},
@@ -168,7 +160,7 @@ function EdgeArrow({ label, onClick, side }) {
 
 /* ─── Mobile vertical timeline item ────────────────────────────── */
 
-function MobileTimelineItem({ item, index, total }) {
+function MobileTimelineItem({ item, index }) {
   const tone = tones[index] ?? tones[0];
   const Icon = nodeIcons[index] ?? Check;
   const isLeft = index % 2 === 0;
@@ -185,7 +177,7 @@ function MobileTimelineItem({ item, index, total }) {
       <div className={isLeft ? "flex justify-end" : ""}>
         {isLeft && (
           <motion.div variants={mobileCardLeft} className="w-full">
-            <MobileCard item={item} tone={tone} align="left" />
+            <MobileCard item={item} tone={tone} />
           </motion.div>
         )}
       </div>
@@ -210,7 +202,7 @@ function MobileTimelineItem({ item, index, total }) {
       <div className={!isLeft ? "flex justify-start" : ""}>
         {!isLeft && (
           <motion.div variants={mobileCardRight} className="w-full">
-            <MobileCard item={item} tone={tone} align="left" />
+            <MobileCard item={item} tone={tone} />
           </motion.div>
         )}
       </div>
@@ -218,7 +210,7 @@ function MobileTimelineItem({ item, index, total }) {
   );
 }
 
-function MobileCard({ item, tone, align }) {
+function MobileCard({ item, tone }) {
   const [expanded, setExpanded] = useState(false);
 
   return (
@@ -281,9 +273,11 @@ export default function ExperienceTimeline() {
     const wrapper = scrollerRef.current?.wrapper;
     if (!wrapper) return;
     const max = wrapper.scrollWidth - wrapper.clientWidth;
-    setCanScroll({
-      left: wrapper.scrollLeft > 8,
-      right: max > 8 && wrapper.scrollLeft < max - 8,
+    const nextLeft = wrapper.scrollLeft > 8;
+    const nextRight = max > 8 && wrapper.scrollLeft < max - 8;
+    setCanScroll((prev) => {
+      if (prev.left === nextLeft && prev.right === nextRight) return prev;
+      return { left: nextLeft, right: nextRight };
     });
   }, []);
 

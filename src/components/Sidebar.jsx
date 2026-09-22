@@ -73,9 +73,17 @@ export default function Sidebar({
         const maxScroll = scrollHeight - clientHeight;
         const hasOverflow = maxScroll > 4;
 
-        setScrollState({
-          canScrollUp: hasOverflow && scrollTop > 4,
-          canScrollDown: hasOverflow && scrollTop < maxScroll - 4,
+        const nextCanScrollUp = hasOverflow && scrollTop > 4;
+        const nextCanScrollDown = hasOverflow && scrollTop < maxScroll - 4;
+
+        setScrollState((prev) => {
+          if (
+            prev.canScrollUp === nextCanScrollUp &&
+            prev.canScrollDown === nextCanScrollDown
+          ) {
+            return prev;
+          }
+          return { canScrollUp: nextCanScrollUp, canScrollDown: nextCanScrollDown };
         });
       };
 
