@@ -39,9 +39,9 @@ function formatTime(seconds) {
 // Exponential Inertial 3D Card FLIP Variants
 const cardFlipVariants = {
   enter: (direction) => ({
-    x: direction > 0 ? 52 : -52,
-    rotateY: direction > 0 ? 18 : -18,
-    scale: 0.94,
+    x: direction > 0 ? 36 : -36,
+    rotateY: direction > 0 ? 12 : -12,
+    scale: 0.95,
     opacity: 0,
     filter: "blur(4px)",
     transformPerspective: 1200,
@@ -65,9 +65,9 @@ const cardFlipVariants = {
     },
   },
   exit: (direction) => ({
-    x: direction > 0 ? -48 : 48,
-    rotateY: direction > 0 ? -16 : 16,
-    scale: 0.94,
+    x: direction > 0 ? -32 : 32,
+    rotateY: direction > 0 ? -12 : 12,
+    scale: 0.95,
     opacity: 0,
     filter: "blur(4px)",
     transformPerspective: 1200,
@@ -79,13 +79,9 @@ const cardFlipVariants = {
   }),
 };
 
-export default function MediaPlayer() {
+export default function MediaPlayer({ className = "", id = "music-player" }) {
   const { resolved } = useTheme();
-  const [color, setColor] = useState("#ffffff");
-
-  useEffect(() => {
-    setColor(resolved === "dark" ? "#ffffff" : "#000000");
-  }, [resolved]);
+  const color = resolved === "dark" ? "#ffffff" : "#000000";
 
   const [viewMode, setViewMode] = useState("player"); // "player" | "spotify"
   const [direction, setDirection] = useState(1); // 1 = forward (to spotify), -1 = backward (to player)
@@ -105,6 +101,16 @@ export default function MediaPlayer() {
   const [currentTime, setCurrentTime] = useState(0);
   const [isDragging, setIsDragging] = useState(false);
   const [isVolumeDragging, setIsVolumeDragging] = useState(false);
+  const [isVolumeOpen, setIsVolumeOpen] = useState(false);
+
+  // Auto-close volume slider on touch devices after 3.5s of inactivity
+  useEffect(() => {
+    if (!isVolumeOpen || isVolumeDragging) return;
+    const timer = setTimeout(() => {
+      setIsVolumeOpen(false);
+    }, 3500);
+    return () => clearTimeout(timer);
+  }, [isVolumeOpen, isVolumeDragging]);
 
   const currentTrack = tracks[trackIndex] || tracks[0];
   const totalDuration = parseDuration(currentTrack.duration);
@@ -175,10 +181,15 @@ export default function MediaPlayer() {
     }
   };
 
+  const handleVolumeClick = () => {
+    toggleMute();
+    setIsVolumeOpen((prev) => !prev);
+  };
+
   const seekProgress = Math.min(100, Math.max(0, (currentTime / totalDuration) * 100));
 
   return (
-    <div className="spotify-music-card w-full">
+    <div id={id} className={`spotify-music-card w-full ${className}`}>
       <motion.div
         layout
         className="app-container"
@@ -252,11 +263,17 @@ export default function MediaPlayer() {
               className="player-view-wrap"
             >
               {/* Top-Left: Volume Overlay directly over Artwork (Dedicated ONLY to Player) */}
-              <div className={`volume-widget-top ${isVolumeDragging ? "is-dragging" : ""}`}>
+              <div
+                className={`volume-widget-top ${isVolumeDragging ? "is-dragging" : ""} ${isVolumeOpen ? "is-open" : ""}`}
+                onMouseEnter={() => setIsVolumeOpen(true)}
+                onMouseLeave={() => {
+                  if (!isVolumeDragging) setIsVolumeOpen(false);
+                }}
+              >
                 <motion.button
                   id="muteBtn"
                   type="button"
-                  onClick={toggleMute}
+                  onClick={handleVolumeClick}
                   whileHover={{ scale: 1.15 }}
                   whileTap={{ scale: 0.85, transition: { type: "spring", stiffness: 500, damping: 15 } }}
                   aria-label={volume === 0 ? "Unmute" : "Mute"}

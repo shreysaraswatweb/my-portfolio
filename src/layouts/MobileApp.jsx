@@ -66,6 +66,7 @@ export default function MobileApp() {
             {tab !== "All" ? <FeaturedProjects /> : null}
             <SkillsCard />
             <AchievementCard />
+            {tab !== "Music" ? <MediaPlayer /> : null}
             <ExperienceTimeline />
             <CertificationGrid />
           </Suspense>

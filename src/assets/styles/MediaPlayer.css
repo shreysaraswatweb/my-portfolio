@@ -17,13 +17,16 @@
 .spotify-music-card .app-container {
   position: relative;
   background-color: var(--player-card-bg);
-  border-radius: 30px;
+  border-radius: 28px;
   box-shadow: 0 20px 45px rgba(0, 0, 0, 0.55),
               0 0 0 1px rgba(255, 255, 255, 0.07);
   text-align: center;
   overflow: hidden;
   box-sizing: border-box;
   width: 100%;
+  max-width: 440px;
+  margin-left: auto;
+  margin-right: auto;
   color: #ffffff;
   perspective: 1200px;
   transform-style: preserve-3d;
@@ -84,7 +87,8 @@
 /* Smooth auto-reveal when hovered, focused, or actively dragging */
 .spotify-music-card .volume-widget-top:hover .volume-widget-slider-box,
 .spotify-music-card .volume-widget-top:focus-within .volume-widget-slider-box,
-.spotify-music-card .volume-widget-top.is-dragging .volume-widget-slider-box {
+.spotify-music-card .volume-widget-top.is-dragging .volume-widget-slider-box,
+.spotify-music-card .volume-widget-top.is-open .volume-widget-slider-box {
   width: 54px;
   opacity: 1;
   margin-left: 6px;
@@ -141,6 +145,11 @@
   opacity: 0;
   cursor: pointer;
   z-index: 4;
+  touch-action: none;
+}
+
+.spotify-music-card .volume-widget-slider-box {
+  touch-action: none;
 }
 
 /* Mode Switcher (Top Right: Player to Spotify) */
@@ -269,16 +278,16 @@
 }
 
 .spotify-music-card #trackTitle {
-  font-size: 1.45rem;
+  font-size: clamp(1.15rem, 4.5vw, 1.45rem);
   font-weight: 700;
-  line-height: 1.2;
+  line-height: 1.25;
   color: #ffffff;
   letter-spacing: -0.01em;
   text-shadow: 0 2px 10px rgba(0, 0, 0, 0.7);
 }
 
 .spotify-music-card #bandName {
-  font-size: 0.9rem;
+  font-size: clamp(0.78rem, 3vw, 0.9rem);
   font-weight: 400;
   color: rgba(255, 255, 255, 0.75);
   margin-top: 3px;
@@ -288,12 +297,15 @@
 .spotify-music-card .like-btn {
   background: none;
   border: none;
-  margin: 10px auto 0;
+  margin: 8px auto 0;
   cursor: pointer;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: 4px;
+  padding: 6px;
+  min-height: 36px;
+  min-width: 36px;
+  border-radius: 50%;
 }
 
 /* ==========================================================================
@@ -324,6 +336,7 @@
   display: flex;
   align-items: center;
   cursor: pointer;
+  touch-action: none;
 }
 
 .spotify-music-card .seek-bar-bg {
@@ -382,6 +395,7 @@
   opacity: 0;
   cursor: pointer;
   z-index: 5;
+  touch-action: none;
 }
 
 /* ==========================================================================
@@ -392,8 +406,12 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-top: 24px;
+  margin-top: 22px;
   padding: 0 8px;
+  max-width: 340px;
+  margin-left: auto;
+  margin-right: auto;
+  width: 100%;
 }
 
 .spotify-music-card #loopBtn,
@@ -814,3 +832,128 @@ html[data-theme="light"] .spotify-music-card #loopBtn.active,
 html[data-theme="light"] .spotify-music-card #shuffleBtn.active {
   color: var(--cyan-accent);
 }
+
+/* ==========================================================================
+   Responsive Adaptations (Small phones, mobile, tablet & desktop)
+   ========================================================================== */
+
+@media (max-width: 480px) {
+  .spotify-music-card .album-art-wrap {
+    height: 290px;
+  }
+}
+
+@media (max-width: 380px) {
+  .spotify-music-card #uiWrap {
+    margin-top: -105px;
+    padding: 0 14px 20px;
+  }
+
+  .spotify-music-card .album-art-wrap {
+    height: 270px;
+  }
+
+  .spotify-music-card #fade {
+    height: 180px;
+  }
+
+  .spotify-music-card .playSkip {
+    margin-top: 18px;
+    padding: 0 4px;
+  }
+
+  .spotify-music-card button.neumorph-btn {
+    width: 40px;
+    height: 40px;
+  }
+
+  .spotify-music-card button.neumorph-btn.play-pause-large {
+    width: 52px;
+    height: 52px;
+  }
+
+  .spotify-music-card #loopBtn,
+  .spotify-music-card #shuffleBtn {
+    padding: 4px;
+  }
+
+  .spotify-music-card .volume-widget-top {
+    top: 10px;
+    left: 10px;
+  }
+
+  .spotify-music-card .mode-switcher-top {
+    top: 10px;
+    right: 10px;
+  }
+
+  .spotify-music-card .mode-tab-btn {
+    padding: 2.5px 6px;
+    font-size: 0.62rem;
+    gap: 3px;
+  }
+
+  .spotify-music-card .spotify-embed-wrap {
+    padding: 42px 8px 12px;
+  }
+
+  .spotify-music-card .spotify-embed-iframe {
+    height: 320px;
+  }
+
+  .spotify-music-card .spotify-live-status-top {
+    top: 12px;
+    left: 10px;
+  }
+
+  .spotify-music-card .live-status-label {
+    font-size: 0.625rem;
+  }
+}
+
+@media (max-width: 330px) {
+  .spotify-music-card .app-container {
+    border-radius: 20px;
+  }
+
+  .spotify-music-card .album-art-wrap {
+    height: 240px;
+    border-radius: 20px 20px 0 0;
+  }
+
+  .spotify-music-card #fade {
+    height: 150px;
+  }
+
+  .spotify-music-card #uiWrap {
+    margin-top: -90px;
+    padding: 0 10px 16px;
+  }
+
+  .spotify-music-card button.neumorph-btn {
+    width: 36px;
+    height: 36px;
+  }
+
+  .spotify-music-card button.neumorph-btn.play-pause-large {
+    width: 46px;
+    height: 46px;
+  }
+
+  .spotify-music-card .playSkip {
+    margin-top: 14px;
+    padding: 0 2px;
+  }
+
+  .spotify-music-card .volume-widget-slider-box {
+    margin-left: 2px;
+  }
+
+  .spotify-music-card .volume-widget-top:hover .volume-widget-slider-box,
+  .spotify-music-card .volume-widget-top:focus-within .volume-widget-slider-box,
+  .spotify-music-card .volume-widget-top.is-dragging .volume-widget-slider-box,
+  .spotify-music-card .volume-widget-top.is-open .volume-widget-slider-box {
+    width: 42px;
+  }
+}
+
