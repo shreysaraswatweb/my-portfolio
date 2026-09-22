@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   Play,
@@ -18,6 +18,8 @@ import spotifyDoodleDark from "../assets/webp/spotify-doodle-dark.webp";
 import spotifyDoodleLight from "../assets/webp/spotify-doodle-light.webp";
 import { useTheme } from "../theme/ThemeProvider";
 import { Particles } from "@/registry/magicui/particles";
+import WakeSlider from "./WakeSlider";
+import RippleDistortion from "./RippleDistortion";
 
 // Helper to convert "3:09" -> seconds
 function parseDuration(timeStr) {
@@ -85,20 +87,27 @@ export default function MediaPlayer({ className = "", id = "music-player" }) {
 
   const [viewMode, setViewMode] = useState("player"); // "player" | "spotify"
   const [direction, setDirection] = useState(1); // 1 = forward (to spotify), -1 = backward (to player)
+  const audioRef = useRef(null);
 
   const switchViewMode = (newMode) => {
     if (newMode === viewMode) return;
     setDirection(newMode === "spotify" ? 1 : -1);
     setViewMode(newMode);
+    if (newMode === "spotify" && audioRef.current && isPlaying) {
+      audioRef.current.pause();
+      setIsPlaying(false);
+    }
   };
+
   const [trackIndex, setTrackIndex] = useState(0);
-  const [isPlaying, setIsPlaying] = useState(true);
+  const [isPlaying, setIsPlaying] = useState(false);
   const [isLiked, setIsLiked] = useState(false);
   const [isLoop, setIsLoop] = useState(false);
   const [isShuffle, setIsShuffle] = useState(false);
   const [volume, setVolume] = useState(0.85);
   const [prevVolume, setPrevVolume] = useState(0.85);
   const [currentTime, setCurrentTime] = useState(0);
+  const [realDuration, setRealDuration] = useState(null);
   const [isDragging, setIsDragging] = useState(false);
   const [isVolumeDragging, setIsVolumeDragging] = useState(false);
   const [isVolumeOpen, setIsVolumeOpen] = useState(false);
@@ -113,35 +122,60 @@ export default function MediaPlayer({ className = "", id = "music-player" }) {
   }, [isVolumeOpen, isVolumeDragging]);
 
   const currentTrack = tracks[trackIndex] || tracks[0];
-  const totalDuration = parseDuration(currentTrack.duration);
+  const totalDuration = realDuration || parseDuration(currentTrack.duration);
 
-  // Playback timer simulation
+  const isInitialMount = useRef(true);
+
+  // Sync audio source when track changes
   useEffect(() => {
-    let timer;
-    if (isPlaying && viewMode === "player") {
-      timer = setInterval(() => {
-        setCurrentTime((prev) => {
-          if (prev >= totalDuration) {
-            if (isLoop) return 0;
-            if (isShuffle) {
-              const nextIdx = Math.floor(Math.random() * tracks.length);
-              setTrackIndex(nextIdx);
-            } else {
-              setTrackIndex((idx) => (idx + 1) % tracks.length);
-            }
-            return 0;
-          }
-          return prev + 1;
-        });
-      }, 1000);
+    if (isInitialMount.current) {
+      isInitialMount.current = false;
+      return;
     }
-    return () => clearInterval(timer);
-  }, [isPlaying, totalDuration, isLoop, isShuffle, viewMode]);
+    if (!audioRef.current) return;
+    audioRef.current.src = currentTrack.audio || currentTrack.src;
+    setCurrentTime(0);
+    setRealDuration(null);
+    if (isPlaying && viewMode === "player") {
+      audioRef.current.play().catch((err) => {
+        console.warn("Autoplay blocked on track switch:", err);
+        setIsPlaying(false);
+      });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [trackIndex]);
+
+  // Volume & mute control
+  useEffect(() => {
+    if (!audioRef.current) return;
+    audioRef.current.volume = volume;
+    audioRef.current.muted = volume === 0;
+  }, [volume]);
+
+  // Loop control
+  useEffect(() => {
+    if (!audioRef.current) return;
+    audioRef.current.loop = isLoop;
+  }, [isLoop]);
+
+  // Stop audio on unmount
+  useEffect(() => {
+    const audioEl = audioRef.current;
+    return () => {
+      if (audioEl) {
+        audioEl.pause();
+        audioEl.src = "";
+      }
+    };
+  }, []);
 
   // Global drag release listener
   useEffect(() => {
     if (!isDragging && !isVolumeDragging) return;
     const handleMouseUp = () => {
+      if (isDragging && audioRef.current) {
+        audioRef.current.currentTime = currentTime;
+      }
       setIsDragging(false);
       setIsVolumeDragging(false);
     };
@@ -151,24 +185,47 @@ export default function MediaPlayer({ className = "", id = "music-player" }) {
       window.removeEventListener("mouseup", handleMouseUp);
       window.removeEventListener("touchend", handleMouseUp);
     };
-  }, [isDragging, isVolumeDragging]);
+  }, [isDragging, isVolumeDragging, currentTime]);
+
+  const togglePlay = () => {
+    if (!audioRef.current) return;
+    if (isPlaying) {
+      audioRef.current.pause();
+      setIsPlaying(false);
+    } else {
+      audioRef.current
+        .play()
+        .then(() => setIsPlaying(true))
+        .catch((err) => {
+          console.warn("Playback prevented:", err);
+          setIsPlaying(false);
+        });
+    }
+  };
 
   const handleNext = () => {
+    let nextIdx;
     if (isShuffle) {
-      const nextIdx = Math.floor(Math.random() * tracks.length);
-      setTrackIndex(nextIdx);
+      nextIdx = Math.floor(Math.random() * tracks.length);
+      if (nextIdx === trackIndex && tracks.length > 1) {
+        nextIdx = (trackIndex + 1) % tracks.length;
+      }
     } else {
-      setTrackIndex((prev) => (prev + 1) % tracks.length);
+      nextIdx = (trackIndex + 1) % tracks.length;
     }
+    setTrackIndex(nextIdx);
     setCurrentTime(0);
+    setRealDuration(null);
   };
 
   const handlePrev = () => {
-    if (currentTime > 3) {
+    if (audioRef.current && audioRef.current.currentTime > 3) {
+      audioRef.current.currentTime = 0;
       setCurrentTime(0);
     } else {
       setTrackIndex((prev) => (prev - 1 + tracks.length) % tracks.length);
       setCurrentTime(0);
+      setRealDuration(null);
     }
   };
 
@@ -182,14 +239,53 @@ export default function MediaPlayer({ className = "", id = "music-player" }) {
   };
 
   const handleVolumeClick = () => {
+    if (volume === 0) {
+      setVolume(prevVolume || 0.85);
+      setIsVolumeOpen(true);
+      return;
+    }
+    if (!isVolumeOpen) {
+      setIsVolumeOpen(true);
+      return;
+    }
     toggleMute();
-    setIsVolumeOpen((prev) => !prev);
   };
 
-  const seekProgress = Math.min(100, Math.max(0, (currentTime / totalDuration) * 100));
+  const handleSeekChange = (e) => {
+    const val = Number(e.target.value);
+    setCurrentTime(val);
+    if (audioRef.current && !isDragging) {
+      audioRef.current.currentTime = val;
+    }
+  };
+
+  const seekProgress = Math.min(100, Math.max(0, (currentTime / (totalDuration || 1)) * 100));
 
   return (
     <div id={id} className={`spotify-music-card w-full ${className}`}>
+      {/* Native HTML5 Audio Element for Real Music Streaming */}
+      <audio
+        ref={audioRef}
+        src={currentTrack.audio || currentTrack.src}
+        preload="metadata"
+        onTimeUpdate={() => {
+          if (!isDragging && audioRef.current) {
+            setCurrentTime(Math.floor(audioRef.current.currentTime));
+          }
+        }}
+        onLoadedMetadata={() => {
+          if (audioRef.current?.duration && !isNaN(audioRef.current.duration)) {
+            setRealDuration(Math.round(audioRef.current.duration));
+          }
+        }}
+        onEnded={() => {
+          if (!isLoop) {
+            handleNext();
+          }
+        }}
+        onPlay={() => setIsPlaying(true)}
+        onPause={() => setIsPlaying(false)}
+      />
       <motion.div
         layout
         className="app-container"
@@ -287,38 +383,55 @@ export default function MediaPlayer({ className = "", id = "music-player" }) {
                   )}
                 </motion.button>
                 <div className="volume-widget-slider-box">
-                  <input
-                    type="range"
-                    id="volumeSlider"
-                    min="0"
-                    max="1"
-                    step="0.01"
-                    value={volume}
-                    onChange={(e) => setVolume(parseFloat(e.target.value))}
-                    onMouseDown={() => setIsVolumeDragging(true)}
-                    onTouchStart={() => setIsVolumeDragging(true)}
-                    aria-label="Volume slider"
-                  />
-                  <div className="volume-line-bg" />
-                  <div
-                    id="volumeIndicator"
-                    className="volume-line-fill"
-                    style={{ width: `calc(${volume} * (100% - 8px))` }}
-                  />
-                  <div
-                    className="volume-line-dot"
-                    style={{ left: `calc(4px + ${volume} * (100% - 8px))` }}
+                  <WakeSlider
+                    value={Math.round(volume * 100)}
+                    onChange={(val) => setVolume(val / 100)}
+                    onDragStart={() => setIsVolumeDragging(true)}
+                    onDragEnd={() => setIsVolumeDragging(false)}
+                    min={0}
+                    max={100}
+                    step={1}
+                    bars={14}
+                    height={20}
+                    restHeight={5}
+                    gap={2.5}
+                    fillColor="#f5f5f5"
+                    trackColor="rgba(255, 255, 255, 0.22)"
+                    crestColor="#14b8a6"
+                    sensitivity={2}
+                    reach={3.5}
+                    skew={1}
+                    glide={0.6}
+                    smoothing={100}
+                    showValue={false}
+                    ariaLabel="Volume slider"
                   />
                 </div>
               </div>
 
               {/* Artwork (Extends fully to top of card) */}
               <div className="album-art-wrap">
-                <img
-                  id="albumArt"
+                <RippleDistortion
+                  key={currentTrack.id || currentTrack.title}
                   src={currentTrack.coverMedium || currentTrack.cover}
-                  alt={currentTrack.title}
-                  loading="lazy"
+                  brushSize={40}
+                  strength={0.185}
+                  swirl={0.5}
+                  rings={0}
+                  grayscale={false}
+                  spread={3}
+                  fade={3}
+                  spacing={1}
+                  dispersion={0}
+                  glint={0}
+                  tint="#a855f7"
+                  tintAmount={0}
+                  highlightColor="#ffffff"
+                  trigger="hover"
+                  clickStrength={2}
+                  quality="high"
+                  enabled
+                  className="w-full h-full"
                 />
                 <div id="fade" />
               </div>
@@ -365,9 +478,9 @@ export default function MediaPlayer({ className = "", id = "music-player" }) {
                       id="seekSlider"
                       min="0"
                       max={totalDuration}
-                      step="1"
+                      step="0.1"
                       value={currentTime}
-                      onChange={(e) => setCurrentTime(Number(e.target.value))}
+                      onChange={handleSeekChange}
                       onMouseDown={() => setIsDragging(true)}
                       onTouchStart={() => setIsDragging(true)}
                       aria-label="Seek track position"
@@ -416,7 +529,7 @@ export default function MediaPlayer({ className = "", id = "music-player" }) {
                     id="playPauseBtn"
                     type="button"
                     className="neumorph-btn play-pause-large"
-                    onClick={() => setIsPlaying(!isPlaying)}
+                    onClick={togglePlay}
                     whileHover={{ scale: 1.08 }}
                     whileTap={{ scale: 0.90, transition: { type: "spring", stiffness: 500, damping: 18 } }}
                     aria-label={isPlaying ? "Pause" : "Play"}

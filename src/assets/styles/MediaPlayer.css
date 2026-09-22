@@ -37,7 +37,7 @@
    Top Overlays (Volume at top-left, Mode Switcher at top-right)
    ========================================================================== */
 
-/* Volume Widget Overlay (Top Left: Auto-hides slider when not hovering) */
+/* Volume Widget Overlay (Top Left: Sleek Frosted Glass Pill with Physics WakeSlider) */
 .spotify-music-card .volume-widget-top {
   position: absolute;
   top: 14px;
@@ -45,7 +45,24 @@
   z-index: 25;
   display: flex;
   align-items: center;
-  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.75));
+  padding: 3px 6px;
+  border-radius: 9999px;
+  background: rgba(0, 0, 0, 0.45);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.4);
+  transition: background-color 220ms ease, border-color 220ms ease, box-shadow 220ms ease;
+  max-width: 122px;
+}
+
+.spotify-music-card .volume-widget-top.is-open,
+.spotify-music-card .volume-widget-top:hover,
+.spotify-music-card .volume-widget-top:focus-within,
+.spotify-music-card .volume-widget-top.is-dragging {
+  background: rgba(18, 21, 30, 0.82);
+  border-color: rgba(255, 255, 255, 0.24);
+  box-shadow: 0 6px 22px rgba(0, 0, 0, 0.6), 0 0 14px rgba(20, 184, 166, 0.2);
 }
 
 .spotify-music-card .volume-widget-btn {
@@ -57,99 +74,44 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 24px;
-  height: 24px;
+  width: 20px;
+  height: 20px;
   flex-shrink: 0;
   transition: color 180ms ease, transform 180ms cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
 .spotify-music-card .volume-widget-btn:hover {
-  color: rgba(255, 255, 255, 0.9);
+  color: rgba(255, 255, 255, 0.95);
 }
 
-/* Volume Slider Box: Hidden and collapsed by default */
+/* Volume Slider Box: Hidden and collapsed into the pill by default */
 .spotify-music-card .volume-widget-slider-box {
   position: relative;
   width: 0;
-  height: 18px;
+  height: 20px;
   opacity: 0;
   overflow: hidden;
   margin-left: 0;
   display: flex;
   align-items: center;
   pointer-events: none;
-  transition: width 260ms cubic-bezier(0.34, 1.56, 0.64, 1),
-              opacity 200ms ease,
+  transition: width 280ms cubic-bezier(0.34, 1.56, 0.64, 1),
+              opacity 220ms ease,
               margin-left 220ms ease;
   will-change: width, opacity;
+  touch-action: none;
 }
 
-/* Smooth auto-reveal when hovered, focused, or actively dragging */
+/* Smooth auto-reveal when hovered, focused, or actively open/dragging — Strictly within red mark boundary */
 .spotify-music-card .volume-widget-top:hover .volume-widget-slider-box,
 .spotify-music-card .volume-widget-top:focus-within .volume-widget-slider-box,
 .spotify-music-card .volume-widget-top.is-dragging .volume-widget-slider-box,
 .spotify-music-card .volume-widget-top.is-open .volume-widget-slider-box {
-  width: 54px;
+  width: 82px;
   opacity: 1;
-  margin-left: 6px;
+  margin-left: 5px;
+  margin-right: 2px;
   pointer-events: auto;
-}
-
-.spotify-music-card .volume-line-bg {
-  position: absolute;
-  top: 7.5px;
-  left: 4px;
-  right: 4px;
-  height: 3px;
-  border-radius: 9999px;
-  background: rgba(255, 255, 255, 0.35);
-  pointer-events: none;
-}
-
-.spotify-music-card .volume-line-fill {
-  position: absolute;
-  top: 7.5px;
-  left: 4px;
-  height: 3px;
-  border-radius: 9999px;
-  background: #ffffff;
-  pointer-events: none;
-  z-index: 2;
-}
-
-.spotify-music-card .volume-line-dot {
-  position: absolute;
-  top: 9px;
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: #ffffff;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.6);
-  pointer-events: none;
-  z-index: 3;
-  transform: translate(-50%, -50%) scale(1);
-  transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
-}
-
-.spotify-music-card .volume-widget-slider-box:hover .volume-line-dot {
-  transform: translate(-50%, -50%) scale(1.25);
-}
-
-.spotify-music-card #volumeSlider {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  margin: 0;
-  opacity: 0;
-  cursor: pointer;
-  z-index: 4;
-  touch-action: none;
-}
-
-.spotify-music-card .volume-widget-slider-box {
-  touch-action: none;
 }
 
 /* Mode Switcher (Top Right: Player to Spotify) */
@@ -236,7 +198,8 @@
   );
 }
 
-.spotify-music-card #albumArt {
+.spotify-music-card #albumArt,
+.spotify-music-card .album-art-wrap canvas {
   width: 100%;
   height: 100%;
   object-fit: cover;
@@ -945,15 +908,21 @@ html[data-theme="light"] .spotify-music-card #shuffleBtn.active {
     padding: 0 2px;
   }
 
+  .spotify-music-card .volume-widget-top {
+    top: 10px;
+    left: 10px;
+    max-width: 108px;
+  }
+
   .spotify-music-card .volume-widget-slider-box {
-    margin-left: 2px;
+    margin-left: 3px;
   }
 
   .spotify-music-card .volume-widget-top:hover .volume-widget-slider-box,
   .spotify-music-card .volume-widget-top:focus-within .volume-widget-slider-box,
   .spotify-music-card .volume-widget-top.is-dragging .volume-widget-slider-box,
   .spotify-music-card .volume-widget-top.is-open .volume-widget-slider-box {
-    width: 42px;
+    width: 72px;
   }
 }
 
