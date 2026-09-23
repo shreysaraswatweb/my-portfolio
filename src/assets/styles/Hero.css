@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&display=swap');
+
 /* =========================================================
    RESET & CONTAINER
 ========================================================= */
@@ -518,46 +520,79 @@ html[data-theme="light"] .bulb-cord-svg path {
 }
 
 /* =========================================================
-   TOOLTIP HINTS
+   TOOLTIP HINTS (DOODLE STYLE)
 ========================================================= */
 
 .bulb-hint {
   position: absolute;
-  top: 85px;
-  left: calc(71.5% + 32px);
+  top: 80px;
+  left: calc(71.5% + 55px);
   z-index: 60;
   display: flex;
   align-items: center;
-  gap: 6px;
-  padding: 5px 9px;
-  color: rgba(220, 226, 240, 0.72);
-  font-size: 11.5px;
-  background: rgba(7, 11, 20, 0.72);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 6px;
-  backdrop-filter: blur(8px);
+  gap: 8px;
+  padding: 0;
+  background: transparent;
+  border: none;
+  border-radius: 0;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  box-shadow: none;
   white-space: nowrap;
   pointer-events: none;
-  animation: hint-float 2.5s ease-in-out infinite;
+  animation: doodle-float 3s ease-in-out infinite;
 }
 
 .color-hint {
-  top: 92px;
-  animation-duration: 3s;
+  top: 80px;
+  animation-duration: 3.5s;
 }
 
-@keyframes hint-float {
+.bulb-doodle-arrow {
+  width: 44px;
+  height: 22px;
+  flex-shrink: 0;
+  color: var(--bulb-glow, #f5a623);
+  filter: drop-shadow(0 0 6px var(--bulb-glow, rgba(245, 166, 35, 0.45)));
+  transition: color 0.6s ease, filter 0.6s ease;
+}
 
+.bulb-doodle-text {
+  font-family: 'Caveat', 'Baloo 2', cursive, sans-serif;
+  font-size: 17px;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: 0.02em;
+  color: var(--filament-color, #fde68a);
+  text-shadow: 0 0 10px var(--bulb-glow, rgba(245, 166, 35, 0.35));
+  transform: rotate(-1.5deg);
+  display: inline-block;
+  user-select: none;
+  transition: color 0.6s ease, text-shadow 0.6s ease;
+}
+
+@keyframes doodle-float {
   0%,
   100% {
-    opacity: 0.6;
-    transform: translateY(0);
+    opacity: 0.88;
+    transform: translateY(0) rotate(0deg);
   }
 
   50% {
     opacity: 1;
-    transform: translateY(3px);
+    transform: translateY(-3px) rotate(-0.5deg);
   }
+}
+
+/* Light Theme Overrides */
+html[data-theme="light"] .bulb-doodle-arrow {
+  color: #d97706;
+  filter: drop-shadow(0 1px 2px rgba(217, 119, 6, 0.25));
+}
+
+html[data-theme="light"] .bulb-doodle-text {
+  color: #b45309;
+  text-shadow: none;
 }
 
 /* =========================================================
@@ -592,7 +627,16 @@ html[data-theme="light"] .bulb-cord-svg path {
   }
 
   .bulb-hint {
-    left: calc(74% + 30px);
+    left: calc(74% + 52px);
+  }
+
+  .bulb-doodle-arrow {
+    width: 36px;
+    height: 18px;
+  }
+
+  .bulb-doodle-text {
+    font-size: 15px;
   }
 }
 

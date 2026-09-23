@@ -601,18 +601,58 @@ function DashboardHero() {
         <div className="light-haze" />
       </div>
 
-      {/* Tooltip Hints */}
+      {/* Doodle Tooltip Hints */}
       {!lightOn && pullY === 0 && (
-        <div className="bulb-hint">
-          <span>💡</span>
-          <span>Pull the bulb</span>
+        <div className="bulb-hint" role="status">
+          <svg
+            className="bulb-doodle-arrow"
+            viewBox="0 0 44 22"
+            fill="none"
+            aria-hidden="true"
+          >
+            <path
+              d="M 41 16 C 28 6, 14 6, 3 10"
+              stroke="currentColor"
+              strokeWidth="2.2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+            <path
+              d="M 3 10 L 11 5 M 3 10 L 10 16"
+              stroke="currentColor"
+              strokeWidth="2.2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+          </svg>
+          <span className="bulb-doodle-text">Pull the bulb</span>
         </div>
       )}
 
       {lightOn && pullY === 0 && (
-        <div className="bulb-hint color-hint">
-          <span>🎨</span>
-          <span>Click bulb to change shade</span>
+        <div className="bulb-hint color-hint" role="status">
+          <svg
+            className="bulb-doodle-arrow"
+            viewBox="0 0 44 22"
+            fill="none"
+            aria-hidden="true"
+          >
+            <path
+              d="M 41 16 C 28 6, 14 6, 3 10"
+              stroke="currentColor"
+              strokeWidth="2.2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+            <path
+              d="M 3 10 L 11 5 M 3 10 L 10 16"
+              stroke="currentColor"
+              strokeWidth="2.2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+          </svg>
+          <span className="bulb-doodle-text">Click bulb to change shade</span>
         </div>
       )}
     </GlassCard>
