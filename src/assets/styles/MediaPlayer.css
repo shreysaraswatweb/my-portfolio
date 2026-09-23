@@ -37,77 +37,99 @@
    Top Overlays (Volume at top-left, Mode Switcher at top-right)
    ========================================================================== */
 
-/* Volume Widget Overlay (Top Left: Sleek Frosted Glass Pill with Physics WakeSlider) */
+/* Shared Top Capsule Shell Styling */
+.spotify-music-card .mode-switcher-top,
 .spotify-music-card .volume-widget-top {
   position: absolute;
   top: 14px;
-  left: 14px;
   z-index: 25;
   display: flex;
   align-items: center;
-  padding: 3px 6px;
+  height: 29px;
+  box-sizing: border-box;
   border-radius: 9999px;
   background: rgba(0, 0, 0, 0.45);
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
   border: 1px solid rgba(255, 255, 255, 0.16);
   box-shadow: 0 4px 14px rgba(0, 0, 0, 0.4);
-  transition: background-color 220ms ease, border-color 220ms ease, box-shadow 220ms ease;
-  max-width: 122px;
+  padding: 2.5px;
+  transition: border-color 200ms ease, box-shadow 200ms ease;
+}
+
+.spotify-music-card .mode-switcher-top:hover,
+.spotify-music-card .volume-widget-top:hover {
+  border-color: rgba(255, 255, 255, 0.28);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.5);
+}
+
+/* Volume Capsule (Top-Left): Compact pill when closed, expands on touch / tap / hover */
+.spotify-music-card .volume-widget-top {
+  left: 14px;
+  padding: 2.5px;
+  cursor: pointer;
+  transition: padding 240ms ease, border-color 200ms ease, box-shadow 200ms ease;
 }
 
 .spotify-music-card .volume-widget-top.is-open,
 .spotify-music-card .volume-widget-top:hover,
 .spotify-music-card .volume-widget-top:focus-within,
 .spotify-music-card .volume-widget-top.is-dragging {
-  background: rgba(18, 21, 30, 0.82);
-  border-color: rgba(255, 255, 255, 0.24);
-  box-shadow: 0 6px 22px rgba(0, 0, 0, 0.6), 0 0 14px rgba(20, 184, 166, 0.2);
+  padding-right: 5px;
+  border-color: rgba(255, 255, 255, 0.28);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.5);
 }
 
+/* Mute / Unmute Button: Matching active pill aesthetic */
 .spotify-music-card .volume-widget-btn {
-  background: transparent;
-  border: none;
-  color: #ffffff;
-  padding: 0;
-  cursor: pointer;
+  position: relative;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 20px;
-  height: 20px;
+  width: 22px;
+  height: 22px;
+  border-radius: 9999px;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  background: rgba(255, 255, 255, 0.22);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+  color: #ffffff;
+  padding: 0;
+  cursor: pointer;
   flex-shrink: 0;
-  transition: color 180ms ease, transform 180ms cubic-bezier(0.34, 1.56, 0.64, 1);
+  transition: background-color 180ms ease, border-color 180ms ease, transform 180ms ease;
 }
 
 .spotify-music-card .volume-widget-btn:hover {
-  color: rgba(255, 255, 255, 0.95);
+  background: rgba(255, 255, 255, 0.32);
+  border-color: rgba(255, 255, 255, 0.38);
+  color: #ffffff;
 }
 
-/* Volume Slider Box: Hidden and collapsed into the pill by default */
+/* Volume Waveform Slider Box: Hidden by default, smoothly reveals on touch / tap / hover */
 .spotify-music-card .volume-widget-slider-box {
   position: relative;
+  display: flex;
+  align-items: center;
+  height: 22px;
   width: 0;
-  height: 20px;
   opacity: 0;
   overflow: hidden;
   margin-left: 0;
-  display: flex;
-  align-items: center;
+  margin-right: 0;
+  cursor: pointer;
+  touch-action: none;
   pointer-events: none;
   transition: width 280ms cubic-bezier(0.34, 1.56, 0.64, 1),
-              opacity 220ms ease,
-              margin-left 220ms ease;
+              opacity 200ms ease,
+              margin 200ms ease;
   will-change: width, opacity;
-  touch-action: none;
 }
 
-/* Smooth auto-reveal when hovered, focused, or actively open/dragging — Strictly within red mark boundary */
+.spotify-music-card .volume-widget-top.is-open .volume-widget-slider-box,
 .spotify-music-card .volume-widget-top:hover .volume-widget-slider-box,
 .spotify-music-card .volume-widget-top:focus-within .volume-widget-slider-box,
-.spotify-music-card .volume-widget-top.is-dragging .volume-widget-slider-box,
-.spotify-music-card .volume-widget-top.is-open .volume-widget-slider-box {
-  width: 82px;
+.spotify-music-card .volume-widget-top.is-dragging .volume-widget-slider-box {
+  width: 70px;
   opacity: 1;
   margin-left: 5px;
   margin-right: 2px;
@@ -676,13 +698,25 @@ html[data-theme="light"] .spotify-music-card .spotify-live-status-top .live-stat
   color: rgba(22, 24, 31, 0.72);
 }
 
-/* Light Theme: Top Mode Switcher */
-html[data-theme="light"] .spotify-music-card .mode-switcher-top {
+/* Light Theme: Top Mode Switcher & Volume Capsule */
+html[data-theme="light"] .spotify-music-card .mode-switcher-top,
+html[data-theme="light"] .spotify-music-card .volume-widget-top {
   background: rgba(255, 255, 255, 0.88);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
   border: 1px solid rgba(22, 24, 31, 0.1);
   box-shadow: 0 2px 8px rgba(22, 24, 31, 0.06);
+}
+
+html[data-theme="light"] .spotify-music-card .volume-widget-btn {
+  background: rgba(22, 24, 31, 0.08);
+  border: 1px solid rgba(22, 24, 31, 0.06);
+  box-shadow: 0 1px 4px rgba(22, 24, 31, 0.08);
+  color: #16181f;
+}
+
+html[data-theme="light"] .spotify-music-card .volume-widget-btn:hover {
+  background: rgba(22, 24, 31, 0.14);
 }
 
 html[data-theme="light"] .spotify-music-card .mode-tab-btn {
@@ -843,11 +877,39 @@ html[data-theme="light"] .spotify-music-card #shuffleBtn.active {
   .spotify-music-card .volume-widget-top {
     top: 10px;
     left: 10px;
+    height: 27px;
+    padding: 2.5px;
+  }
+
+  .spotify-music-card .volume-widget-top.is-open,
+  .spotify-music-card .volume-widget-top:hover,
+  .spotify-music-card .volume-widget-top:focus-within,
+  .spotify-music-card .volume-widget-top.is-dragging {
+    padding-right: 4px;
   }
 
   .spotify-music-card .mode-switcher-top {
     top: 10px;
     right: 10px;
+    height: 27px;
+  }
+
+  .spotify-music-card .volume-widget-btn {
+    width: 20px;
+    height: 20px;
+  }
+
+  .spotify-music-card .volume-widget-slider-box {
+    height: 20px;
+  }
+
+  .spotify-music-card .volume-widget-top.is-open .volume-widget-slider-box,
+  .spotify-music-card .volume-widget-top:hover .volume-widget-slider-box,
+  .spotify-music-card .volume-widget-top:focus-within .volume-widget-slider-box,
+  .spotify-music-card .volume-widget-top.is-dragging .volume-widget-slider-box {
+    width: 60px;
+    margin-left: 4px;
+    margin-right: 1px;
   }
 
   .spotify-music-card .mode-tab-btn {
@@ -909,20 +971,41 @@ html[data-theme="light"] .spotify-music-card #shuffleBtn.active {
   }
 
   .spotify-music-card .volume-widget-top {
-    top: 10px;
-    left: 10px;
-    max-width: 108px;
+    top: 8px;
+    left: 8px;
+    height: 25px;
+    padding: 2px;
+  }
+
+  .spotify-music-card .volume-widget-top.is-open,
+  .spotify-music-card .volume-widget-top:hover,
+  .spotify-music-card .volume-widget-top:focus-within,
+  .spotify-music-card .volume-widget-top.is-dragging {
+    padding-right: 3px;
+  }
+
+  .spotify-music-card .mode-switcher-top {
+    top: 8px;
+    right: 8px;
+    height: 25px;
+  }
+
+  .spotify-music-card .volume-widget-btn {
+    width: 18px;
+    height: 18px;
   }
 
   .spotify-music-card .volume-widget-slider-box {
-    margin-left: 3px;
+    height: 18px;
   }
 
+  .spotify-music-card .volume-widget-top.is-open .volume-widget-slider-box,
   .spotify-music-card .volume-widget-top:hover .volume-widget-slider-box,
   .spotify-music-card .volume-widget-top:focus-within .volume-widget-slider-box,
-  .spotify-music-card .volume-widget-top.is-dragging .volume-widget-slider-box,
-  .spotify-music-card .volume-widget-top.is-open .volume-widget-slider-box {
-    width: 72px;
+  .spotify-music-card .volume-widget-top.is-dragging .volume-widget-slider-box {
+    width: 50px;
+    margin-left: 3px;
+    margin-right: 0;
   }
 }
 

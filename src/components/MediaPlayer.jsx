@@ -88,6 +88,7 @@ export default function MediaPlayer({ className = "", id = "music-player" }) {
   const [viewMode, setViewMode] = useState("player"); // "player" | "spotify"
   const [direction, setDirection] = useState(1); // 1 = forward (to spotify), -1 = backward (to player)
   const audioRef = useRef(null);
+  const volumeWidgetRef = useRef(null);
 
   const switchViewMode = (newMode) => {
     if (newMode === viewMode) return;
@@ -119,6 +120,20 @@ export default function MediaPlayer({ className = "", id = "music-player" }) {
       setIsVolumeOpen(false);
     }, 3500);
     return () => clearTimeout(timer);
+  }, [isVolumeOpen, isVolumeDragging, volume]);
+
+  // Tap/click outside to hide volume capsule
+  useEffect(() => {
+    if (!isVolumeOpen) return;
+    const handleOutsidePointer = (e) => {
+      if (volumeWidgetRef.current && !volumeWidgetRef.current.contains(e.target)) {
+        if (!isVolumeDragging) {
+          setIsVolumeOpen(false);
+        }
+      }
+    };
+    window.addEventListener("pointerdown", handleOutsidePointer);
+    return () => window.removeEventListener("pointerdown", handleOutsidePointer);
   }, [isVolumeOpen, isVolumeDragging]);
 
   const currentTrack = tracks[trackIndex] || tracks[0];
@@ -238,7 +253,8 @@ export default function MediaPlayer({ className = "", id = "music-player" }) {
     }
   };
 
-  const handleVolumeClick = () => {
+  const handleVolumeClick = (e) => {
+    e?.stopPropagation?.();
     if (volume === 0) {
       setVolume(prevVolume || 0.85);
       setIsVolumeOpen(true);
@@ -360,26 +376,32 @@ export default function MediaPlayer({ className = "", id = "music-player" }) {
             >
               {/* Top-Left: Volume Overlay directly over Artwork (Dedicated ONLY to Player) */}
               <div
+                ref={volumeWidgetRef}
                 className={`volume-widget-top ${isVolumeDragging ? "is-dragging" : ""} ${isVolumeOpen ? "is-open" : ""}`}
                 onMouseEnter={() => setIsVolumeOpen(true)}
                 onMouseLeave={() => {
                   if (!isVolumeDragging) setIsVolumeOpen(false);
+                }}
+                onClick={(e) => {
+                  if (!isVolumeOpen) {
+                    e.stopPropagation();
+                    setIsVolumeOpen(true);
+                  }
                 }}
               >
                 <motion.button
                   id="muteBtn"
                   type="button"
                   onClick={handleVolumeClick}
-                  whileHover={{ scale: 1.15 }}
-                  whileTap={{ scale: 0.85, transition: { type: "spring", stiffness: 500, damping: 15 } }}
+                  whileHover={{ scale: 1.1 }}
+                  whileTap={{ scale: 0.88, transition: { type: "spring", stiffness: 500, damping: 15 } }}
                   aria-label={volume === 0 ? "Unmute" : "Mute"}
                   className="volume-widget-btn"
-                  title={volume === 0 ? "Unmute" : "Mute"}
                 >
                   {volume === 0 ? (
-                    <VolumeX className="h-4 w-4 text-rose-400" />
+                    <VolumeX className="h-3.5 w-3.5 text-rose-400" />
                   ) : (
-                    <Volume2 className="h-4 w-4 text-white" />
+                    <Volume2 className="h-3.5 w-3.5 text-white" />
                   )}
                 </motion.button>
                 <div className="volume-widget-slider-box">
@@ -391,10 +413,10 @@ export default function MediaPlayer({ className = "", id = "music-player" }) {
                     min={0}
                     max={100}
                     step={1}
-                    bars={14}
-                    height={20}
+                    bars={12}
+                    height={18}
                     restHeight={5}
-                    gap={2.5}
+                    gap={2.2}
                     fillColor="#f5f5f5"
                     trackColor="rgba(255, 255, 255, 0.22)"
                     crestColor="#14b8a6"
