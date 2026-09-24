@@ -1,7 +1,55 @@
 /* ==========================================================================
    Get In Touch / Contact Form Widget Card
    Designed per design-system.json tokens (Glassmorphic, Amber Accent, Rounded)
+   With 3D Exponential Card Flip & Signature Emerald Tick Mark Animation
    ========================================================================== */
+
+/* 3D Perspective Flip Viewport */
+.contact-flip-viewport {
+  width: 100%;
+  position: relative;
+  perspective: 1200px;
+}
+
+.contact-flip-face {
+  width: 100%;
+  position: relative;
+  transform-style: preserve-3d;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  will-change: transform, opacity, filter;
+}
+
+/* Specular Light Sweep Effect during 3D Card Flip */
+.contact-flip-sheen {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    115deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.04) 40%,
+    rgba(255, 255, 255, 0.28) 50%,
+    rgba(255, 255, 255, 0.04) 60%,
+    transparent 100%
+  );
+  pointer-events: none;
+  z-index: 25;
+  border-radius: 32px;
+}
+
+html[data-theme="light"] .contact-flip-sheen {
+  background: linear-gradient(
+    115deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.15) 40%,
+    rgba(255, 255, 255, 0.55) 50%,
+    rgba(255, 255, 255, 0.15) 60%,
+    transparent 100%
+  );
+}
 
 .contact-widget-card {
   position: relative;
@@ -34,6 +82,10 @@
   pointer-events: none;
   z-index: 0;
   transition: opacity 0.5s ease;
+}
+
+.contact-success-glow {
+  background: radial-gradient(circle, rgba(34, 197, 94, 0.2) 0%, rgba(245, 166, 35, 0.1) 50%, transparent 75%);
 }
 
 /* Status Pill */
@@ -200,27 +252,117 @@
   cursor: not-allowed;
 }
 
-/* Success Card View */
+/* ==========================================================================
+   Success Card View & Signature Animated Green Tick Mark
+   ========================================================================== */
+
+.contact-success-card-shell {
+  display: flex;
+  flex-direction: column;
+  min-height: 440px;
+}
+
 .contact-success-box {
-  padding: 16px 8px;
-  text-align: center;
+  flex: 1;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 12px;
+  justify-content: center;
+  text-align: center;
+  padding: 16px 8px;
+  gap: 14px;
 }
 
+/* Animated Green Tick Mark Container */
 .contact-success-icon-wrap {
-  width: 52px;
-  height: 52px;
+  position: relative;
+  width: 58px;
+  height: 58px;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: radial-gradient(circle, rgba(34, 197, 94, 0.2) 0%, rgba(34, 197, 94, 0.05) 70%);
-  border: 1px solid rgba(34, 197, 94, 0.4);
   color: #22c55e;
-  box-shadow: 0 0 20px rgba(34, 197, 94, 0.25);
+  margin: 0 auto;
+  box-shadow: 0 0 24px rgba(34, 197, 94, 0.28);
+}
+
+/* Dual Concentric Emerald Sonar Ripples */
+.contact-success-ripple {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  border: 1.5px solid rgba(34, 197, 94, 0.7);
+  pointer-events: none;
+  animation: contact-ripple-burst 1.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.contact-success-ripple.ripple-2 {
+  animation-delay: 0.16s;
+  border-color: rgba(34, 197, 94, 0.45);
+}
+
+@keyframes contact-ripple-burst {
+  0% {
+    transform: scale(0.65);
+    opacity: 0.95;
+  }
+  100% {
+    transform: scale(1.95);
+    opacity: 0;
+  }
+}
+
+/* Ambient Core Breathing Glow */
+.contact-success-glow-core {
+  position: absolute;
+  inset: -6px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(34, 197, 94, 0.35) 0%, transparent 70%);
+  filter: blur(8px);
+  pointer-events: none;
+  animation: contact-emerald-breathe 2.8s ease-in-out infinite alternate;
+}
+
+@keyframes contact-emerald-breathe {
+  0% {
+    opacity: 0.45;
+    transform: scale(0.95);
+  }
+  100% {
+    opacity: 0.95;
+    transform: scale(1.12);
+  }
+}
+
+/* SVG Badge Components */
+.contact-success-svg {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  z-index: 2;
+  filter: drop-shadow(0 0 10px rgba(34, 197, 94, 0.5));
+}
+
+.contact-success-circle-bg {
+  fill: rgba(34, 197, 94, 0.14);
+}
+
+.contact-success-check-path {
+  filter: drop-shadow(0 0 6px rgba(34, 197, 94, 0.75));
+}
+
+/* Reset / Send Another Button */
+.contact-reset-btn {
+  border-radius: 10px;
+  border: 1px solid transparent;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.contact-reset-btn:hover {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.08);
+  color: #ffffff;
 }
 
 /* ==========================================================================
@@ -240,6 +382,10 @@ html[data-theme="light"] .contact-widget-card:hover {
 
 html[data-theme="light"] .contact-widget-glow {
   background: radial-gradient(circle, rgba(245, 166, 35, 0.2) 0%, rgba(139, 92, 246, 0.12) 50%, transparent 75%);
+}
+
+html[data-theme="light"] .contact-success-glow {
+  background: radial-gradient(circle, rgba(22, 163, 74, 0.18) 0%, rgba(245, 166, 35, 0.1) 50%, transparent 75%);
 }
 
 html[data-theme="light"] .contact-status-pill {
@@ -293,4 +439,51 @@ html[data-theme="light"] .contact-textarea:focus {
 html[data-theme="light"] .contact-input:focus + .contact-input-icon,
 html[data-theme="light"] .contact-input-wrap:focus-within .contact-input-icon {
   color: #d97706;
+}
+
+html[data-theme="light"] .contact-success-icon-wrap {
+  color: #16a34a;
+  box-shadow: 0 0 20px rgba(22, 163, 74, 0.22);
+}
+
+html[data-theme="light"] .contact-success-circle-bg {
+  fill: rgba(22, 163, 74, 0.1);
+}
+
+html[data-theme="light"] .contact-success-ripple {
+  border-color: rgba(22, 163, 74, 0.6);
+}
+
+html[data-theme="light"] .contact-success-ripple.ripple-2 {
+  border-color: rgba(22, 163, 74, 0.35);
+}
+
+html[data-theme="light"] .contact-success-glow-core {
+  background: radial-gradient(circle, rgba(22, 163, 74, 0.25) 0%, transparent 70%);
+}
+
+html[data-theme="light"] .contact-success-svg {
+  filter: drop-shadow(0 0 8px rgba(22, 163, 74, 0.35));
+}
+
+html[data-theme="light"] .contact-reset-btn:hover {
+  background: rgba(22, 24, 31, 0.05);
+  border-color: rgba(22, 24, 31, 0.08);
+  color: #16181f;
+}
+
+/* ==========================================================================
+   Accessibility & Reduced Motion
+   ========================================================================== */
+@media (prefers-reduced-motion: reduce) {
+  .contact-flip-face {
+    transform: none !important;
+  }
+  .contact-success-ripple {
+    animation: none !important;
+    display: none;
+  }
+  .contact-flip-sheen {
+    display: none !important;
+  }
 }
