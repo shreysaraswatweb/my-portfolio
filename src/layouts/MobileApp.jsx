@@ -15,6 +15,7 @@ const AchievementCard = lazy(() => import("../components/AchievementCard"));
 const CertificationGrid = lazy(() => import("../components/CertificationTile"));
 const ExperienceTimeline = lazy(() => import("../components/ExperienceTimeline"));
 const MediaPlayer = lazy(() => import("../components/MediaPlayer"));
+const ContactCard = lazy(() => import("../components/ContactCard"));
 
 export default function MobileApp() {
   const [tab, setTab] = useState("Photos");
@@ -67,6 +68,7 @@ export default function MobileApp() {
             <SkillsCard />
             <AchievementCard />
             {tab !== "Music" ? <MediaPlayer /> : null}
+            <ContactCard />
             <ExperienceTimeline />
             <CertificationGrid />
           </Suspense>

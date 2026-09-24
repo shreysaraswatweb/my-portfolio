@@ -12,6 +12,7 @@ const ExperienceTimeline = lazy(() => import("../components/ExperienceTimeline")
 const CertificationGrid = lazy(() => import("../components/CertificationTile"));
 const AchievementCard = lazy(() => import("../components/AchievementCard"));
 const MediaPlayer = lazy(() => import("../components/MediaPlayer"));
+const ContactCard = lazy(() => import("../components/ContactCard"));
 
 export default function DesktopDashboard() {
   return (
@@ -43,6 +44,9 @@ export default function DesktopDashboard() {
             </Suspense>
             <Suspense fallback={null}>
               <MediaPlayer />
+            </Suspense>
+            <Suspense fallback={null}>
+              <ContactCard />
             </Suspense>
           </div>
         </aside>
