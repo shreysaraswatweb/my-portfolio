@@ -399,9 +399,9 @@ export default function MediaPlayer({ className = "", id = "music-player" }) {
                   className="volume-widget-btn"
                 >
                   {volume === 0 ? (
-                    <VolumeX className="h-3.5 w-3.5 text-rose-400" />
+                    <VolumeX className="h-3.5 w-3.5 text-rose-500" />
                   ) : (
-                    <Volume2 className="h-3.5 w-3.5 text-white" />
+                    <Volume2 className="h-3.5 w-3.5 text-current" />
                   )}
                 </motion.button>
                 <div className="volume-widget-slider-box">
@@ -417,9 +417,13 @@ export default function MediaPlayer({ className = "", id = "music-player" }) {
                     height={18}
                     restHeight={5}
                     gap={2.2}
-                    fillColor="#f5f5f5"
-                    trackColor="rgba(255, 255, 255, 0.22)"
-                    crestColor="#14b8a6"
+                    fillColor={resolved === "light" ? "#16181f" : "#f5f5f5"}
+                    trackColor={
+                      resolved === "light"
+                        ? "rgba(22, 24, 31, 0.2)"
+                        : "rgba(255, 255, 255, 0.22)"
+                    }
+                    crestColor={resolved === "light" ? "#0d9488" : "#14b8a6"}
                     sensitivity={2}
                     reach={3.5}
                     skew={1}
