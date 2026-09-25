@@ -95,6 +95,7 @@ export default function ContactCard({ className = "" }) {
   const [errors, setErrors] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [submitError, setSubmitError] = useState("");
   const [copied, setCopied] = useState(false);
   const [flipDirection, setFlipDirection] = useState(1);
 
@@ -117,29 +118,42 @@ export default function ContactCard({ className = "" }) {
     return Object.keys(errs).length === 0;
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (!validate()) return;
 
     setIsSubmitting(true);
+    setSubmitError("");
     setFlipDirection(1);
 
-    const subject = `[${selectedTopic.label}] From ${name.trim()}: ${selectedTopic.subject}`;
-    const body = `Hi ${profile.firstName},\n\nName: ${name.trim()}\nEmail: ${email.trim()}\nTopic: ${selectedTopic.label}\n\nMessage:\n${message.trim()}\n\n---\nSent via portfolio contact widget`;
+    try {
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: name.trim(),
+          email: email.trim(),
+          message: message.trim(),
+          topic: selectedTopic.label,
+        }),
+      });
 
-    const recipient = profile.email || "";
-    const mailtoUrl = `mailto:${recipient}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+      const data = await res.json();
 
-    // Slight delay for smooth dispatch animation
-    setTimeout(() => {
-      window.location.href = mailtoUrl;
+      if (res.ok && data.success) {
+        setIsSubmitted(true);
+      } else {
+        setSubmitError(data.message || "Something went wrong. Please try again.");
+      }
+    } catch {
+      setSubmitError("Something went wrong. Please try again.");
+    } finally {
       setIsSubmitting(false);
-      setIsSubmitted(true);
-    }, 450);
+    }
   };
 
   const handleCopyDraft = async () => {
-    const draftText = `To: ${profile.displayName} ${profile.email ? `<${profile.email}>` : ""}\nSubject: [${selectedTopic.label}] From ${name.trim()}: ${selectedTopic.subject}\n\nHi ${profile.firstName},\n\nName: ${name.trim()}\nEmail: ${email.trim()}\nTopic: ${selectedTopic.label}\n\nMessage:\n${message.trim()}`;
+    const draftText = `Name: ${name.trim()}\nEmail: ${email.trim()}\nTopic: ${selectedTopic.label}\n\nMessage:\n${message.trim()}`;
 
     try {
       await navigator.clipboard.writeText(draftText);
@@ -154,6 +168,7 @@ export default function ContactCard({ className = "" }) {
   const handleReset = () => {
     setFlipDirection(-1);
     setIsSubmitted(false);
+    setSubmitError("");
     setCopied(false);
     setTimeout(() => {
       setName("");
@@ -399,7 +414,7 @@ export default function ContactCard({ className = "" }) {
                         transition={{ repeat: Infinity, duration: 0.8, ease: "linear" }}
                         className="h-4 w-4 border-2 border-white/30 border-t-white rounded-full"
                       />
-                      <span>Dispatching...</span>
+                      <span>Sending...</span>
                     </>
                   ) : (
                     <>
@@ -408,6 +423,16 @@ export default function ContactCard({ className = "" }) {
                     </>
                   )}
                 </motion.button>
+
+                {/* Inline error message for failed send */}
+                {submitError && (
+                  <p
+                    role="alert"
+                    className="mt-1.5 text-center text-micro text-rose-400 font-medium"
+                  >
+                    {submitError}
+                  </p>
+                )}
               </form>
             </GlassCard>
           </motion.div>
@@ -545,11 +570,11 @@ export default function ContactCard({ className = "" }) {
 
                 <div className="space-y-1">
                   <h3 className="font-display text-body-lg font-bold text-text-primary">
-                    Draft Dispatched! 🚀
+                    Message Sent! 🚀
                   </h3>
                   <p className="text-caption text-text-secondary max-w-xs mx-auto">
-                    Your email client was triggered with your note. You can also copy
-                    the full draft below.
+                    Your note has been delivered directly to my inbox.
+                    I'll get back to you soon!
                   </p>
                 </div>
 

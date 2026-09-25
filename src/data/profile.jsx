@@ -42,7 +42,7 @@ export const profile = {
   birthday: "~4.5 years in software",
   location: "Gurugram, India",
   joinedOn: "Software work since 2021",
-  email: "",
+  email: "shreysaraswat1998@gmail.com",
   available: false,
   cvUrl: "#",
 };
@@ -79,8 +79,8 @@ export const socials = [
   {
     id: "email",
     label: "Email",
-    handle: "On request",
-    href: "#",
+    handle: "shreysaraswat1998@gmail.com",
+    href: "mailto:shreysaraswat1998@gmail.com",
     variant: "email",
   },
   {
