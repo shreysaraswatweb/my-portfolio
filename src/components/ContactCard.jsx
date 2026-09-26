@@ -426,12 +426,20 @@ export default function ContactCard({ className = "" }) {
 
                 {/* Inline error message for failed send */}
                 {submitError && (
-                  <p
-                    role="alert"
-                    className="mt-1.5 text-center text-micro text-rose-400 font-medium"
-                  >
-                    {submitError}
-                  </p>
+                  <div className="mt-1.5 text-center space-y-1">
+                    <p
+                      role="alert"
+                      className="text-micro text-rose-400 font-medium"
+                    >
+                      {submitError}
+                    </p>
+                    <a
+                      href={`mailto:${profile.email}?subject=${encodeURIComponent(selectedTopic.subject)}&body=${encodeURIComponent(message || "")}`}
+                      className="inline-block text-micro text-accent-primary hover:underline font-semibold"
+                    >
+                      Or click here to email directly →
+                    </a>
+                  </div>
                 )}
               </form>
             </GlassCard>

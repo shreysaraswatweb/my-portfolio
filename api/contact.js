@@ -356,8 +356,11 @@ export default async function handler(req, res) {
   const fromAddress = process.env.FROM_EMAIL || "Portfolio Contact <onboarding@resend.dev>";
 
   if (!apiKey) {
-    console.error("[contact] Missing RESEND_API_KEY env var.");
-    return res.status(500).json({ success: false, message: "Unable to send message." });
+    console.error("[contact] Missing RESEND_API_KEY env var in hosting environment.");
+    return res.status(500).json({
+      success: false,
+      message: "Email service is not configured (missing RESEND_API_KEY in Vercel environment variables).",
+    });
   }
 
   // ── Server-side Timestamps & Subject ──────────────────────────────────
@@ -369,7 +372,7 @@ export default async function handler(req, res) {
   try {
     const resend = new Resend(apiKey);
 
-    await resend.emails.send({
+    const { data, error } = await resend.emails.send({
       from: fromAddress,
       to: [contactEmail],
       replyTo: cleanEmail,
@@ -393,9 +396,20 @@ export default async function handler(req, res) {
       }),
     });
 
-    return res.status(200).json({ success: true });
+    if (error) {
+      console.error("[contact] Resend API error:", error);
+      return res.status(500).json({
+        success: false,
+        message: error.message || "Failed to deliver email through Resend.",
+      });
+    }
+
+    return res.status(200).json({ success: true, id: data?.id });
   } catch (err) {
     console.error("[contact] Resend error:", err);
-    return res.status(500).json({ success: false, message: "Unable to send message." });
+    return res.status(500).json({
+      success: false,
+      message: err?.message || "Unable to send message.",
+    });
   }
 }
