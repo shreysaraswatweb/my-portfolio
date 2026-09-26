@@ -5,7 +5,7 @@ import Hero from "../components/Hero";
 import StatRow from "../components/StatRow";
 import SegmentedTabBar from "../components/SegmentedTabBar";
 import ContentGrid from "../components/ContentGrid";
-import ContactGrid from "../components/ContactGrid";
+import BentoStatsGrid from "../components/BentoStatsGrid";
 import AboutCard from "../components/AboutCard";
 import Header from "../components/Header";
 
@@ -34,7 +34,7 @@ export default function MobileApp() {
         <Hero variant="identity" />
 
         <section className="mt-space-4">
-          <ContactGrid layout="mobile" />
+          <BentoStatsGrid />
         </section>
 
         <AboutCard />

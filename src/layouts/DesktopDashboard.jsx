@@ -1,9 +1,9 @@
 import { lazy, Suspense } from "react";
 import Header from "../components/Header";
 import Hero from "../components/Hero";
-import StatRow from "../components/StatRow";
+import BentoStatsGrid from "../components/BentoStatsGrid";
 import AboutCard from "../components/AboutCard";
-import ContactGrid, { QuickLinks } from "../components/ContactGrid";
+import { QuickLinks } from "../components/ContactGrid";
 import FeaturedProjects from "../components/ProjectCard";
 import SkillsCard from "../components/SkillsCard";
 import { profile } from "../data/profile";
@@ -21,9 +21,8 @@ export default function DesktopDashboard() {
       <div className="flex flex-col laptop:flex-row laptop:gap-space-5">
         <div className="min-w-0 flex-1 space-y-space-5 p-space-6 pt-space-5">
           <Hero variant="dashboard" />
-          <StatRow variant="info" />
+          <BentoStatsGrid />
           <AboutCard />
-          <ContactGrid layout="desktop" />
           <FeaturedProjects />
           <Suspense fallback={null}>
             <ExperienceTimeline />
