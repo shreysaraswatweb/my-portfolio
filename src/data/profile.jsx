@@ -40,7 +40,7 @@ export const profile = {
   about:
     "B.Tech in Mechanical Engineering from GLA University (2015–2019). I worked as a Senior Executive in 3D Design at UNO Minda Groups, then moved into software. Since 2021 I have owned frontend delivery on client products across telecom-regulatory, payments, blockchain, supply-chain, EdTech, and mortgage-lending domains — turning specs and Figma into working, API-integrated interfaces.",
   birthday: "~4.5 years in software",
-  location: "Gurugram, India",
+  location: "Noida, India",
   joinedOn: "Software work since 2021",
   email: "shreysaraswat1998@gmail.com",
   available: false,

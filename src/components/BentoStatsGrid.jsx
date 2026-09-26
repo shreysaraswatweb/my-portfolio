@@ -20,6 +20,8 @@ import {
   TypeScriptIcon,
 } from "./icons/TechIcons";
 
+import LocationMapBackground from "./LocationMapBackground";
+
 // Generate deterministic, realistic contribution activity for GitHub calendar
 function generateContributionWeeks(totalWeeks = 24) {
   const weeks = [];
@@ -146,13 +148,22 @@ export default function BentoStatsGrid() {
       <motion.div variants={cardEntrance} className="col-span-1 flex">
         <GlassCard
           as="a"
-          href="https://maps.google.com/?q=Gurugram,India"
+          href="https://maps.google.com/?q=Noida,India"
           target="_blank"
           rel="noopener noreferrer"
           {...hoverLift}
-          className="group relative flex w-full flex-col justify-between rounded-lg p-space-4 transition-all duration-200 hover:border-accent-primary/40 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent-primary"
+          style={{
+            "--map-accent": "#22c55e",
+            "--map-block": "#1a2029",
+            "--map-street": "#080b10",
+            "--loop": "3s",
+          }}
+          className="location-card group relative flex w-full flex-col justify-between overflow-hidden rounded-lg p-space-4 transition-all duration-200 hover:border-accent-primary/40 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent-primary"
         >
-          <div className="flex items-center justify-between">
+          {/* Animated City Map Background Layer */}
+          <LocationMapBackground />
+
+          <div className="relative z-[1] flex items-center justify-between">
             <IconChip className="h-space-8 w-space-8 bg-accent-primary/10 text-accent-primary transition-transform duration-200 group-hover:scale-105">
               <MapPin className="h-space-4 w-space-4" strokeWidth={1.75} />
             </IconChip>
@@ -162,12 +173,12 @@ export default function BentoStatsGrid() {
             </span>
           </div>
 
-          <div className="mt-space-3">
+          <div className="relative z-[1] mt-space-3">
             <p className="text-micro font-semibold uppercase tracking-wider text-text-secondary">
               LOCATION
             </p>
             <p className="mt-0.5 font-display text-body-lg sm:text-h2 font-bold text-text-primary leading-tight">
-              Gurugram
+              Noida
             </p>
             <p className="mt-0.5 truncate text-micro text-text-tertiary">
               India · GMT+5:30

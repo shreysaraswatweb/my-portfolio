@@ -1,0 +1,271 @@
+/* ─── Location Card City Map Background ───────────────────────────────── */
+.location-card {
+  --map-accent: #22c55e;
+  --map-block: #1a2029;
+  --map-street: #080b10;
+  --loop: 3s;
+}
+
+.map-bg {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.map-svg-base,
+.map-svg-streaks {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+  pointer-events: none;
+}
+
+/* ─── Layer B: Animated Light Streaks ─────────────────────────────────── */
+.map-streak {
+  fill: none;
+  stroke: var(--map-accent, #22c55e);
+  stroke-width: 1.75;
+  stroke-linecap: round;
+  stroke-dasharray: 18 120;
+  stroke-dashoffset: 18;
+  opacity: 0;
+  filter: drop-shadow(0 0 2px #ffffff)
+    drop-shadow(0 0 6px var(--map-accent, #22c55e))
+    drop-shadow(0 0 12px var(--map-accent, #22c55e));
+  transition: filter 0.28s ease;
+}
+
+.location-card:hover .map-streak {
+  filter: drop-shadow(0 0 3px #ffffff)
+    drop-shadow(0 0 8px var(--map-accent, #22c55e))
+    drop-shadow(0 0 16px var(--map-accent, #22c55e)) brightness(1.25);
+}
+
+.map-streak-collector {
+  fill: var(--map-accent, #22c55e);
+  filter: drop-shadow(0 0 3px #ffffff)
+    drop-shadow(0 0 8px var(--map-accent, #22c55e))
+    drop-shadow(0 0 14px var(--map-accent, #22c55e));
+  transform-origin: 150px 138px;
+  opacity: 0.3;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .map-streak {
+    animation: streak-run var(--loop, 3s) infinite cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  /* Direct cardinal arteries */
+  .map-streak-1 { animation-delay: 0s; }
+  .map-streak-2 { animation-delay: 0.05s; }
+  .map-streak-3 { animation-delay: 0.10s; }
+  .map-streak-4 { animation-delay: 0.14s; }
+
+  /* Corner turns from Kachnar Marg & Chameli Marg */
+  .map-streak-5 { animation-delay: 0.18s; }
+  .map-streak-6 { animation-delay: 0.22s; }
+  .map-streak-7 { animation-delay: 0.26s; }
+  .map-streak-8 { animation-delay: 0.30s; }
+
+  .map-streak-collector {
+    animation: collector-glow var(--loop, 3s) infinite ease-in-out;
+  }
+}
+
+/* All trails run along streets and collect directly into Pin point (150, 138) */
+@keyframes streak-run {
+  0% {
+    stroke-dashoffset: 18;
+    opacity: 0;
+  }
+  6% {
+    opacity: 1;
+  }
+  38% {
+    stroke-dashoffset: -82;
+    opacity: 1;
+  }
+  46% {
+    stroke-dashoffset: -100;
+    opacity: 1;
+  }
+  49% {
+    stroke-dashoffset: -100;
+    opacity: 0;
+  }
+  100% {
+    stroke-dashoffset: -100;
+    opacity: 0;
+  }
+}
+
+/* SVG collector node flares as trails converge into it */
+@keyframes collector-glow {
+  0%, 36% {
+    opacity: 0.3;
+    transform: scale(0.8);
+  }
+  46%, 51% {
+    opacity: 1;
+    transform: scale(1.6);
+  }
+  65% {
+    opacity: 0.5;
+    transform: scale(1);
+  }
+  100% {
+    opacity: 0.3;
+    transform: scale(0.8);
+  }
+}
+
+/* ─── Layer C: Blinking Location Point + Radar Pulse Ring ─────────────── */
+.map-pin-pulse {
+  position: absolute;
+  left: 50%;
+  top: 46%;
+  transform: translate(-50%, -50%);
+  width: 58%;
+  aspect-ratio: 1 / 1;
+  border-radius: 9999px;
+  background: color-mix(in srgb, var(--map-accent, #22c55e) 15%, transparent);
+  border: 1px solid color-mix(in srgb, var(--map-accent, #22c55e) 40%, transparent);
+  box-shadow: inset 0 0 14px color-mix(in srgb, var(--map-accent, #22c55e) 25%, transparent),
+    0 0 16px color-mix(in srgb, var(--map-accent, #22c55e) 30%, transparent);
+  pointer-events: none;
+  opacity: 0;
+  will-change: transform, opacity;
+}
+
+.map-pin-dot {
+  position: absolute;
+  left: 50%;
+  top: 46%;
+  transform: translate(-50%, -50%);
+  width: 10px;
+  height: 10px;
+  border-radius: 9999px;
+  background: var(--map-accent, #22c55e);
+  border: 2px solid #ffffff;
+  box-shadow: 0 0 10px var(--map-accent, #22c55e),
+    0 0 20px color-mix(in srgb, var(--map-accent, #22c55e) 70%, transparent);
+  pointer-events: none;
+  will-change: transform, box-shadow;
+}
+
+/* Continuous GPS beacon ping */
+.map-pin-dot::after {
+  content: "";
+  position: absolute;
+  inset: -4px;
+  border-radius: 9999px;
+  background: color-mix(in srgb, var(--map-accent, #22c55e) 35%, transparent);
+  border: 1.5px solid color-mix(in srgb, var(--map-accent, #22c55e) 65%, transparent);
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .map-pin-dot::after {
+    animation: pin-beacon-ping 1.5s infinite ease-out;
+  }
+
+  .map-pin-pulse {
+    animation: pulse-ring var(--loop, 3s) infinite cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .map-pin-dot {
+    animation: pin-breathe var(--loop, 3s) infinite ease-in-out;
+  }
+}
+
+@keyframes pin-beacon-ping {
+  0% {
+    transform: scale(0.6);
+    opacity: 0.9;
+  }
+  100% {
+    transform: scale(2.3);
+    opacity: 0;
+  }
+}
+
+@keyframes pulse-ring {
+  0%, 46% {
+    transform: translate(-50%, -50%) scale(0.2);
+    opacity: 0;
+  }
+  48% {
+    transform: translate(-50%, -50%) scale(0.25);
+    opacity: 0.95;
+  }
+  78% {
+    transform: translate(-50%, -50%) scale(1.15);
+    opacity: 0;
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(1.15);
+    opacity: 0;
+  }
+}
+
+@keyframes pin-breathe {
+  0% {
+    transform: translate(-50%, -50%) scale(1);
+    box-shadow: 0 0 8px var(--map-accent, #22c55e),
+      0 0 18px color-mix(in srgb, var(--map-accent, #22c55e) 60%, transparent);
+  }
+  20% {
+    transform: translate(-50%, -50%) scale(1.08);
+    box-shadow: 0 0 12px var(--map-accent, #22c55e),
+      0 0 24px color-mix(in srgb, var(--map-accent, #22c55e) 70%, transparent);
+  }
+  38% {
+    transform: translate(-50%, -50%) scale(1);
+    box-shadow: 0 0 8px var(--map-accent, #22c55e);
+  }
+  /* Energy burst when trails collect on the location point! */
+  47%, 52% {
+    transform: translate(-50%, -50%) scale(1.4);
+    box-shadow: 0 0 16px #ffffff,
+      0 0 28px var(--map-accent, #22c55e),
+      0 0 46px var(--map-accent, #22c55e);
+  }
+  62% {
+    transform: translate(-50%, -50%) scale(1.1);
+    box-shadow: 0 0 12px var(--map-accent, #22c55e),
+      0 0 22px var(--map-accent, #22c55e);
+  }
+  80% {
+    transform: translate(-50%, -50%) scale(0.96);
+    box-shadow: 0 0 7px var(--map-accent, #22c55e);
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(1);
+    box-shadow: 0 0 8px var(--map-accent, #22c55e),
+      0 0 18px color-mix(in srgb, var(--map-accent, #22c55e) 60%, transparent);
+  }
+}
+
+/* ─── Layer D: Readability Overlay ────────────────────────────────────── */
+.map-readability-overlay {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(
+      to top,
+      rgba(10, 13, 18, 0.92) 0%,
+      rgba(10, 13, 18, 0.55) 40%,
+      rgba(10, 13, 18, 0) 75%
+    ),
+    radial-gradient(
+      ellipse at center,
+      transparent 30%,
+      rgba(0, 0, 0, 0.35) 100%
+    );
+  pointer-events: none;
+}
