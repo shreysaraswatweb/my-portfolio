@@ -6,7 +6,6 @@ import {
   GraduationCap,
   Sparkles,
 } from "lucide-react";
-import { profile } from "../data/profile";
 import { cardEntrance, hoverLift, staggerContainer } from "../lib/motion";
 import GlassCard from "./ui/GlassCard";
 import IconChip from "./ui/IconChip";

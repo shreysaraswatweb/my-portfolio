@@ -5,7 +5,6 @@ import { cn } from "@/lib/utils";
 function NumberItem({
   value,
   index,
-  total,
   className,
   getHeight,
   isInView,

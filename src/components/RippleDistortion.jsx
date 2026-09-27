@@ -205,21 +205,6 @@ const RippleDistortion = ({
       wrapT: gl.CLAMP_TO_EDGE
     });
 
-    let disposed = false;
-    const image = new window.Image();
-    image.crossOrigin = 'anonymous';
-    image.decoding = 'async';
-    const applyImage = () => {
-      if (disposed) return;
-      imageTexture.image = image;
-      compositeUniforms.uTextureSize.value = [image.naturalWidth || 1, image.naturalHeight || 1];
-    };
-    image.onload = applyImage;
-    image.src = src;
-    if (image.complete && image.naturalWidth > 0) {
-      applyImage();
-    }
-
     const offsets = new Float32Array(MAX_WAVES * 2);
     const scales = new Float32Array(MAX_WAVES * 2);
     const opacities = new Float32Array(MAX_WAVES);
@@ -294,6 +279,21 @@ const RippleDistortion = ({
 
     uniformsRef.current = { wave: waveUniforms, composite: compositeUniforms };
 
+    let disposed = false;
+    const image = new window.Image();
+    image.crossOrigin = 'anonymous';
+    image.decoding = 'async';
+    const applyImage = () => {
+      if (disposed) return;
+      imageTexture.image = image;
+      compositeUniforms.uTextureSize.value = [image.naturalWidth || 1, image.naturalHeight || 1];
+    };
+    image.onload = applyImage;
+    image.src = src;
+    if (image.complete && image.naturalWidth > 0) {
+      applyImage();
+    }
+
     let width = 1;
     let height = 1;
 
@@ -337,10 +337,25 @@ const RippleDistortion = ({
 
     let previousX = 0;
     let previousY = 0;
+    let isTouchActive = false;
+    let activeTouchId = null;
+
+    const isTouchPointer = event => event.pointerType === 'touch' || event.pointerType === 'pen';
 
     const onMove = event => {
       const cfg = configRef.current;
-      if (!cfg.enabled || reduceMotion || cfg.trigger === 'click') return;
+      if (!cfg.enabled || reduceMotion) return;
+
+      const isTouch = isTouchPointer(event);
+
+      // For touch: only generate ripples if touch started on this element
+      if (isTouch) {
+        if (!isTouchActive || event.pointerId !== activeTouchId) return;
+      } else {
+        // For mouse: respect trigger mode (original behavior)
+        if (cfg.trigger === 'click') return;
+      }
+
       const point = localPoint(event.clientX, event.clientY);
       if (!point) return;
       const step = Math.max(1, cfg.spacing);
@@ -353,14 +368,34 @@ const RippleDistortion = ({
 
     const onDown = event => {
       const cfg = configRef.current;
-      if (!cfg.enabled || reduceMotion || cfg.trigger === 'hover') return;
+      if (!cfg.enabled || reduceMotion) return;
       const point = localPoint(event.clientX, event.clientY);
       if (!point) return;
-      setNewWave(point[0], point[1], Math.max(1, cfg.clickStrength));
+
+      if (isTouchPointer(event)) {
+        // Touch started on the image — track it for ripple generation
+        isTouchActive = true;
+        activeTouchId = event.pointerId;
+        previousX = point[0];
+        previousY = point[1];
+        setNewWave(point[0], point[1], 1);
+      } else if (cfg.trigger === 'click') {
+        setNewWave(point[0], point[1], Math.max(1, cfg.clickStrength));
+      }
     };
 
+    const onUp = event => {
+      if (isTouchPointer(event) && event.pointerId === activeTouchId) {
+        isTouchActive = false;
+        activeTouchId = null;
+      }
+    };
+
+    // All listeners are passive — we never block scrolling
     window.addEventListener('pointermove', onMove, { passive: true });
     window.addEventListener('pointerdown', onDown, { passive: true });
+    window.addEventListener('pointerup', onUp, { passive: true });
+    window.addEventListener('pointercancel', onUp, { passive: true });
 
     let raf = 0;
     let previousTime = 0;
@@ -413,6 +448,8 @@ const RippleDistortion = ({
       ro.disconnect();
       window.removeEventListener('pointermove', onMove);
       window.removeEventListener('pointerdown', onDown);
+      window.removeEventListener('pointerup', onUp);
+      window.removeEventListener('pointercancel', onUp);
       uniformsRef.current = null;
       if (canvas.parentNode === mount) mount.removeChild(canvas);
       const ext = gl.getExtension('WEBGL_lose_context');
@@ -445,3 +482,4 @@ const RippleDistortion = ({
 };
 
 export default RippleDistortion;
+

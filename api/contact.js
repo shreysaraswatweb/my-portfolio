@@ -14,6 +14,7 @@ const MAX_TOPIC = 60;
 
 /** Basic text sanitisation — strip control chars, collapse whitespace */
 function sanitize(str) {
+  // eslint-disable-next-line no-control-regex
   return str.replace(/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]/g, "").trim();
 }
 
