@@ -273,12 +273,13 @@ export default function LocationWeatherCard() {
       }
     }
 
-    fetchNoidaWeather();
+    const initialTimer = setTimeout(fetchNoidaWeather, 600);
     // Refresh weather every 15 minutes
     const interval = setInterval(fetchNoidaWeather, 15 * 60 * 1000);
 
     return () => {
       isMounted = false;
+      clearTimeout(initialTimer);
       clearInterval(interval);
     };
   }, []);

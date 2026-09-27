@@ -283,7 +283,7 @@ export default function MediaPlayer({ className = "", id = "music-player" }) {
       <audio
         ref={audioRef}
         src={currentTrack.audio || currentTrack.src}
-        preload="metadata"
+        preload="none"
         onTimeUpdate={() => {
           if (!isDragging && audioRef.current) {
             setCurrentTime(Math.floor(audioRef.current.currentTime));

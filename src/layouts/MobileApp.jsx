@@ -4,11 +4,12 @@ import GlassCard from "../components/ui/GlassCard";
 import Hero from "../components/Hero";
 import StatRow from "../components/StatRow";
 import SegmentedTabBar from "../components/SegmentedTabBar";
-import ContentGrid from "../components/ContentGrid";
 import BentoStatsGrid from "../components/BentoStatsGrid";
 import AboutCard from "../components/AboutCard";
 import Header from "../components/Header";
+import DeferredSection from "../components/DeferredSection";
 
+const ContentGrid = lazy(() => import("../components/ContentGrid"));
 const FeaturedProjects = lazy(() => import("../components/ProjectCard"));
 const SkillsCard = lazy(() => import("../components/SkillsCard"));
 const AchievementCard = lazy(() => import("../components/AchievementCard"));
@@ -52,25 +53,51 @@ export default function MobileApp() {
                 <FeaturedProjects />
               </Suspense>
             ) : null}
-            {tab === "Photos" ? <ContentGrid items={gridItems} /> : null}
+            {tab === "Photos" ? (
+              <Suspense fallback={null}>
+                <ContentGrid items={gridItems} />
+              </Suspense>
+            ) : null}
             {tab === "Music" ? (
               <Suspense fallback={null}>
                 <MediaPlayer />
               </Suspense>
             ) : null}
-            {tab === "Videos" ? <ContentGrid items={gridItems} /> : null}
+            {tab === "Videos" ? (
+              <Suspense fallback={null}>
+                <ContentGrid items={gridItems} />
+              </Suspense>
+            ) : null}
           </div>
         </section>
 
         <div className="mt-space-5 space-y-space-4">
           <Suspense fallback={null}>
-            {tab !== "All" ? <FeaturedProjects /> : null}
-            <SkillsCard />
-            <AchievementCard />
-            {tab !== "Music" ? <MediaPlayer /> : null}
-            <ContactCard />
-            <ExperienceTimeline />
-            <CertificationGrid />
+            {tab !== "All" ? (
+              <DeferredSection minHeight="200px">
+                <FeaturedProjects />
+              </DeferredSection>
+            ) : null}
+            <DeferredSection minHeight="200px">
+              <SkillsCard />
+            </DeferredSection>
+            <DeferredSection minHeight="180px">
+              <AchievementCard />
+            </DeferredSection>
+            {tab !== "Music" ? (
+              <DeferredSection minHeight="240px">
+                <MediaPlayer />
+              </DeferredSection>
+            ) : null}
+            <DeferredSection minHeight="280px">
+              <ContactCard />
+            </DeferredSection>
+            <DeferredSection minHeight="300px">
+              <ExperienceTimeline />
+            </DeferredSection>
+            <DeferredSection minHeight="200px">
+              <CertificationGrid />
+            </DeferredSection>
           </Suspense>
         </div>
 

@@ -429,11 +429,10 @@ export default function ActionSearchBar({ className = "" }) {
       <button
         type="button"
         onClick={handleOpen}
-        aria-label="Open command palette (⌘K)"
         className="group flex h-7 items-center gap-1.5 rounded-md px-2 text-caption text-text-secondary transition-colors duration-200 hover:text-text-primary focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent-primary"
       >
-        <Search className="h-3.5 w-3.5 transition-colors duration-200 group-hover:text-accent-primary" />
-        <span className="hidden sm:inline font-normal text-text-secondary/80">
+        <Search aria-hidden="true" className="h-3.5 w-3.5 transition-colors duration-200 group-hover:text-accent-primary" />
+        <span className="sr-only sm:not-sr-only sm:inline font-normal text-text-secondary/80">
           Quick command
         </span>
         <kbd className="inline-flex h-4.5 select-none items-center gap-0.5 rounded border border-border-hairline bg-surface-secondary px-1 font-mono text-[10px] font-medium text-text-tertiary">

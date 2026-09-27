@@ -81,27 +81,54 @@
         }
       })();
     </script>
+    <style id="critical-shell-css">
+      :root {
+        color-scheme: dark;
+        --rgb-canvas-mid: 18 20 28;
+        --rgb-text-primary: 255 255 255;
+      }
+      html[data-theme="light"] {
+        color-scheme: light;
+        --rgb-canvas-mid: 243 238 232;
+        --rgb-text-primary: 22 24 31;
+      }
+      html, body {
+        margin: 0;
+        padding: 0;
+        background-color: rgb(var(--rgb-canvas-mid));
+        color: rgb(var(--rgb-text-primary));
+        font-family: "Inter", system-ui, -apple-system, sans-serif;
+        -webkit-font-smoothing: antialiased;
+      }
+    </style>
     <link
       rel="preload"
       fetchpriority="high"
       as="image"
-      href="/src/assets/webp/avatar.webp"
+      href="/avatar.webp"
       type="image/webp"
+      media="(max-width: 1023px)"
     />
-    <link rel="modulepreload" href="/src/main.jsx" />
-    <link rel="modulepreload" href="/src/App.jsx" />
+    <link
+      rel="preload"
+      fetchpriority="high"
+      as="image"
+      href="/workstation-400.webp"
+      type="image/webp"
+      media="(min-width: 1024px)"
+    />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
       rel="preload"
       as="style"
-      href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Inter:wght@400;500;600;700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700&family=Caveat:wght@700&family=Inter:wght@400;500;600;700&display=swap"
       onload="this.onload=null;this.rel='stylesheet'"
     />
     <noscript>
       <link
         rel="stylesheet"
-        href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Inter:wght@400;500;600;700&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700&family=Caveat:wght@700&family=Inter:wght@400;500;600;700&display=swap"
       />
     </noscript>
   </head>
