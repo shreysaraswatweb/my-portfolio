@@ -111,7 +111,7 @@ export default function LocationMapBackground() {
         viewBox="0 0 300 300"
         preserveAspectRatio="xMidYMid slice"
       >
-        <rect width="300" height="300" fill="var(--map-street, #080b10)" />
+        <rect width="300" height="300" className="map-base-ground" />
         {/* Rotated to match the diagonal orientation of Kachnar Marg & Mall Road in Sector 28 */}
         <g transform="rotate(-38 150 138)">
           {noidaSector28Blocks.map((b, i) => (
@@ -122,7 +122,7 @@ export default function LocationMapBackground() {
               width={b.w}
               height={b.h}
               rx={1.5}
-              fill={b.color}
+              className={`map-block ${i < 4 ? "map-block-park" : "map-block-building"}`}
             />
           ))}
         </g>

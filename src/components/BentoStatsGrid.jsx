@@ -4,7 +4,6 @@ import {
   Briefcase,
   FolderKanban,
   GraduationCap,
-  MapPin,
   Sparkles,
 } from "lucide-react";
 import { profile } from "../data/profile";
@@ -20,7 +19,7 @@ import {
   TypeScriptIcon,
 } from "./icons/TechIcons";
 
-import LocationMapBackground from "./LocationMapBackground";
+import LocationWeatherCard from "./LocationWeatherCard";
 
 // Generate deterministic, realistic contribution activity for GitHub calendar
 function generateContributionWeeks(totalWeeks = 24) {
@@ -144,47 +143,9 @@ export default function BentoStatsGrid() {
         </GlassCard>
       </motion.div>
 
-      {/* ─── ROW 1: BOX 2 - LOCATION ────────────────────────────────────────── */}
+      {/* ─── ROW 1: BOX 2 - LOCATION & REAL-TIME WEATHER (3D FLIP) ───────────── */}
       <motion.div variants={cardEntrance} className="col-span-1 flex">
-        <GlassCard
-          as="a"
-          href="https://maps.google.com/?q=Noida,India"
-          target="_blank"
-          rel="noopener noreferrer"
-          {...hoverLift}
-          style={{
-            "--map-accent": "#22c55e",
-            "--map-block": "#1a2029",
-            "--map-street": "#080b10",
-            "--loop": "3s",
-          }}
-          className="location-card group relative flex w-full flex-col justify-between overflow-hidden rounded-lg p-space-4 transition-all duration-200 hover:border-accent-primary/40 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent-primary"
-        >
-          {/* Animated City Map Background Layer */}
-          <LocationMapBackground />
-
-          <div className="relative z-[1] flex items-center justify-between">
-            <IconChip className="h-space-8 w-space-8 bg-accent-primary/10 text-accent-primary transition-transform duration-200 group-hover:scale-105">
-              <MapPin className="h-space-4 w-space-4" strokeWidth={1.75} />
-            </IconChip>
-            <span className="inline-flex items-center gap-1 rounded-full bg-status-available/10 px-space-2 py-0.5 text-micro font-medium text-status-available border border-status-available/20">
-              <span className="h-1.5 w-1.5 rounded-full bg-status-available animate-pulse" />
-              IST
-            </span>
-          </div>
-
-          <div className="relative z-[1] mt-space-3">
-            <p className="text-micro font-semibold uppercase tracking-wider text-text-secondary">
-              LOCATION
-            </p>
-            <p className="mt-0.5 font-display text-body-lg sm:text-h2 font-bold text-text-primary leading-tight">
-              Noida
-            </p>
-            <p className="mt-0.5 truncate text-micro text-text-tertiary">
-              India · GMT+5:30
-            </p>
-          </div>
-        </GlassCard>
+        <LocationWeatherCard />
       </motion.div>
 
       {/* ─── ROW 1: BOX 3 - GIT CALENDER (Spans 2 columns on all viewports) ─── */}

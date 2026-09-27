@@ -1,0 +1,285 @@
+/* ==========================================================================
+   Location & Real-time Weather 3D Flip Card
+   - Smooth GPU-accelerated 3D flip animation (cubic-bezier(0.16, 1, 0.3, 1))
+   - Glassmorphic Weather Face with realistic condensation water droplets
+   - Specular sheen caustics & 3D volumetric weather illustrations
+   - Light and Dark Theme Complete Harmony
+   ========================================================================== */
+
+.location-flipper-container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  min-height: 148px;
+  perspective: 1200px;
+  cursor: pointer;
+  user-select: none;
+  -webkit-user-select: none;
+  border-radius: 24px; /* Matches rounded-lg token (24px) */
+}
+
+/* 3D Transform Flipper Core */
+.location-flipper-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+  -webkit-transform-style: preserve-3d;
+  transition: transform 0.72s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: transform;
+  border-radius: inherit;
+}
+
+/* Flip Triggers: Desktop Hover & Mobile Touch Tap (.is-flipped) */
+@media (hover: hover) and (pointer: fine) {
+  .location-flipper-container:hover .location-flipper-inner {
+    transform: rotateY(180deg);
+  }
+}
+
+.location-flipper-container.is-flipped .location-flipper-inner {
+  transform: rotateY(180deg);
+}
+
+/* Front & Back Faces Common Setup */
+.location-face-front,
+.location-face-back {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  border-radius: inherit;
+  overflow: hidden;
+}
+
+/* Front Face: Location Map & Coordinates */
+.location-face-front {
+  transform: rotateY(0deg) translateZ(1px);
+  z-index: 2;
+}
+
+/* Back Face: Real-Time Glass Weather Display */
+.location-face-back {
+  transform: rotateY(180deg) translateZ(1px);
+  z-index: 1;
+}
+
+.location-flipper-container.is-flipped .location-face-back,
+.location-flipper-container:hover .location-face-back {
+  z-index: 3;
+}
+
+/* Specular Flip Glint Sweep */
+.location-flip-sheen {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  z-index: 10;
+  opacity: 0;
+  background: linear-gradient(
+    105deg,
+    transparent 20%,
+    rgba(255, 255, 255, 0.16) 45%,
+    rgba(255, 255, 255, 0.3) 50%,
+    rgba(255, 255, 255, 0.16) 55%,
+    transparent 80%
+  );
+  transition: opacity 0.4s ease;
+}
+
+html[data-theme="light"] .location-flip-sheen {
+  background: linear-gradient(
+    105deg,
+    transparent 20%,
+    rgba(255, 255, 255, 0.35) 45%,
+    rgba(255, 255, 255, 0.7) 50%,
+    rgba(255, 255, 255, 0.35) 55%,
+    transparent 80%
+  );
+}
+
+.location-flipper-container:hover .location-flip-sheen,
+.location-flipper-container.is-flipped .location-flip-sheen {
+  opacity: 1;
+}
+
+/* ==========================================================================
+   Weather Card Styling (Matching reference image media_1791635459177.png)
+   - Translucent frosted sky-cyan glass
+   - Realistic condensation droplets with caustics
+   ========================================================================== */
+
+/* Dark Theme Weather Pod */
+.weather-card-shell {
+  background: linear-gradient(
+    140deg,
+    rgba(54, 126, 196, 0.58) 0%,
+    rgba(26, 88, 154, 0.68) 45%,
+    rgba(12, 52, 105, 0.8) 100%
+  ) !important;
+  border: 1px solid rgba(175, 225, 255, 0.45) !important;
+  box-shadow:
+    0 16px 36px -6px rgba(4, 28, 56, 0.55),
+    inset 0 1.5px 1px 0 rgba(255, 255, 255, 0.75),
+    inset 0 -1px 2px 0 rgba(0, 32, 68, 0.35) !important;
+  backdrop-filter: blur(24px) saturate(170%);
+  -webkit-backdrop-filter: blur(24px) saturate(170%);
+}
+
+/* Light Theme Weather Pod (exact ethereal sky-blue frosted aesthetic) */
+html[data-theme="light"] .weather-card-shell {
+  background: linear-gradient(
+    140deg,
+    rgba(132, 198, 252, 0.88) 0%,
+    rgba(90, 170, 240, 0.92) 50%,
+    rgba(56, 140, 225, 0.96) 100%
+  ) !important;
+  border: 1.5px solid rgba(255, 255, 255, 0.88) !important;
+  box-shadow:
+    0 16px 36px -4px rgba(35, 105, 185, 0.28),
+    inset 0 2px 2px 0 rgba(255, 255, 255, 0.95),
+    inset 0 -2px 4px 0 rgba(30, 95, 175, 0.25) !important;
+  backdrop-filter: blur(24px) saturate(170%);
+  -webkit-backdrop-filter: blur(24px) saturate(170%);
+}
+
+/* Ambient Radial Glow & Caustics */
+.weather-frosted-backdrop {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(circle at 50% 12%, rgba(255, 255, 255, 0.3) 0%, rgba(140, 215, 255, 0.15) 45%, transparent 75%),
+    radial-gradient(circle at 85% 85%, rgba(68, 165, 255, 0.22) 0%, transparent 60%);
+}
+
+html[data-theme="light"] .weather-frosted-backdrop {
+  background:
+    radial-gradient(circle at 50% 10%, rgba(255, 255, 255, 0.45) 0%, rgba(180, 230, 255, 0.2) 50%, transparent 80%),
+    radial-gradient(circle at 85% 85%, rgba(100, 190, 255, 0.3) 0%, transparent 65%);
+}
+
+/* Realistic Glass Condensation Water Droplets */
+.weather-droplet {
+  position: absolute;
+  pointer-events: none;
+  border-radius: 50%;
+  z-index: 6;
+  background: radial-gradient(
+    circle at 35% 30%,
+    rgba(255, 255, 255, 0.95) 0%,
+    rgba(255, 255, 255, 0.35) 28%,
+    rgba(12, 45, 80, 0.08) 65%,
+    rgba(255, 255, 255, 0.45) 100%
+  );
+  box-shadow:
+    inset 0.8px 0.8px 1.2px rgba(255, 255, 255, 0.85),
+    inset -0.8px -0.8px 1.2px rgba(0, 30, 60, 0.22),
+    0.8px 1.6px 2.4px rgba(0, 20, 45, 0.28);
+}
+
+html[data-theme="light"] .weather-droplet {
+  background: radial-gradient(
+    circle at 35% 30%,
+    rgba(255, 255, 255, 1) 0%,
+    rgba(255, 255, 255, 0.45) 28%,
+    rgba(15, 65, 120, 0.06) 65%,
+    rgba(255, 255, 255, 0.6) 100%
+  );
+  box-shadow:
+    inset 1px 1px 1.5px rgba(255, 255, 255, 0.95),
+    inset -0.8px -0.8px 1.4px rgba(20, 80, 140, 0.2),
+    1px 2px 3px rgba(10, 50, 100, 0.22);
+}
+
+/* Droplet Positions (sculpted around the edges like reference image) */
+.droplet-1 {
+  top: 10%;
+  left: 8%;
+  width: 7px;
+  height: 8.5px;
+  transform: rotate(-12deg);
+}
+
+.droplet-2 {
+  top: 22%;
+  left: 13%;
+  width: 4px;
+  height: 4px;
+}
+
+.droplet-3 {
+  top: 9%;
+  right: 11%;
+  width: 5px;
+  height: 5.5px;
+  transform: rotate(8deg);
+}
+
+.droplet-4 {
+  top: 24%;
+  right: 7%;
+  width: 7.5px;
+  height: 8.5px;
+  transform: rotate(18deg);
+}
+
+.droplet-5 {
+  bottom: 22%;
+  right: 8%;
+  width: 8.5px;
+  height: 10px;
+  transform: rotate(10deg);
+}
+
+.droplet-6 {
+  bottom: 12%;
+  left: 10%;
+  width: 5px;
+  height: 6px;
+  transform: rotate(-8deg);
+}
+
+.droplet-7 {
+  bottom: 30%;
+  left: 6%;
+  width: 4px;
+  height: 4px;
+}
+
+.droplet-8 {
+  top: 46%;
+  right: 6%;
+  width: 5px;
+  height: 6px;
+  transform: rotate(14deg);
+}
+
+/* 3D Volumetric Weather Icon */
+.weather-3d-wrap {
+  width: 72px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  filter: drop-shadow(0 6px 12px rgba(0, 24, 52, 0.35));
+}
+
+.weather-3d-svg {
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+/* Reduced Motion Fallback */
+@media (prefers-reduced-motion: reduce) {
+  .location-flipper-inner {
+    transition-duration: 0.01ms !important;
+  }
+  .weather-3d-wrap {
+    animation: none !important;
+  }
+}
