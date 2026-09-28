@@ -568,8 +568,8 @@ function DashboardHero() {
           }}
           aria-label={
             lightOn
-              ? "Click bulb to change shade, pull to turn off"
-              : "Pull bulb to turn light on"
+              ? "Click Me"
+              : "Pull Me"
           }
           aria-pressed={lightOn}
           onPointerDown={handlePointerDown}
@@ -625,7 +625,7 @@ function DashboardHero() {
               strokeLinejoin="round"
             />
           </svg>
-          <span className="bulb-doodle-text">Pull the bulb</span>
+          <span className="bulb-doodle-text">Pull Me</span>
         </div>
       )}
 
@@ -652,7 +652,7 @@ function DashboardHero() {
               strokeLinejoin="round"
             />
           </svg>
-          <span className="bulb-doodle-text">Click bulb to change shade</span>
+          <span className="bulb-doodle-text">Click Me</span>
         </div>
       )}
     </GlassCard>
