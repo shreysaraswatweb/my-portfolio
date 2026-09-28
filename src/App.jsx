@@ -1,20 +1,15 @@
-import { Suspense, useState } from "react";
+import { lazy, Suspense, useState } from "react";
 import { SpeedInsights } from "@vercel/speed-insights/react";
 import { Analytics } from "@vercel/analytics/react";
 import useDesktop from "./hooks/useDesktop";
 
 import MobileApp from "./layouts/MobileApp";
-import DesktopDashboard from "./layouts/DesktopDashboard";
-import Sidebar from "./components/Sidebar";
+const DesktopDashboard = lazy(() => import("./layouts/DesktopDashboard"));
+const Sidebar = lazy(() => import("./components/Sidebar"));
 
 export default function App() {
   const isDesktop = useDesktop();
   const [active, setActive] = useState("home");
-
-  const isVercel =
-    typeof window !== "undefined" &&
-    (window.location.hostname.endsWith("vercel.app") ||
-      window.location.hostname.endsWith(".vercel.app"));
 
   return (
     <>
@@ -38,12 +33,8 @@ export default function App() {
         </Suspense>
       </main>
 
-      {isVercel && (
-        <>
-          <SpeedInsights />
-          <Analytics />
-        </>
-      )}
+      <SpeedInsights />
+      <Analytics />
     </>
   );
 }

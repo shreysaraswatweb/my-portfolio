@@ -570,6 +570,7 @@ html[data-theme="light"] .bulb-cord-svg path {
 }
 
 @keyframes doodle-float {
+
   0%,
   100% {
     opacity: 0.88;

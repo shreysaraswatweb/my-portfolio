@@ -147,9 +147,8 @@ function buildHtmlEmail({ name, email, message, topic, date, time, fullTimestamp
                       </a>
                     </div>
 
-                    ${
-                      safeTopic
-                        ? `
+                    ${safeTopic
+      ? `
                     <!-- Topic Row -->
                     <div style="font-size: 11px; font-weight: 600; color: #6B7280; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 4px;">
                       TOPIC
@@ -158,8 +157,8 @@ function buildHtmlEmail({ name, email, message, topic, date, time, fullTimestamp
                       ${safeTopic}
                     </div>
                     `
-                        : ""
-                    }
+      : ""
+    }
                   </td>
                 </tr>
               </table>
@@ -183,8 +182,8 @@ function buildHtmlEmail({ name, email, message, topic, date, time, fullTimestamp
                     <!-- Direct Reply Pill CTA Button -->
                     <div style="margin-top: 22px; padding-top: 18px; border-top: 1px solid #242B3D;">
                       <a href="mailto:${safeEmail}?subject=Re:%20${encodeURIComponent(
-    `Portfolio Contact — ${safeName}`
-  )}" style="display: inline-block; background-color: #F5A623; color: #0B0D14; font-size: 13px; font-weight: 700; padding: 10px 22px; border-radius: 9999px; text-decoration: none; letter-spacing: 0.01em;">
+      `Portfolio Contact — ${safeName}`
+    )}" style="display: inline-block; background-color: #F5A623; color: #0B0D14; font-size: 13px; font-weight: 700; padding: 10px 22px; border-radius: 9999px; text-decoration: none; letter-spacing: 0.01em;">
                         Reply to ${safeName} &rarr;
                       </a>
                     </div>

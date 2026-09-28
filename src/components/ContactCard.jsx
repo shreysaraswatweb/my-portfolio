@@ -405,7 +405,7 @@ export default function ContactCard({ className = "" }) {
                   disabled={isSubmitting}
                   whileTap={{ scale: 0.98 }}
                   className="contact-submit-btn"
-                  aria-label={isSubmitting ? "Sending note" : "Send Note"}
+                  aria-label="Send message"
                 >
                   {isSubmitting ? (
                     <>

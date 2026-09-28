@@ -4,11 +4,10 @@ import Hero from "../components/Hero";
 import BentoStatsGrid from "../components/BentoStatsGrid";
 import AboutCard from "../components/AboutCard";
 import { QuickLinks } from "../components/ContactGrid";
-import { profile } from "../data/profile";
-import DeferredSection from "../components/DeferredSection";
-
 import FeaturedProjects from "../components/ProjectCard";
 import SkillsCard from "../components/SkillsCard";
+import { profile } from "../data/profile";
+
 const ExperienceTimeline = lazy(() => import("../components/ExperienceTimeline"));
 const CertificationGrid = lazy(() => import("../components/CertificationTile"));
 const AchievementCard = lazy(() => import("../components/AchievementCard"));
@@ -25,16 +24,12 @@ export default function DesktopDashboard() {
           <BentoStatsGrid />
           <AboutCard />
           <FeaturedProjects />
-          <DeferredSection minHeight="280px">
-            <Suspense fallback={null}>
-              <ExperienceTimeline />
-            </Suspense>
-          </DeferredSection>
-          <DeferredSection minHeight="200px">
-            <Suspense fallback={null}>
-              <CertificationGrid />
-            </Suspense>
-          </DeferredSection>
+          <Suspense fallback={null}>
+            <ExperienceTimeline />
+          </Suspense>
+          <Suspense fallback={null}>
+            <CertificationGrid />
+          </Suspense>
           <footer className="pt-space-6 text-center text-micro text-text-tertiary">
             © {new Date().getFullYear()} {profile.displayName} — {profile.role}
           </footer>
@@ -43,21 +38,15 @@ export default function DesktopDashboard() {
           <div className="grid grid-cols-1 gap-space-4 tablet:grid-cols-2 laptop:grid-cols-1">
             <SkillsCard />
             <QuickLinks />
-            <DeferredSection minHeight="180px">
-              <Suspense fallback={null}>
-                <AchievementCard />
-              </Suspense>
-            </DeferredSection>
-            <DeferredSection minHeight="240px">
-              <Suspense fallback={null}>
-                <MediaPlayer />
-              </Suspense>
-            </DeferredSection>
-            <DeferredSection minHeight="280px">
-              <Suspense fallback={null}>
-                <ContactCard />
-              </Suspense>
-            </DeferredSection>
+            <Suspense fallback={null}>
+              <AchievementCard />
+            </Suspense>
+            <Suspense fallback={null}>
+              <MediaPlayer />
+            </Suspense>
+            <Suspense fallback={null}>
+              <ContactCard />
+            </Suspense>
           </div>
         </aside>
       </div>

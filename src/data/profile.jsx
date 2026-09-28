@@ -1,6 +1,6 @@
-const avatar = "/avatar.webp";
+import avatar from "../assets/webp/avatar.webp";
 import workstation from "../assets/webp/workstation.webp";
-const workstation400 = "/workstation-400.webp";
+import workstation400 from "../assets/webp/workstation-400.webp";
 import projectAnalytics from "../assets/webp/project-analytics.webp";
 import projectAnalytics320 from "../assets/webp/project-analytics-320.webp";
 import projectFinance from "../assets/webp/project-finance.webp";
@@ -303,8 +303,8 @@ export const tracks = [
     cover: albumArtFluid,
     coverMedium: albumArtFluid200,
     coverThumb: albumArtFluid80,
-    audio: "/audio/track1.mp3",
-    src: "/audio/track1.mp3",
+    audio: "https://cdn.pixabay.com/audio/2026/05/26/audio_a982ab61b1.mp3",
+    src: "https://cdn.pixabay.com/audio/2026/05/26/audio_a982ab61b1.mp3",
   },
   {
     id: "t2",
@@ -314,8 +314,8 @@ export const tracks = [
     cover: albumLofi,
     coverMedium: albumLofi200,
     coverThumb: albumLofi80,
-    audio: "/audio/track2.mp3",
-    src: "/audio/track2.mp3",
+    audio: "https://cdn.pixabay.com/audio/2026/05/05/audio_b1b0d091b3.mp3",
+    src: "https://cdn.pixabay.com/audio/2026/05/05/audio_b1b0d091b3.mp3",
   },
   {
     id: "t3",
@@ -325,8 +325,8 @@ export const tracks = [
     cover: gallerySunset,
     coverMedium: gallerySunset200,
     coverThumb: gallerySunset80,
-    audio: "/audio/track3.mp3",
-    src: "/audio/track3.mp3",
+    audio: "https://cdn.pixabay.com/audio/2024/09/19/audio_bacc8148bc.mp3",
+    src: "https://cdn.pixabay.com/audio/2024/09/19/audio_bacc8148bc.mp3",
   },
   {
     id: "t4",
@@ -336,8 +336,8 @@ export const tracks = [
     cover: galleryGeo,
     coverMedium: galleryGeo200,
     coverThumb: galleryGeo80,
-    audio: "/audio/track4.mp3",
-    src: "/audio/track4.mp3",
+    audio: "https://cdn.pixabay.com/audio/2023/01/28/audio_c17e639e86.mp3",
+    src: "https://cdn.pixabay.com/audio/2023/01/28/audio_c17e639e86.mp3",
   },
   {
     id: "t5",
@@ -347,8 +347,8 @@ export const tracks = [
     cover: galleryHeart,
     coverMedium: galleryHeart200,
     coverThumb: galleryHeart200,
-    audio: "/audio/track5.mp3",
-    src: "/audio/track5.mp3",
+    audio: "https://cdn.pixabay.com/audio/2026/06/17/audio_9c2ff2565f.mp3",
+    src: "https://cdn.pixabay.com/audio/2026/06/17/audio_9c2ff2565f.mp3",
   },
 ];
 
