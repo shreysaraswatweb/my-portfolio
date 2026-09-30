@@ -15,33 +15,37 @@ export default function Header({ className = "" }) {
   const lenis = useLenis();
 
   useEffect(() => {
-    const handleScroll = () => {
-      const scrollY = window.scrollY || document.documentElement.scrollTop || 0;
-      const nextScrolled = scrollY > 4;
+    const handleScroll = (scrollY) => {
+      const y =
+        typeof scrollY === "number"
+          ? scrollY
+          : window.scrollY || document.documentElement.scrollTop || 0;
+      const nextScrolled = y > 4;
       setIsScrolled((prev) => (prev !== nextScrolled ? nextScrolled : prev));
     };
 
     handleScroll();
-    window.addEventListener("scroll", handleScroll, { passive: true });
 
     if (lenis && typeof lenis.on === "function") {
-      lenis.on("scroll", (e) => {
-        const nextScrolled = (e.scroll || 0) > 4;
-        setIsScrolled((prev) => (prev !== nextScrolled ? nextScrolled : prev));
-      });
+      const onLenisScroll = (e) => handleScroll(e.scroll || 0);
+      lenis.on("scroll", onLenisScroll);
+      return () => {
+        if (typeof lenis.off === "function") {
+          lenis.off("scroll", onLenisScroll);
+        }
+      };
     }
 
+    window.addEventListener("scroll", handleScroll, { passive: true });
     return () => {
       window.removeEventListener("scroll", handleScroll);
-      if (lenis && typeof lenis.off === "function") {
-        lenis.off("scroll");
-      }
     };
   }, [lenis]);
 
   return (
     <header
       className={`sticky top-0 z-50 flex w-full items-center justify-between px-space-4 tablet:px-space-6 py-space-2 tablet:py-space-3 pointer-events-none relative ${className}`}
+      style={{ transform: "translateZ(0)" }}
     >
       {/* Top Faded Blur Atmosphere — dissolves scrolled content into the top haze */}
       <div
@@ -51,6 +55,8 @@ export default function Header({ className = "" }) {
           isScrolled ? "opacity-100" : "opacity-0",
         ].join(" ")}
         style={{
+          transform: "translateZ(0)",
+          willChange: "opacity, transform",
           backdropFilter: "blur(18px)",
           WebkitBackdropFilter: "blur(18px)",
           maskImage:

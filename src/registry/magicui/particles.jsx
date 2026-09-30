@@ -1,27 +1,6 @@
 "use client";
 
-import React, { useEffect, useRef, useState } from "react";
-
-function MousePosition() {
-  const [mousePosition, setMousePosition] = useState({
-    x: 0,
-    y: 0,
-  });
-
-  useEffect(() => {
-    const handleMouseMove = (event) => {
-      setMousePosition({ x: event.clientX, y: event.clientY });
-    };
-
-    window.addEventListener("mousemove", handleMouseMove);
-
-    return () => {
-      window.removeEventListener("mousemove", handleMouseMove);
-    };
-  }, []);
-
-  return mousePosition;
-}
+import React, { useEffect, useRef } from "react";
 
 function hexToRgb(hex) {
   let cleaned = hex.replace("#", "");
@@ -56,7 +35,6 @@ export function Particles({
   const canvasContainerRef = useRef(null);
   const context = useRef(null);
   const circles = useRef([]);
-  const mousePosition = MousePosition();
   const mouse = useRef({ x: 0, y: 0 });
   const canvasSize = useRef({ w: 0, h: 0 });
   const animationFrameId = useRef(null);
@@ -87,8 +65,27 @@ export function Particles({
       resizeObserver.observe(canvasContainerRef.current);
     }
 
+    const handleMouseMove = (event) => {
+      if (!canvasRef.current) return;
+      const rect = canvasRef.current.getBoundingClientRect();
+      const { w, h } = canvasSize.current;
+      const x = event.clientX - rect.left - w / 2;
+      const y = event.clientY - rect.top - h / 2;
+      const inside = x < w / 2 && x > -w / 2 && y < h / 2 && y > -h / 2;
+      if (inside) {
+        mouse.current.x = x;
+        mouse.current.y = y;
+      } else {
+        mouse.current.x = 0;
+        mouse.current.y = 0;
+      }
+    };
+
+    window.addEventListener("mousemove", handleMouseMove, { passive: true });
+
     return () => {
       window.removeEventListener("resize", initCanvas);
+      window.removeEventListener("mousemove", handleMouseMove);
       if (resizeObserver) {
         resizeObserver.disconnect();
       }
@@ -99,33 +96,12 @@ export function Particles({
   }, [color]);
 
   useEffect(() => {
-    onMouseMove();
-  }, [mousePosition.x, mousePosition.y]);
-
-  useEffect(() => {
     initCanvas();
   }, [refresh]);
 
   const initCanvas = () => {
     resizeCanvas();
     drawParticles();
-  };
-
-  const onMouseMove = () => {
-    if (canvasRef.current) {
-      const rect = canvasRef.current.getBoundingClientRect();
-      const { w, h } = canvasSize.current;
-      const x = mousePosition.x - rect.left - w / 2;
-      const y = mousePosition.y - rect.top - h / 2;
-      const inside = x < w / 2 && x > -w / 2 && y < h / 2 && y > -h / 2;
-      if (inside) {
-        mouse.current.x = x;
-        mouse.current.y = y;
-      } else {
-        mouse.current.x = 0;
-        mouse.current.y = 0;
-      }
-    }
   };
 
   const resizeCanvas = () => {

@@ -170,6 +170,7 @@ const RippleDistortion = ({
   const mountRef = useRef(null);
   const configRef = useRef({});
   const uniformsRef = useRef(null);
+  const requestRenderRef = useRef(null);
 
   useEffect(() => {
     configRef.current = { brushSize, spread, fade, spacing, clickStrength, trigger, enabled };
@@ -195,6 +196,7 @@ const RippleDistortion = ({
     canvas.style.width = '100%';
     canvas.style.height = '100%';
     canvas.style.display = 'block';
+    canvas.style.touchAction = 'none';
     mount.appendChild(canvas);
 
     const imageTexture = new Texture(gl, {
@@ -279,6 +281,12 @@ const RippleDistortion = ({
 
     uniformsRef.current = { wave: waveUniforms, composite: compositeUniforms };
 
+    let needsRender = true;
+    const requestRender = () => {
+      needsRender = true;
+    };
+    requestRenderRef.current = requestRender;
+
     let disposed = false;
     const image = new window.Image();
     image.crossOrigin = 'anonymous';
@@ -286,7 +294,9 @@ const RippleDistortion = ({
     const applyImage = () => {
       if (disposed) return;
       imageTexture.image = image;
+      imageTexture.needsUpdate = true;
       compositeUniforms.uTextureSize.value = [image.naturalWidth || 1, image.naturalHeight || 1];
+      requestRender();
     };
     image.onload = applyImage;
     image.src = src;
@@ -308,6 +318,7 @@ const RippleDistortion = ({
       const fieldH = Math.max(2, Math.round(height * scale));
       displacementTarget.setSize(fieldW, fieldH);
       compositeUniforms.uTexel.value = [1 / fieldW, 1 / fieldH];
+      requestRender();
     };
 
     const ro = new ResizeObserver(resize);
@@ -324,15 +335,18 @@ const RippleDistortion = ({
       wave.target = START_SCALE * Math.max(1, cfg.spread) * power;
       wave.size = Math.max(1, cfg.brushSize);
       wave.opacity = 1;
+      requestRender();
     };
 
-    const localPoint = (clientX, clientY) => {
+    const localPoint = (clientX, clientY, clamp = false) => {
       const rect = mount.getBoundingClientRect();
       if (rect.width === 0 || rect.height === 0) return null;
-      if (clientX < rect.left || clientX > rect.right || clientY < rect.top || clientY > rect.bottom) {
+      if (!clamp && (clientX < rect.left || clientX > rect.right || clientY < rect.top || clientY > rect.bottom)) {
         return null;
       }
-      return [clientX - rect.left, rect.height - (clientY - rect.top)];
+      const x = Math.min(Math.max(0, clientX - rect.left), rect.width);
+      const y = Math.min(Math.max(0, rect.height - (clientY - rect.top)), rect.height);
+      return [x, y];
     };
 
     let previousX = 0;
@@ -354,9 +368,11 @@ const RippleDistortion = ({
       } else {
         // For mouse: respect trigger mode (original behavior)
         if (cfg.trigger === 'click') return;
+        // Avoid calculating getBoundingClientRect when mouse is not over the artwork
+        if (!mount.contains(event.target)) return;
       }
 
-      const point = localPoint(event.clientX, event.clientY);
+      const point = localPoint(event.clientX, event.clientY, isTouch);
       if (!point) return;
       const step = Math.max(1, cfg.spacing);
       if (Math.abs(point[0] - previousX) > step || Math.abs(point[1] - previousY) > step) {
@@ -379,6 +395,9 @@ const RippleDistortion = ({
         previousX = point[0];
         previousY = point[1];
         setNewWave(point[0], point[1], 1);
+        try {
+          event.target?.setPointerCapture?.(event.pointerId);
+        } catch {}
       } else if (cfg.trigger === 'click') {
         setNewWave(point[0], point[1], Math.max(1, cfg.clickStrength));
       }
@@ -386,12 +405,25 @@ const RippleDistortion = ({
 
     const onUp = event => {
       if (isTouchPointer(event) && event.pointerId === activeTouchId) {
+        try {
+          event.target?.releasePointerCapture?.(event.pointerId);
+        } catch {}
         isTouchActive = false;
         activeTouchId = null;
       }
     };
 
-    // All listeners are passive — we never block scrolling
+    // Dedicated non-passive scroll block strictly on the artwork mount container
+    const preventScroll = event => {
+      if (event.cancelable) {
+        event.preventDefault();
+      }
+    };
+
+    mount.addEventListener('touchstart', preventScroll, { passive: false });
+    mount.addEventListener('touchmove', preventScroll, { passive: false });
+    mount.addEventListener('wheel', preventScroll, { passive: false });
+
     window.addEventListener('pointermove', onMove, { passive: true });
     window.addEventListener('pointerdown', onDown, { passive: true });
     window.addEventListener('pointerup', onUp, { passive: true });
@@ -409,6 +441,8 @@ const RippleDistortion = ({
       const growth = reduceMotion ? 0 : 1 - Math.exp(-delta * 1.09);
       const decay = reduceMotion ? 1 : Math.exp((-delta * LIFE_CONSTANT) / Math.max(0.15, cfg.fade));
 
+      let activeCount = 0;
+
       for (let i = 0; i < MAX_WAVES; i += 1) {
         const wave = waves[i];
         if (wave.opacity <= 0) {
@@ -416,6 +450,7 @@ const RippleDistortion = ({
           continue;
         }
 
+        activeCount += 1;
         wave.opacity *= decay;
         wave.scale += (wave.target - wave.scale) * growth;
 
@@ -433,12 +468,17 @@ const RippleDistortion = ({
         opacities[i] = wave.opacity;
       }
 
-      geometry.attributes.iOffset.needsUpdate = true;
-      geometry.attributes.iScale.needsUpdate = true;
-      geometry.attributes.iOpacity.needsUpdate = true;
+      // Only perform GPU buffer updates and renders when ripples are active or a final clean frame is needed
+      if (activeCount > 0 || needsRender) {
+        geometry.attributes.iOffset.needsUpdate = true;
+        geometry.attributes.iScale.needsUpdate = true;
+        geometry.attributes.iOpacity.needsUpdate = true;
 
-      renderer.render({ scene: waveMesh, target: displacementTarget, clear: true });
-      renderer.render({ scene: compositeMesh });
+        renderer.render({ scene: waveMesh, target: displacementTarget, clear: true });
+        renderer.render({ scene: compositeMesh });
+
+        needsRender = activeCount > 0;
+      }
     };
     raf = requestAnimationFrame(loop);
 
@@ -446,11 +486,15 @@ const RippleDistortion = ({
       disposed = true;
       cancelAnimationFrame(raf);
       ro.disconnect();
+      mount.removeEventListener('touchstart', preventScroll);
+      mount.removeEventListener('touchmove', preventScroll);
+      mount.removeEventListener('wheel', preventScroll);
       window.removeEventListener('pointermove', onMove);
       window.removeEventListener('pointerdown', onDown);
       window.removeEventListener('pointerup', onUp);
       window.removeEventListener('pointercancel', onUp);
       uniformsRef.current = null;
+      requestRenderRef.current = null;
       if (canvas.parentNode === mount) mount.removeChild(canvas);
       const ext = gl.getExtension('WEBGL_lose_context');
       if (ext) ext.loseContext();
@@ -470,13 +514,15 @@ const RippleDistortion = ({
     u.composite.uGrayscale.value = grayscale ? 1 : 0;
     u.composite.uHighlight.value = hexToRGB(highlightColor);
     u.composite.uTint.value = hexToRGB(tint);
+    requestRenderRef.current?.();
   }, [rings, strength, swirl, dispersion, glint, tintAmount, grayscale, highlightColor, tint]);
 
   return (
     <div
       ref={mountRef}
-      className={`relative w-full h-full overflow-hidden bg-black [&>canvas]:block [&>canvas]:w-full [&>canvas]:h-full ${className}`.trim()}
-      style={style}
+      data-lenis-prevent="true"
+      className={`relative w-full h-full overflow-hidden bg-black touch-none [&>canvas]:block [&>canvas]:w-full [&>canvas]:h-full [&>canvas]:touch-none ${className}`.trim()}
+      style={{ touchAction: 'none', overscrollBehavior: 'contain', ...style }}
     />
   );
 };

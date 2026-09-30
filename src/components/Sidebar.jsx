@@ -121,6 +121,7 @@ export default function Sidebar({
   return (
     <GlassCard
       as="aside"
+      style={{ transform: "translateZ(0)", willChange: "transform" }}
       className={[
         "flex min-h-0 w-sidebar shrink-0 flex-col overflow-hidden px-space-4 py-space-5",
         drawer

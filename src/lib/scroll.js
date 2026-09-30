@@ -22,8 +22,8 @@ export const easeOutQuint = (t) => 1 - (1 - t) ** 5;
 /** Ultra-smooth sextic ease-out — longest, dreamiest deceleration tail. */
 export const easeOutSextic = (t) => 1 - (1 - t) ** 6;
 
-export const MOUSE_WHEEL_LERP = 0.11;
-export const TRACKPAD_LERP = 0.22;
+export const MOUSE_WHEEL_LERP = 0.19;
+export const TRACKPAD_LERP = 0.28;
 
 let lastWheelTimestamp = 0;
 let consecutiveFastSmallEvents = 0;
@@ -77,7 +77,7 @@ export const rootScrollOptions = {
   lerp: MOUSE_WHEEL_LERP,
   duration: undefined,
   easing: undefined,
-  wheelMultiplier: 1.0,
+  wheelMultiplier: 1.15,
   autoRaf: true,
   syncTouch: false,
   touchMultiplier: 1.0,

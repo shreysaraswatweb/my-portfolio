@@ -436,7 +436,11 @@ export default function MediaPlayer({ className = "", id = "music-player" }) {
               </div>
 
               {/* Artwork (Extends fully to top of card) */}
-              <div className="album-art-wrap">
+              <div
+                className="album-art-wrap"
+                data-lenis-prevent="true"
+                style={{ touchAction: "none" }}
+              >
                 <RippleDistortion
                   key={currentTrack.id || currentTrack.title}
                   src={currentTrack.coverMedium || currentTrack.cover}
