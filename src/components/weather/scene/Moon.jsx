@@ -8,6 +8,7 @@ function Moon({
   parallax = { x: 0, y: 0 },
   isPaused = false,
   prefersReducedMotion = false,
+  isWide = false,
 }) {
   if (phase !== "night") return null;
 
@@ -24,8 +25,9 @@ function Moon({
     <motion.div
       className="absolute pointer-events-none select-none z-[2]"
       style={{
-        right: "18%",
-        top: "16%",
+        ...(isWide
+          ? { left: "35%", top: "13%" }
+          : { right: "18%", top: "16%" }),
         opacity: effectiveOpacity,
       }}
       animate={{
