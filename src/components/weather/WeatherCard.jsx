@@ -1,0 +1,735 @@
+import { useState, useEffect, useRef, useCallback, memo } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import {
+  MapPin,
+  Droplets,
+  Wind,
+  Thermometer,
+  Sun as SunIcon,
+  Moon as MoonIcon,
+  Cloud,
+  CloudSun,
+  CloudMoon,
+  CloudRain,
+  CloudLightning,
+  CloudSnow,
+  CloudFog,
+  RefreshCw,
+  X,
+} from "lucide-react";
+import GlassCard from "../ui/GlassCard";
+import IconChip from "../ui/IconChip";
+import LocationMapBackground from "../LocationMapBackground";
+import { useTheme } from "../../theme/ThemeProvider";
+import useWeather from "../../hooks/useWeather";
+import Sky from "./scene/Sky";
+import Stars from "./scene/Stars";
+import Sun from "./scene/Sun";
+import Moon from "./scene/Moon";
+import Clouds from "./scene/Clouds";
+import Rain from "./scene/Rain";
+import Lightning from "./scene/Lightning";
+import Snow from "./scene/Snow";
+import Fog from "./scene/Fog";
+import "../LocationWeatherCard.css";
+
+/**
+ * Animated count-up component for temperature display.
+ */
+function CountUp({ value = 0 }) {
+  const [displayValue, setDisplayValue] = useState(0);
+
+  useEffect(() => {
+    let start = 0;
+    const end = Math.round(value);
+    const duration = 850;
+    const startTime = performance.now();
+
+    let animId;
+    const update = (now) => {
+      const elapsed = now - startTime;
+      const progress = Math.min(elapsed / duration, 1);
+      // easeOutCubic
+      const ease = 1 - Math.pow(1 - progress, 3);
+      setDisplayValue(Math.round(start + (end - start) * ease));
+
+      if (progress < 1) {
+        animId = requestAnimationFrame(update);
+      }
+    };
+
+    animId = requestAnimationFrame(update);
+    return () => cancelAnimationFrame(animId);
+  }, [value]);
+
+  return <span>{displayValue}</span>;
+}
+
+/**
+ * Maps condition to compact hourly Lucide icon.
+ */
+function HourlyIcon({ condition, isDay = 1 }) {
+  const iconProps = { className: "w-3.5 h-3.5", strokeWidth: 2.2 };
+
+  switch (condition) {
+    case "clear":
+      return isDay ? (
+        <SunIcon {...iconProps} className="w-3.5 h-3.5 text-amber-300" />
+      ) : (
+        <MoonIcon {...iconProps} className="w-3.5 h-3.5 text-sky-200" />
+      );
+    case "partly-cloudy":
+      return isDay ? (
+        <CloudSun {...iconProps} className="w-3.5 h-3.5 text-amber-200" />
+      ) : (
+        <CloudMoon {...iconProps} className="w-3.5 h-3.5 text-sky-200" />
+      );
+    case "cloudy":
+      return <Cloud {...iconProps} className="w-3.5 h-3.5 text-slate-200" />;
+    case "rain":
+      return <CloudRain {...iconProps} className="w-3.5 h-3.5 text-sky-300" />;
+    case "thunderstorm":
+      return <CloudLightning {...iconProps} className="w-3.5 h-3.5 text-amber-300" />;
+    case "snow":
+      return <CloudSnow {...iconProps} className="w-3.5 h-3.5 text-blue-100" />;
+    case "fog":
+      return <CloudFog {...iconProps} className="w-3.5 h-3.5 text-slate-300" />;
+    default:
+      return <SunIcon {...iconProps} className="w-3.5 h-3.5 text-amber-300" />;
+  }
+}
+
+/**
+ * Dev Switcher Floating Panel for testing all phases x conditions.
+ */
+function DevSwitcher({
+  isOpen,
+  onClose,
+  currentPhase,
+  naturalPhase,
+  forcedPhase,
+  onSetPhase,
+  currentCondition,
+  naturalCondition,
+  forcedCondition,
+  onSetCondition,
+  onRefresh,
+}) {
+  if (!isOpen) return null;
+
+  const phases = ["dawn", "day", "evening", "night"];
+  const conditions = [
+    "clear",
+    "partly-cloudy",
+    "cloudy",
+    "fog",
+    "rain",
+    "thunderstorm",
+    "snow",
+  ];
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, scale: 0.9, y: 8 }}
+      animate={{ opacity: 1, scale: 1, y: 0 }}
+      exit={{ opacity: 0, scale: 0.9, y: 8 }}
+      onClick={(e) => e.stopPropagation()}
+      className="absolute inset-x-2 top-2 z-50 rounded-xl bg-neutral-950/95 border border-white/20 p-3 text-white shadow-2xl backdrop-blur-xl text-left"
+    >
+      <div className="flex items-center justify-between pb-2 border-b border-white/10">
+        <div className="flex items-center gap-1.5">
+          <span className="w-2 h-2 rounded-full bg-amber-400 animate-pulse" />
+          <span className="text-xs font-bold tracking-wide text-neutral-100">
+            Weather Dev Preview
+          </span>
+        </div>
+        <div className="flex items-center gap-1">
+          <button
+            type="button"
+            onClick={onRefresh}
+            className="p-1 rounded-md text-neutral-400 hover:text-white hover:bg-white/10 transition-colors"
+            title="Refresh Live Data"
+          >
+            <RefreshCw className="w-3.5 h-3.5" />
+          </button>
+          <button
+            type="button"
+            onClick={onClose}
+            className="p-1 rounded-md text-neutral-400 hover:text-white hover:bg-white/10 transition-colors"
+            title="Close (Press D)"
+          >
+            <X className="w-3.5 h-3.5" />
+          </button>
+        </div>
+      </div>
+
+      {/* Phase Selector */}
+      <div className="mt-2">
+        <p className="text-[10px] font-semibold uppercase tracking-wider text-neutral-400">
+          Phase <span className="text-amber-300 font-mono">({currentPhase})</span>
+        </p>
+        <div className="mt-1 flex flex-wrap gap-1">
+          <button
+            type="button"
+            onClick={() => onSetPhase(null)}
+            className={`px-2 py-0.5 text-[10px] rounded font-medium transition-colors ${
+              forcedPhase === null
+                ? "bg-amber-500 text-black font-bold"
+                : "bg-white/10 text-neutral-300 hover:bg-white/20"
+            }`}
+          >
+            Auto ({naturalPhase})
+          </button>
+          {phases.map((p) => (
+            <button
+              key={p}
+              type="button"
+              onClick={() => onSetPhase(p)}
+              className={`px-2 py-0.5 text-[10px] rounded font-medium capitalize transition-colors ${
+                forcedPhase === p
+                  ? "bg-amber-500 text-black font-bold"
+                  : "bg-white/10 text-neutral-300 hover:bg-white/20"
+              }`}
+            >
+              {p}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {/* Condition Selector */}
+      <div className="mt-2.5">
+        <p className="text-[10px] font-semibold uppercase tracking-wider text-neutral-400">
+          Condition <span className="text-cyan-300 font-mono">({currentCondition})</span>
+        </p>
+        <div className="mt-1 flex flex-wrap gap-1">
+          <button
+            type="button"
+            onClick={() => onSetCondition(null)}
+            className={`px-2 py-0.5 text-[10px] rounded font-medium transition-colors ${
+              forcedCondition === null
+                ? "bg-cyan-500 text-black font-bold"
+                : "bg-white/10 text-neutral-300 hover:bg-white/20"
+            }`}
+          >
+            Auto ({naturalCondition})
+          </button>
+          {conditions.map((c) => (
+            <button
+              key={c}
+              type="button"
+              onClick={() => onSetCondition(c)}
+              className={`px-2 py-0.5 text-[10px] rounded font-medium capitalize transition-colors ${
+                forcedCondition === c
+                  ? "bg-cyan-500 text-black font-bold"
+                  : "bg-white/10 text-neutral-300 hover:bg-white/20"
+              }`}
+            >
+              {c}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      <p className="mt-2 text-[9px] text-neutral-400 font-mono text-center">
+        Press <kbd className="px-1 py-0.2 bg-white/15 rounded text-white">D</kbd> or click ✕ to toggle
+      </p>
+    </motion.div>
+  );
+}
+
+function WeatherCard() {
+  const [isFlipped, setIsFlipped] = useState(false);
+  const [showHourly, setShowHourly] = useState(false);
+  const [isHovered, setIsHovered] = useState(false);
+  const [parallax, setParallax] = useState({ x: 0, y: 0 });
+  const [glint, setGlint] = useState({ x: 50, y: 50 });
+
+  const { resolved } = useTheme();
+  const isLight = resolved === "light";
+
+  const {
+    data,
+    loading,
+    isOffline,
+    phase,
+    naturalPhase,
+    condition,
+    sunPosition,
+    moonInfo,
+    refresh,
+    isDebugOpen,
+    setIsDebugOpen,
+    forcedPhase,
+    setForcedPhase,
+    forcedCondition,
+    setForcedCondition,
+  } = useWeather();
+
+  const cardRef = useRef(null);
+
+  // Performance guards: pause off-screen & background tabs
+  const [isInView, setIsInView] = useState(true);
+  const [isDocVisible, setIsDocVisible] = useState(true);
+  const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
+
+  // Monitor prefers-reduced-motion
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const media = window.matchMedia("(prefers-reduced-motion: reduce)");
+    setPrefersReducedMotion(media.matches);
+    const handler = (e) => setPrefersReducedMotion(e.matches);
+    media.addEventListener("change", handler);
+    return () => media.removeEventListener("change", handler);
+  }, []);
+
+  // Monitor page visibility
+  useEffect(() => {
+    const handleVisibility = () => {
+      setIsDocVisible(!document.hidden);
+    };
+    document.addEventListener("visibilitychange", handleVisibility);
+    return () => document.removeEventListener("visibilitychange", handleVisibility);
+  }, []);
+
+  // IntersectionObserver to pause when card scrolled off-screen
+  useEffect(() => {
+    if (!cardRef.current) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setIsInView(entry.isIntersecting);
+      },
+      { threshold: 0.1 }
+    );
+    observer.observe(cardRef.current);
+    return () => observer.disconnect();
+  }, []);
+
+  const isPaused = !isInView || !isDocVisible;
+
+  // Mouse move handler for sheen glint & scene parallax
+  const handleMouseMove = useCallback((e) => {
+    if (!cardRef.current) return;
+    const rect = cardRef.current.getBoundingClientRect();
+    const x = (e.clientX - rect.left) / rect.width - 0.5;
+    const y = (e.clientY - rect.top) / rect.height - 0.5;
+
+    setGlint({
+      x: (x + 0.5) * 100,
+      y: (y + 0.5) * 100,
+    });
+    setParallax({ x: x * 2, y: y * 2 });
+  }, []);
+
+  const handleMouseEnter = useCallback(() => {
+    setIsHovered(true);
+  }, []);
+
+  const handleMouseLeave = useCallback(() => {
+    setIsHovered(false);
+    setParallax({ x: 0, y: 0 });
+    setGlint({ x: 50, y: 50 });
+    // On desktop, ensure card returns to map when cursor leaves
+    if (typeof window !== "undefined" && !window.matchMedia("(pointer: coarse)").matches) {
+      setIsFlipped(false);
+    }
+  }, []);
+
+  const handleCardClick = useCallback((e) => {
+    // If click originated from an explicit button or interactive element, do nothing
+    if (e.target.closest("button") || e.target.closest("a") || e.target.closest(".no-flip")) {
+      return;
+    }
+    // Only toggle flip state on mobile/touch screens where hover doesn't exist
+    if (typeof window !== "undefined" && window.matchMedia("(pointer: coarse)").matches) {
+      setIsFlipped((prev) => !prev);
+    }
+  }, []);
+
+  const ariaLabel = isFlipped
+    ? `Live Weather in ${data.city}: ${data.temperature} degrees, ${data.label}`
+    : "Location: Noida, India. Hover to view live weather.";
+
+  return (
+    <div
+      ref={cardRef}
+      className={`location-flipper-container ${isFlipped ? "is-flipped" : ""}`}
+      onClick={handleCardClick}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
+      onMouseMove={handleMouseMove}
+      role="region"
+      aria-label={ariaLabel}
+      tabIndex={0}
+      onKeyDown={(e) => {
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          setIsFlipped((prev) => !prev);
+        }
+      }}
+    >
+      <div className="location-flipper-inner">
+        {/* Specular Light Sweep during 3D flip */}
+        <div className="location-flip-sheen" aria-hidden="true" />
+
+        {/* ════════════════════════════════════════════════════════════════════
+            FRONT FACE: LOCATION CARD (Map, Trails, Pin)
+           ════════════════════════════════════════════════════════════════════ */}
+        <div className="location-face-front">
+          <GlassCard
+            as="div"
+            className="location-card group relative flex w-full h-full flex-col justify-between overflow-hidden rounded-lg p-3 sm:p-space-4 transition-all duration-200 hover:border-accent-primary/40 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent-primary"
+          >
+            {/* Animated City Map Background Layer */}
+            <LocationMapBackground />
+
+            {/* Top Row: MapPin Icon + IST Live Badge + Flip Icon */}
+            <div className="relative z-[1] flex items-center justify-between">
+              <IconChip className="h-space-8 w-space-8 bg-accent-primary/10 text-accent-primary transition-transform duration-200 group-hover:scale-105">
+                <MapPin className="h-space-4 w-space-4" strokeWidth={1.75} />
+              </IconChip>
+              <div className="flex items-center gap-1.5">
+                <span className="inline-flex items-center gap-1 rounded-full bg-status-available/10 px-space-2 py-0.5 text-micro font-medium text-status-available border border-status-available/20">
+                  <span className="h-1.5 w-1.5 rounded-full bg-status-available animate-pulse" />
+                  IST
+                </span>
+              </div>
+            </div>
+
+            {/* Bottom Row: Location Typography */}
+            <div className="relative z-[1] mt-space-3">
+              <div className="flex items-center justify-between">
+                <p className="text-micro font-semibold uppercase tracking-wider text-text-secondary">
+                  LOCATION
+                </p>
+                <span className="text-[10px] text-emerald-700 dark:text-accent-primary/70 font-medium tracking-tight">
+                  Hover for weather →
+                </span>
+              </div>
+              <p className="mt-0.5 font-display text-body-lg sm:text-h2 font-bold text-text-primary leading-tight">
+                Noida
+              </p>
+              <p className="mt-0.5 truncate text-micro text-text-tertiary">
+                India · GMT+5:30
+              </p>
+            </div>
+          </GlassCard>
+        </div>
+
+        {/* ════════════════════════════════════════════════════════════════════
+            BACK FACE: LIVE ANIMATED REAL-TIME WEATHER CARD
+           ════════════════════════════════════════════════════════════════════ */}
+        <div className="location-face-back">
+          <div
+            className={`group relative flex w-full h-full flex-col justify-between overflow-hidden rounded-lg px-3 pt-3 pb-2.5 sm:px-3.5 sm:pt-3.5 sm:pb-3 transition-all duration-300 ${
+              isLight
+                ? "bg-white/80 border border-slate-200/90 shadow-[0_8px_30px_rgba(30,80,140,0.08)]"
+                : "bg-surface-card border border-white/10 shadow-[0_8px_32px_rgba(0,0,0,0.35)]"
+            }`}
+            style={{
+              transform:
+                isHovered && !prefersReducedMotion
+                  ? `perspective(900px) rotateX(${-parallax.y * 6}deg) rotateY(${parallax.x * 6}deg)`
+                  : "perspective(900px) rotateX(0deg) rotateY(0deg)",
+              transition: isHovered
+                ? "transform 0.08s ease-out, box-shadow 0.3s ease"
+                : "transform 0.4s ease-out, box-shadow 0.3s ease",
+            }}
+          >
+            {/* Animated Scene Layers (Back to Front) */}
+            <Sky phase={phase} condition={condition} isLight={isLight} />
+            <Stars
+              phase={phase}
+              condition={condition}
+              isPaused={isPaused}
+              prefersReducedMotion={prefersReducedMotion}
+            />
+            <Sun
+              phase={phase}
+              condition={condition}
+              sunPosition={sunPosition}
+              parallax={parallax}
+              isPaused={isPaused}
+              prefersReducedMotion={prefersReducedMotion}
+            />
+            <Moon
+              phase={phase}
+              condition={condition}
+              moonInfo={moonInfo}
+              parallax={parallax}
+              isPaused={isPaused}
+              prefersReducedMotion={prefersReducedMotion}
+            />
+            <Clouds
+              phase={phase}
+              condition={condition}
+              parallax={parallax}
+              isPaused={isPaused}
+              prefersReducedMotion={prefersReducedMotion}
+            />
+            <Fog
+              condition={condition}
+              isPaused={isPaused}
+              prefersReducedMotion={prefersReducedMotion}
+            />
+            <Rain
+              condition={condition}
+              isPaused={isPaused}
+              prefersReducedMotion={prefersReducedMotion}
+            />
+            <Snow
+              condition={condition}
+              isPaused={isPaused}
+              prefersReducedMotion={prefersReducedMotion}
+            />
+            <Lightning
+              condition={condition}
+              isPaused={isPaused}
+              prefersReducedMotion={prefersReducedMotion}
+            />
+
+            {/* Dynamic Moving Glossy Sheen Highlight */}
+            <div
+              className="absolute inset-0 pointer-events-none z-[6] transition-opacity duration-300"
+              style={{
+                opacity: isHovered ? (isLight ? 0.25 : 0.35) : 0.08,
+                background: `radial-gradient(circle at ${glint.x}% ${glint.y}%, rgba(255, 255, 255, 0.45) 0%, transparent 60%)`,
+              }}
+              aria-hidden="true"
+            />
+
+            {/* Dev Switcher Overlay (When Active) */}
+            <AnimatePresence>
+              {isDebugOpen && (
+                <DevSwitcher
+                  isOpen={isDebugOpen}
+                  onClose={() => setIsDebugOpen(false)}
+                  currentPhase={phase}
+                  naturalPhase={naturalPhase}
+                  forcedPhase={forcedPhase}
+                  onSetPhase={setForcedPhase}
+                  currentCondition={condition}
+                  naturalCondition={data.condition}
+                  forcedCondition={forcedCondition}
+                  onSetCondition={setForcedCondition}
+                  onRefresh={refresh}
+                />
+              )}
+            </AnimatePresence>
+
+            {/* Top Header: Noida + AQI Text (Left) & Cool Blinking Green Dot (Right) */}
+            <div className="relative z-10 flex items-start justify-between w-full">
+              <div className="flex flex-col items-start">
+                <p
+                  className={`font-display text-body-lg sm:text-h2 font-bold leading-tight select-none ${
+                    isLight ? "text-slate-800" : "text-white"
+                  }`}
+                >
+                  Noida
+                </p>
+                <div
+                  className="mt-0.5 flex items-center gap-1.5 text-micro select-none"
+                  title={`Air Quality Index: ${data.aqi} (${data.aqiStatus})`}
+                >
+                  <span
+                    className={`h-1.5 w-1.5 rounded-full shrink-0 ${
+                      data.aqi <= 50
+                        ? "bg-emerald-500"
+                        : data.aqi <= 100
+                        ? "bg-amber-400"
+                        : data.aqi <= 150
+                        ? "bg-orange-500"
+                        : "bg-rose-500"
+                    }`}
+                  />
+                  <span
+                    className={`font-medium tracking-tight ${
+                      isLight ? "text-slate-600" : "text-text-secondary"
+                    }`}
+                  >
+                    AQI {data.aqi} · {data.aqiStatus}
+                  </span>
+                </div>
+              </div>
+
+              {/* Top-Right: Cool Green Blinking Dot (No rounded arrow) */}
+              <div className="flex items-center pt-1">
+                <span
+                  className="relative flex h-2 w-2 sm:h-2.5 sm:w-2.5"
+                  title={isOffline ? "Offline (cached data)" : "Live real-time feed"}
+                >
+                  {!isOffline && (
+                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-status-available opacity-75" />
+                  )}
+                  <span
+                    className={`relative inline-flex rounded-full h-2 w-2 sm:h-2.5 sm:w-2.5 ${
+                      isOffline
+                        ? "bg-neutral-500"
+                        : "bg-status-available shadow-[0_0_8px_rgba(34,197,94,0.7)]"
+                    }`}
+                  />
+                </span>
+              </div>
+            </div>
+
+            {/* Center: Sleek Temperature & Weather Condition */}
+            <div className="relative z-10 my-auto py-0.5 text-center flex flex-col items-center justify-center">
+              {loading ? (
+                <div className="flex flex-col items-center gap-1.5 py-1">
+                  <div
+                    className={`h-8 w-16 rounded-md animate-pulse ${
+                      isLight ? "bg-black/10" : "bg-white/10"
+                    }`}
+                  />
+                  <div
+                    className={`h-3 w-20 rounded animate-pulse ${
+                      isLight ? "bg-black/10" : "bg-white/10"
+                    }`}
+                  />
+                </div>
+              ) : (
+                <>
+                  <div
+                    className={`font-display text-3xl sm:text-4xl font-light tracking-tight leading-none select-none flex items-start justify-center ${
+                      isLight ? "text-slate-800" : "text-white"
+                    }`}
+                    style={
+                      !isLight
+                        ? {
+                            textShadow: "0 2px 8px rgba(0, 0, 0, 0.4)",
+                          }
+                        : undefined
+                    }
+                  >
+                    <CountUp value={data.temperature} />
+                    <span className="text-xl sm:text-2xl font-extralight ml-0.5 opacity-90">°</span>
+                  </div>
+
+                  <p
+                    className={`mt-1 text-[11px] sm:text-caption font-medium capitalize tracking-wide select-none ${
+                      isLight ? "text-slate-600" : "text-white/90"
+                    }`}
+                  >
+                    {data.label}
+                  </p>
+                </>
+              )}
+            </div>
+
+            {/* Bottom Area: Compact Optimized Capsules with ZERO Truncation */}
+            <div
+              className={`relative z-10 w-full pt-1.5 sm:pt-2 border-t no-flip ${
+                isLight ? "border-slate-300/40" : "border-white/10"
+              }`}
+              onClick={(e) => {
+                e.stopPropagation();
+                setShowHourly((prev) => !prev);
+              }}
+            >
+              {showHourly ? (
+                <motion.div
+                  key="hourly"
+                  initial={{ opacity: 0, y: 4 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -4 }}
+                  transition={{ duration: 0.18 }}
+                  className="grid grid-cols-4 gap-1 w-full text-center py-0.5 cursor-pointer"
+                  title="Click to view metrics"
+                >
+                  {data.hourly.map((h, idx) => (
+                    <div
+                      key={idx}
+                      className={`flex flex-col items-center justify-center backdrop-blur-md rounded-lg py-1 px-0.5 border min-w-0 ${
+                        isLight
+                          ? "bg-white/85 border-slate-200/90 text-slate-800"
+                          : "bg-surface-pill/85 border-white/10 text-white"
+                      }`}
+                    >
+                      <span
+                        className={`text-[8.5px] sm:text-[9px] font-medium leading-tight truncate w-full ${
+                          isLight ? "text-slate-600" : "text-neutral-300"
+                        }`}
+                      >
+                        {h.time}
+                      </span>
+                      <div className="my-0.5 scale-90">
+                        <HourlyIcon condition={h.condition} isDay={h.isDay} />
+                      </div>
+                      <span
+                        className={`text-[9.5px] sm:text-[10px] font-bold leading-tight ${
+                          isLight ? "text-slate-800" : "text-white"
+                        }`}
+                      >
+                        {h.temp}°
+                      </span>
+                    </div>
+                  ))}
+                </motion.div>
+              ) : (
+                <motion.div
+                  key="chips"
+                  initial={{ opacity: 0, y: -4 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: 4 }}
+                  transition={{ duration: 0.18 }}
+                  className="grid grid-cols-3 gap-1 sm:gap-1.5 w-full cursor-pointer"
+                  title="Click to view 4-hour forecast"
+                >
+                  {/* Humidity Chip */}
+                  <div
+                    className={`flex items-center justify-center gap-1 py-1 px-1.5 rounded-full backdrop-blur-md text-[10px] sm:text-[11px] font-semibold whitespace-nowrap shadow-sm border ${
+                      isLight
+                        ? "bg-white/85 border-slate-200/90 text-slate-800"
+                        : "bg-surface-pill/85 border-white/10 text-white"
+                    }`}
+                    title="Relative Humidity"
+                  >
+                    <Droplets className="h-3 w-3 text-sky-500 shrink-0" strokeWidth={2.2} />
+                    <span className="tabular-nums leading-none">{data.humidity}%</span>
+                  </div>
+
+                  {/* Wind Speed Chip */}
+                  <div
+                    className={`flex items-center justify-center gap-1 py-1 px-1.5 rounded-full backdrop-blur-md text-[10px] sm:text-[11px] font-semibold whitespace-nowrap shadow-sm border ${
+                      isLight
+                        ? "bg-white/85 border-slate-200/90 text-slate-800"
+                        : "bg-surface-pill/85 border-white/10 text-white"
+                    }`}
+                    title="Wind Speed"
+                  >
+                    <Wind className="h-3 w-3 text-teal-500 shrink-0" strokeWidth={2.2} />
+                    <span className="tabular-nums leading-none">{data.windSpeed} km/h</span>
+                  </div>
+
+                  {/* Feels Like Chip */}
+                  <div
+                    className={`flex items-center justify-center gap-1 py-1 px-1.5 rounded-full backdrop-blur-md text-[10px] sm:text-[11px] font-semibold whitespace-nowrap shadow-sm border ${
+                      isLight
+                        ? "bg-white/85 border-slate-200/90 text-slate-800"
+                        : "bg-surface-pill/85 border-white/10 text-white"
+                    }`}
+                    title="Feels Like Temperature"
+                  >
+                    <Thermometer className="h-3 w-3 text-amber-500 shrink-0" strokeWidth={2.2} />
+                    <span className="tabular-nums leading-none">{data.feelsLike}°</span>
+                  </div>
+                </motion.div>
+              )}
+
+              {/* Bottom Subtle Indicator with ample clearance above bottom border */}
+              <div
+                className={`mt-1.5 flex items-center justify-center text-[9px] sm:text-[10px] font-medium tracking-tight select-none ${
+                  isLight ? "text-slate-500" : "text-neutral-400"
+                }`}
+              >
+                <span>{showHourly ? "Tap for metrics" : "Tap for 4h forecast"}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export default memo(WeatherCard);

@@ -18,7 +18,7 @@ import {
   TypeScriptIcon,
 } from "./icons/TechIcons";
 
-import LocationWeatherCard from "./LocationWeatherCard";
+import WeatherCard from "./weather/WeatherCard";
 
 // Generate deterministic, realistic contribution activity for GitHub calendar
 function generateContributionWeeks(totalWeeks = 24) {
@@ -142,9 +142,9 @@ export default function BentoStatsGrid() {
         </GlassCard>
       </motion.div>
 
-      {/* ─── ROW 1: BOX 2 - LOCATION & REAL-TIME WEATHER (3D FLIP) ───────────── */}
+      {/* ─── ROW 1: BOX 2 - LIVE ANIMATED REAL-TIME WEATHER ─────────────────── */}
       <motion.div variants={cardEntrance} className="col-span-1 flex">
-        <LocationWeatherCard />
+        <WeatherCard />
       </motion.div>
 
       {/* ─── ROW 1: BOX 3 - GIT CALENDER (Spans 2 columns on all viewports) ─── */}
