@@ -267,6 +267,14 @@ function WeatherCard() {
     setForcedCondition,
   } = useWeather();
 
+  // Determines if the live sky background behind the text is visually dark or light.
+  // - In dark mode: all skies are dark -> isDarkSky is true.
+  // - In light mode:
+  //   - 'night': deep navy twilight sky with moon/stars -> isDarkSky is true (requires crisp white text)
+  //   - 'evening': rich sunset purple & fiery amber -> isDarkSky is true (requires crisp white text)
+  //   - 'day' & 'dawn': soft sky blue & pastel morning -> isDarkSky is false (uses crisp slate-800 text)
+  const isDarkSky = !isLight || phase === "night" || phase === "evening";
+
   const cardRef = useRef(null);
 
   // Performance guards: pause off-screen & background tabs
@@ -524,9 +532,14 @@ function WeatherCard() {
             <div className="relative z-10 flex items-start justify-between w-full">
               <div className="flex flex-col items-start">
                 <p
-                  className={`font-display text-body-lg sm:text-h2 font-bold leading-tight select-none ${
-                    isLight ? "text-slate-800" : "text-white"
+                  className={`font-display text-body-lg sm:text-h2 font-bold leading-tight select-none transition-colors duration-300 ${
+                    isDarkSky ? "text-white" : "text-slate-800"
                   }`}
+                  style={
+                    isDarkSky
+                      ? { textShadow: "0 1px 3px rgba(0, 0, 0, 0.45)" }
+                      : undefined
+                  }
                 >
                   Noida
                 </p>
@@ -544,9 +557,14 @@ function WeatherCard() {
                       }`}
                     />
                     <span
-                      className={`font-medium tracking-tight ${
-                        isLight ? "text-slate-600" : "text-text-secondary"
+                      className={`font-medium tracking-tight transition-colors duration-300 ${
+                        isDarkSky ? "text-white/85" : "text-slate-600"
                       }`}
+                      style={
+                        isDarkSky
+                          ? { textShadow: "0 1px 2px rgba(0, 0, 0, 0.35)" }
+                          : undefined
+                      }
                     >
                       AQI {data.aqi} · {data.aqiStatus}
                     </span>
@@ -579,25 +597,25 @@ function WeatherCard() {
                 <div className="flex flex-col items-center gap-1.5 py-1">
                   <div
                     className={`h-8 w-16 rounded-md animate-pulse ${
-                      isLight ? "bg-black/10" : "bg-white/10"
+                      isDarkSky ? "bg-white/10" : "bg-black/10"
                     }`}
                   />
                   <div
                     className={`h-3 w-20 rounded animate-pulse ${
-                      isLight ? "bg-black/10" : "bg-white/10"
+                      isDarkSky ? "bg-white/10" : "bg-black/10"
                     }`}
                   />
                 </div>
               ) : (
                 <>
                   <div
-                    className={`font-display text-3xl sm:text-4xl font-light tracking-tight leading-none select-none flex items-start justify-center ${
-                      isLight ? "text-slate-800" : "text-white"
+                    className={`font-display text-3xl sm:text-4xl font-light tracking-tight leading-none select-none flex items-start justify-center transition-colors duration-300 ${
+                      isDarkSky ? "text-white" : "text-slate-800"
                     }`}
                     style={
-                      !isLight
+                      isDarkSky
                         ? {
-                            textShadow: "0 2px 8px rgba(0, 0, 0, 0.4)",
+                            textShadow: "0 2px 10px rgba(0, 0, 0, 0.55)",
                           }
                         : undefined
                     }
@@ -607,9 +625,14 @@ function WeatherCard() {
                   </div>
 
                   <p
-                    className={`mt-1 text-[11px] sm:text-caption font-medium capitalize tracking-wide select-none ${
-                      isLight ? "text-slate-600" : "text-white/90"
+                    className={`mt-1 text-[11px] sm:text-caption font-medium capitalize tracking-wide select-none transition-colors duration-300 ${
+                      isDarkSky ? "text-white/90" : "text-slate-600"
                     }`}
+                    style={
+                      isDarkSky
+                        ? { textShadow: "0 1px 3px rgba(0, 0, 0, 0.4)" }
+                        : undefined
+                    }
                   >
                     {data.label}
                   </p>
@@ -619,8 +642,8 @@ function WeatherCard() {
 
             {/* Bottom Area: Compact Optimized Capsules with ZERO Truncation */}
             <div
-              className={`relative z-10 w-full pt-1 sm:pt-1.5 border-t no-flip ${
-                isLight ? "border-slate-300/40" : "border-white/10"
+              className={`relative z-10 w-full pt-1.5 border-t no-flip transition-colors duration-300 ${
+                isDarkSky ? "border-white/15" : "border-slate-300/60"
               }`}
               onClick={(e) => {
                 e.stopPropagation();
@@ -641,7 +664,7 @@ function WeatherCard() {
                       key={idx}
                       className={`flex flex-col items-center justify-center backdrop-blur-md rounded-md py-0.5 px-0.5 border min-w-0 ${
                         isLight
-                          ? "bg-white/85 border-slate-200/90 text-slate-800"
+                          ? "bg-white/95 border-slate-200/90 text-slate-800"
                           : "bg-surface-pill/85 border-white/10 text-white"
                       }`}
                     >
@@ -672,15 +695,15 @@ function WeatherCard() {
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: 4 }}
                   transition={{ duration: 0.18 }}
-                  className="grid grid-cols-3 gap-1 sm:gap-1.5 w-full cursor-pointer"
+                  className="grid grid-cols-[auto_1fr_auto] items-center gap-1 w-full cursor-pointer"
                 >
-                  {/* Humidity Chip */}
+                  {/* Humidity Chip - Snugly optimized to content without excessive side whitespace */}
                   <Tooltip content={`Relative Humidity: ${data.humidity}%`} side="top">
                     <div
-                      className={`flex items-center justify-center gap-1 py-1 px-1.5 rounded-full backdrop-blur-md text-[10px] sm:text-[11px] font-semibold whitespace-nowrap shadow-sm border ${
+                      className={`w-max shrink-0 flex items-center justify-center gap-1 py-1 px-1.5 rounded-full backdrop-blur-md text-[10px] sm:text-[10.5px] font-semibold whitespace-nowrap shadow-xs border ${
                         isLight
-                          ? "bg-white/85 border-slate-200/90 text-slate-800"
-                          : "bg-surface-pill/85 border-white/10 text-white"
+                          ? "bg-white/95 border-slate-200/90 text-slate-800"
+                          : "bg-surface-pill/90 border-white/10 text-white"
                       }`}
                     >
                       <Droplets className="h-3 w-3 text-sky-500 shrink-0" strokeWidth={2.2} />
@@ -688,13 +711,13 @@ function WeatherCard() {
                     </div>
                   </Tooltip>
 
-                  {/* Wind Speed Chip */}
+                  {/* Wind Speed Chip - Fills available center space with ample clearance, no clipping */}
                   <Tooltip content={`Wind Speed: ${data.windSpeed} km/h`} side="top">
                     <div
-                      className={`flex items-center justify-center gap-1 py-1 px-1.5 rounded-full backdrop-blur-md text-[10px] sm:text-[11px] font-semibold whitespace-nowrap shadow-sm border ${
+                      className={`w-full min-w-0 flex items-center justify-center gap-1 py-1 px-2 rounded-full backdrop-blur-md text-[10px] sm:text-[10.5px] font-semibold whitespace-nowrap shadow-xs border ${
                         isLight
-                          ? "bg-white/85 border-slate-200/90 text-slate-800"
-                          : "bg-surface-pill/85 border-white/10 text-white"
+                          ? "bg-white/95 border-slate-200/90 text-slate-800"
+                          : "bg-surface-pill/90 border-white/10 text-white"
                       }`}
                     >
                       <Wind className="h-3 w-3 text-teal-500 shrink-0" strokeWidth={2.2} />
@@ -702,13 +725,13 @@ function WeatherCard() {
                     </div>
                   </Tooltip>
 
-                  {/* Feels Like Chip */}
+                  {/* Feels Like Chip - Snugly optimized to content without excessive side whitespace */}
                   <Tooltip content={`Feels Like Temperature: ${data.feelsLike}°`} side="top">
                     <div
-                      className={`flex items-center justify-center gap-1 py-1 px-1.5 rounded-full backdrop-blur-md text-[10px] sm:text-[11px] font-semibold whitespace-nowrap shadow-sm border ${
+                      className={`w-max shrink-0 flex items-center justify-center gap-1 py-1 px-1.5 rounded-full backdrop-blur-md text-[10px] sm:text-[10.5px] font-semibold whitespace-nowrap shadow-xs border ${
                         isLight
-                          ? "bg-white/85 border-slate-200/90 text-slate-800"
-                          : "bg-surface-pill/85 border-white/10 text-white"
+                          ? "bg-white/95 border-slate-200/90 text-slate-800"
+                          : "bg-surface-pill/90 border-white/10 text-white"
                       }`}
                     >
                       <Thermometer className="h-3 w-3 text-amber-500 shrink-0" strokeWidth={2.2} />
@@ -727,9 +750,9 @@ function WeatherCard() {
                   <button
                     type="button"
                     className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[9px] sm:text-[9.5px] font-medium tracking-tight transition-all duration-200 cursor-pointer ${
-                      isLight
-                        ? "bg-slate-900/5 hover:bg-slate-900/10 text-slate-600 hover:text-slate-900 border border-slate-900/10 shadow-xs"
-                        : "bg-surface-pill/80 hover:bg-surface-pill text-text-secondary hover:text-text-primary border border-border-hairline shadow-xs"
+                      isDarkSky
+                        ? "bg-white/15 hover:bg-white/25 text-white/90 hover:text-white border border-white/20 shadow-xs backdrop-blur-sm"
+                        : "bg-slate-900/5 hover:bg-slate-900/10 text-slate-700 hover:text-slate-900 border border-slate-900/10 shadow-xs"
                     }`}
                   >
                     <span>{showHourly ? "Tap for metrics" : "Tap for 4h forecast"}</span>
