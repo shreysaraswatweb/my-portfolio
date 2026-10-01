@@ -276,6 +276,25 @@ function WeatherCard() {
   const isDarkSky = !isLight || phase === "night" || phase === "evening";
 
   const cardRef = useRef(null);
+  const [isWide, setIsWide] = useState(() => {
+    if (typeof window !== "undefined") {
+      const w = window.innerWidth;
+      return w >= 600 && w < 1280;
+    }
+    return false;
+  });
+
+  // Track card width to automatically toggle tablet landscape vs compact mobile layout
+  useEffect(() => {
+    if (!cardRef.current || typeof ResizeObserver === "undefined") return;
+    const observer = new ResizeObserver((entries) => {
+      for (const entry of entries) {
+        setIsWide(entry.contentRect.width >= 250);
+      }
+    });
+    observer.observe(cardRef.current);
+    return () => observer.disconnect();
+  }, []);
 
   // Performance guards: pause off-screen & background tabs
   const [isInView, setIsInView] = useState(true);
@@ -432,7 +451,11 @@ function WeatherCard() {
            ════════════════════════════════════════════════════════════════════ */}
         <div className="location-face-back">
           <div
-            className={`group relative flex w-full h-full flex-col justify-between overflow-hidden rounded-lg px-3 pt-3 pb-3 sm:px-3.5 sm:pt-3.5 sm:pb-3.5 transition-all duration-300 ${
+            className={`group relative flex w-full h-full ${
+              isWide
+                ? "flex-row items-stretch p-2.5 sm:p-3"
+                : "flex-col justify-between p-2 sm:p-2.5"
+            } overflow-hidden rounded-lg transition-all duration-300 ${
               isLight
                 ? "bg-white/80 border border-slate-200/90 shadow-[0_8px_30px_rgba(30,80,140,0.08)]"
                 : "bg-surface-card border border-white/10 shadow-[0_8px_32px_rgba(0,0,0,0.35)]"
@@ -528,238 +551,484 @@ function WeatherCard() {
               )}
             </AnimatePresence>
 
-            {/* Top Header: Noida + AQI Text (Left) & Cool Blinking Green Dot (Right) */}
-            <div className="relative z-10 flex items-start justify-between w-full">
-              <div className="flex flex-col items-start">
-                <p
-                  className={`font-display text-body-lg sm:text-h2 font-bold leading-tight select-none transition-colors duration-300 ${
-                    isDarkSky ? "text-white" : "text-slate-800"
+            {isWide ? (
+              /* ══════════════════════════════════════════════════════════════
+                 WIDE TABLET MODE: Left Weather Scene + Right Border Capsules
+                 ══════════════════════════════════════════════════════════════ */
+              <>
+                {/* Left Section: Noida Header, Big Temperature, Condition */}
+                <div className="relative z-10 flex-1 flex flex-col justify-between h-full min-w-0 pr-2 sm:pr-3">
+                  {/* Top: Header */}
+                  <div className="flex items-start justify-between w-full">
+                    <div className="flex flex-col items-start">
+                      <p
+                        className={`font-display text-sm sm:text-base font-bold leading-tight select-none transition-colors duration-300 ${
+                          isDarkSky ? "text-white" : "text-slate-800"
+                        }`}
+                        style={
+                          isDarkSky
+                            ? { textShadow: "0 1px 3px rgba(0, 0, 0, 0.45)" }
+                            : undefined
+                        }
+                      >
+                        Noida
+                      </p>
+                      <Tooltip content={`Air Quality Index: ${data.aqi} · ${data.aqiStatus}`} side="bottom">
+                        <div className="mt-0.5 flex items-center gap-1.5 text-[9px] sm:text-[9.5px] select-none cursor-pointer">
+                          <span
+                            className={`h-1.5 w-1.5 rounded-full shrink-0 ${
+                              data.aqi <= 50
+                                ? "bg-emerald-500"
+                                : data.aqi <= 100
+                                ? "bg-amber-400"
+                                : data.aqi <= 150
+                                ? "bg-orange-500"
+                                : "bg-rose-500"
+                            }`}
+                          />
+                          <span
+                            className={`font-medium tracking-tight transition-colors duration-300 ${
+                              isDarkSky ? "text-white/85" : "text-slate-600"
+                            }`}
+                            style={
+                              isDarkSky
+                                ? { textShadow: "0 1px 2px rgba(0, 0, 0, 0.35)" }
+                                : undefined
+                            }
+                          >
+                            AQI {data.aqi} · {data.aqiStatus}
+                          </span>
+                        </div>
+                      </Tooltip>
+                    </div>
+
+                    {/* Green Blinking Dot */}
+                    <Tooltip content={isOffline ? "Offline (cached data)" : "Live real-time weather feed"} side="bottom">
+                      <div className="flex items-center pt-0.5 cursor-pointer">
+                        <span className="relative flex h-2 w-2">
+                          {!isOffline && (
+                            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-status-available opacity-75" />
+                          )}
+                          <span
+                            className={`relative inline-flex rounded-full h-2 w-2 ${
+                              isOffline
+                                ? "bg-neutral-500"
+                                : "bg-status-available shadow-[0_0_8px_rgba(34,197,94,0.7)]"
+                            }`}
+                          />
+                        </span>
+                      </div>
+                    </Tooltip>
+                  </div>
+
+                  {/* Center/Bottom-Left: Temperature & Condition */}
+                  <div className="my-auto py-0.5 text-left flex flex-col items-start justify-center">
+                    {loading ? (
+                      <div className="flex flex-col items-start gap-1 py-1">
+                        <div
+                          className={`h-8 w-16 rounded-md animate-pulse ${
+                            isDarkSky ? "bg-white/10" : "bg-black/10"
+                          }`}
+                        />
+                        <div
+                          className={`h-3 w-20 rounded animate-pulse ${
+                            isDarkSky ? "bg-white/10" : "bg-black/10"
+                          }`}
+                        />
+                      </div>
+                    ) : (
+                      <>
+                        <div
+                          className={`font-display text-3xl sm:text-4xl font-light tracking-tight leading-none select-none flex items-start justify-start transition-colors duration-300 ${
+                            isDarkSky ? "text-white" : "text-slate-800"
+                          }`}
+                          style={
+                            isDarkSky
+                              ? { textShadow: "0 2px 10px rgba(0, 0, 0, 0.55)" }
+                              : undefined
+                          }
+                        >
+                          <CountUp value={data.temperature} />
+                          <span className="text-xl sm:text-2xl font-extralight ml-0.5 opacity-90">°</span>
+                        </div>
+
+                        <p
+                          className={`mt-1 text-[11px] font-medium capitalize tracking-wide select-none transition-colors duration-300 ${
+                            isDarkSky ? "text-white/90" : "text-slate-600"
+                          }`}
+                          style={
+                            isDarkSky
+                              ? { textShadow: "0 1px 3px rgba(0, 0, 0, 0.4)" }
+                              : undefined
+                          }
+                        >
+                          {data.label}
+                        </p>
+                      </>
+                    )}
+                  </div>
+                </div>
+
+                {/* Right Section: Capsules vertically aligned on right border */}
+                <div
+                  className={`relative z-10 shrink-0 w-[114px] sm:w-[124px] pl-2 sm:pl-2.5 flex flex-col justify-between items-stretch h-full border-l no-flip transition-colors duration-300 ${
+                    isDarkSky ? "border-white/15" : "border-slate-300/60"
                   }`}
-                  style={
-                    isDarkSky
-                      ? { textShadow: "0 1px 3px rgba(0, 0, 0, 0.45)" }
-                      : undefined
-                  }
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setShowHourly((prev) => !prev);
+                  }}
                 >
-                  Noida
-                </p>
-                <Tooltip content={`Air Quality Index: ${data.aqi} · ${data.aqiStatus}`} side="bottom">
-                  <div className="mt-0.5 flex items-center gap-1.5 text-micro select-none cursor-pointer">
-                    <span
-                      className={`h-1.5 w-1.5 rounded-full shrink-0 ${
-                        data.aqi <= 50
-                          ? "bg-emerald-500"
-                          : data.aqi <= 100
-                          ? "bg-amber-400"
-                          : data.aqi <= 150
-                          ? "bg-orange-500"
-                          : "bg-rose-500"
-                      }`}
-                    />
-                    <span
-                      className={`font-medium tracking-tight transition-colors duration-300 ${
-                        isDarkSky ? "text-white/85" : "text-slate-600"
+                  {showHourly ? (
+                    <motion.div
+                      key="hourly-wide"
+                      initial={{ opacity: 0, scale: 0.95 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      exit={{ opacity: 0, scale: 0.95 }}
+                      transition={{ duration: 0.18 }}
+                      className="grid grid-cols-2 gap-1 w-full my-auto text-center cursor-pointer"
+                    >
+                      {data.hourly.map((h, idx) => (
+                        <div
+                          key={idx}
+                          className={`flex flex-col items-center justify-center backdrop-blur-md rounded-md py-1 px-0.5 border min-w-0 ${
+                            isLight
+                              ? "bg-white/95 border-slate-200/90 text-slate-800"
+                              : "bg-surface-pill/85 border-white/10 text-white"
+                          }`}
+                        >
+                          <span
+                            className={`text-[8px] font-medium leading-tight truncate w-full ${
+                              isLight ? "text-slate-600" : "text-neutral-300"
+                            }`}
+                          >
+                            {h.time}
+                          </span>
+                          <div className="my-0.5 scale-75">
+                            <HourlyIcon condition={h.condition} isDay={h.isDay} />
+                          </div>
+                          <span
+                            className={`text-[9px] font-bold leading-tight ${
+                              isLight ? "text-slate-800" : "text-white"
+                            }`}
+                          >
+                            {h.temp}°
+                          </span>
+                        </div>
+                      ))}
+                    </motion.div>
+                  ) : (
+                    <motion.div
+                      key="chips-wide"
+                      initial={{ opacity: 0, x: 4 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      exit={{ opacity: 0, x: -4 }}
+                      transition={{ duration: 0.18 }}
+                      className="flex flex-col justify-center gap-1.5 w-full my-auto cursor-pointer"
+                    >
+                      {/* Humidity Chip */}
+                      <Tooltip content={`Relative Humidity: ${data.humidity}%`} side="left">
+                        <div
+                          className={`w-full flex items-center justify-center gap-1.5 py-1 px-2.5 rounded-full backdrop-blur-md text-[10px] font-semibold whitespace-nowrap shadow-xs border ${
+                            isLight
+                              ? "bg-white/95 border-slate-200/90 text-slate-800"
+                              : "bg-surface-pill/90 border-white/10 text-white"
+                          }`}
+                        >
+                          <Droplets className="h-3 w-3 text-sky-500 shrink-0" strokeWidth={2.2} />
+                          <span className="tabular-nums leading-none">{data.humidity}%</span>
+                        </div>
+                      </Tooltip>
+
+                      {/* Wind Speed Chip - Full width in vertical stack with ample padding */}
+                      <Tooltip content={`Wind Speed: ${data.windSpeed} km/h`} side="left">
+                        <div
+                          className={`w-full flex items-center justify-center gap-1.5 py-1 px-2.5 rounded-full backdrop-blur-md text-[10px] font-semibold whitespace-nowrap shadow-xs border ${
+                            isLight
+                              ? "bg-white/95 border-slate-200/90 text-slate-800"
+                              : "bg-surface-pill/90 border-white/10 text-white"
+                          }`}
+                        >
+                          <Wind className="h-3 w-3 text-teal-500 shrink-0" strokeWidth={2.2} />
+                          <span className="tabular-nums leading-none">{data.windSpeed} km/h</span>
+                        </div>
+                      </Tooltip>
+
+                      {/* Feels Like Chip */}
+                      <Tooltip content={`Feels Like Temperature: ${data.feelsLike}°`} side="left">
+                        <div
+                          className={`w-full flex items-center justify-center gap-1.5 py-1 px-2.5 rounded-full backdrop-blur-md text-[10px] font-semibold whitespace-nowrap shadow-xs border ${
+                            isLight
+                              ? "bg-white/95 border-slate-200/90 text-slate-800"
+                              : "bg-surface-pill/90 border-white/10 text-white"
+                          }`}
+                        >
+                          <Thermometer className="h-3 w-3 text-amber-500 shrink-0" strokeWidth={2.2} />
+                          <span className="tabular-nums leading-none">{data.feelsLike}°</span>
+                        </div>
+                      </Tooltip>
+                    </motion.div>
+                  )}
+
+                  {/* Bottom Toggle Button */}
+                  <div className="w-full flex items-center justify-center select-none pt-1">
+                    <Tooltip
+                      content={showHourly ? "Click to view current conditions" : "Click to view 4-hour forecast"}
+                      side="top"
+                    >
+                      <button
+                        type="button"
+                        className={`w-full inline-flex items-center justify-center gap-1 py-0.5 px-1.5 rounded-full text-[8.5px] font-medium tracking-tight transition-all duration-200 cursor-pointer ${
+                          isDarkSky
+                            ? "bg-white/15 hover:bg-white/25 text-white/90 hover:text-white border border-white/20 shadow-xs backdrop-blur-sm"
+                            : "bg-slate-900/5 hover:bg-slate-900/10 text-slate-700 hover:text-slate-900 border border-slate-900/10 shadow-xs"
+                        }`}
+                      >
+                        <span>{showHourly ? "Tap for metrics" : "Tap for 4h forecast"}</span>
+                      </button>
+                    </Tooltip>
+                  </div>
+                </div>
+              </>
+            ) : (
+              /* ══════════════════════════════════════════════════════════════
+                 COMPACT MODE: Mobile & 4-Col Desktop Stacked Layout
+                 ══════════════════════════════════════════════════════════════ */
+              <>
+                {/* Header: Noida + AQI + Green Dot (Smaller Text for Mobile) */}
+                <div className="relative z-10 flex items-start justify-between w-full">
+                  <div className="flex flex-col items-start">
+                    <p
+                      className={`font-display text-[13px] sm:text-sm font-bold leading-tight select-none transition-colors duration-300 ${
+                        isDarkSky ? "text-white" : "text-slate-800"
                       }`}
                       style={
                         isDarkSky
-                          ? { textShadow: "0 1px 2px rgba(0, 0, 0, 0.35)" }
+                          ? { textShadow: "0 1px 3px rgba(0, 0, 0, 0.45)" }
                           : undefined
                       }
                     >
-                      AQI {data.aqi} · {data.aqiStatus}
-                    </span>
-                  </div>
-                </Tooltip>
-              </div>
-
-              {/* Top-Right: Cool Green Blinking Dot (No rounded arrow) */}
-              <Tooltip content={isOffline ? "Offline (cached data)" : "Live real-time weather feed"} side="bottom">
-                <div className="flex items-center pt-1 cursor-pointer">
-                  <span className="relative flex h-2 w-2 sm:h-2.5 sm:w-2.5">
-                    {!isOffline && (
-                      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-status-available opacity-75" />
-                    )}
-                    <span
-                      className={`relative inline-flex rounded-full h-2 w-2 sm:h-2.5 sm:w-2.5 ${
-                        isOffline
-                          ? "bg-neutral-500"
-                          : "bg-status-available shadow-[0_0_8px_rgba(34,197,94,0.7)]"
-                      }`}
-                    />
-                  </span>
-                </div>
-              </Tooltip>
-            </div>
-
-            {/* Center: Sleek Temperature & Weather Condition */}
-            <div className="relative z-10 my-auto py-0.5 text-center flex flex-col items-center justify-center">
-              {loading ? (
-                <div className="flex flex-col items-center gap-1.5 py-1">
-                  <div
-                    className={`h-8 w-16 rounded-md animate-pulse ${
-                      isDarkSky ? "bg-white/10" : "bg-black/10"
-                    }`}
-                  />
-                  <div
-                    className={`h-3 w-20 rounded animate-pulse ${
-                      isDarkSky ? "bg-white/10" : "bg-black/10"
-                    }`}
-                  />
-                </div>
-              ) : (
-                <>
-                  <div
-                    className={`font-display text-3xl sm:text-4xl font-light tracking-tight leading-none select-none flex items-start justify-center transition-colors duration-300 ${
-                      isDarkSky ? "text-white" : "text-slate-800"
-                    }`}
-                    style={
-                      isDarkSky
-                        ? {
-                            textShadow: "0 2px 10px rgba(0, 0, 0, 0.55)",
+                      Noida
+                    </p>
+                    <Tooltip content={`Air Quality Index: ${data.aqi} · ${data.aqiStatus}`} side="bottom">
+                      <div className="mt-0.5 flex items-center gap-1 text-[8.5px] sm:text-[9.5px] select-none cursor-pointer">
+                        <span
+                          className={`h-1.5 w-1.5 rounded-full shrink-0 ${
+                            data.aqi <= 50
+                              ? "bg-emerald-500"
+                              : data.aqi <= 100
+                              ? "bg-amber-400"
+                              : data.aqi <= 150
+                              ? "bg-orange-500"
+                              : "bg-rose-500"
+                          }`}
+                        />
+                        <span
+                          className={`font-medium tracking-tight transition-colors duration-300 ${
+                            isDarkSky ? "text-white/85" : "text-slate-600"
+                          }`}
+                          style={
+                            isDarkSky
+                              ? { textShadow: "0 1px 2px rgba(0, 0, 0, 0.35)" }
+                              : undefined
                           }
-                        : undefined
-                    }
-                  >
-                    <CountUp value={data.temperature} />
-                    <span className="text-xl sm:text-2xl font-extralight ml-0.5 opacity-90">°</span>
+                        >
+                          AQI {data.aqi} · {data.aqiStatus}
+                        </span>
+                      </div>
+                    </Tooltip>
                   </div>
 
-                  <p
-                    className={`mt-1 text-[11px] sm:text-caption font-medium capitalize tracking-wide select-none transition-colors duration-300 ${
-                      isDarkSky ? "text-white/90" : "text-slate-600"
-                    }`}
-                    style={
-                      isDarkSky
-                        ? { textShadow: "0 1px 3px rgba(0, 0, 0, 0.4)" }
-                        : undefined
-                    }
-                  >
-                    {data.label}
-                  </p>
-                </>
-              )}
-            </div>
-
-            {/* Bottom Area: Compact Optimized Capsules with ZERO Truncation */}
-            <div
-              className={`relative z-10 w-full pt-1.5 border-t no-flip transition-colors duration-300 ${
-                isDarkSky ? "border-white/15" : "border-slate-300/60"
-              }`}
-              onClick={(e) => {
-                e.stopPropagation();
-                setShowHourly((prev) => !prev);
-              }}
-            >
-              {showHourly ? (
-                <motion.div
-                  key="hourly"
-                  initial={{ opacity: 0, y: 4 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -4 }}
-                  transition={{ duration: 0.18 }}
-                  className="grid grid-cols-4 gap-1 w-full text-center py-0.5 cursor-pointer"
-                >
-                  {data.hourly.map((h, idx) => (
-                    <div
-                      key={idx}
-                      className={`flex flex-col items-center justify-center backdrop-blur-md rounded-md py-0.5 px-0.5 border min-w-0 ${
-                        isLight
-                          ? "bg-white/95 border-slate-200/90 text-slate-800"
-                          : "bg-surface-pill/85 border-white/10 text-white"
-                      }`}
-                    >
-                      <span
-                        className={`text-[8px] sm:text-[8.5px] font-medium leading-tight truncate w-full ${
-                          isLight ? "text-slate-600" : "text-neutral-300"
-                        }`}
-                      >
-                        {h.time}
+                  {/* Top-Right: Cool Green Blinking Dot */}
+                  <Tooltip content={isOffline ? "Offline (cached data)" : "Live real-time weather feed"} side="bottom">
+                    <div className="flex items-center pt-0.5 cursor-pointer">
+                      <span className="relative flex h-2 w-2">
+                        {!isOffline && (
+                          <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-status-available opacity-75" />
+                        )}
+                        <span
+                          className={`relative inline-flex rounded-full h-2 w-2 ${
+                            isOffline
+                              ? "bg-neutral-500"
+                              : "bg-status-available shadow-[0_0_8px_rgba(34,197,94,0.7)]"
+                          }`}
+                        />
                       </span>
-                      <div className="my-0.5 scale-90">
-                        <HourlyIcon condition={h.condition} isDay={h.isDay} />
+                    </div>
+                  </Tooltip>
+                </div>
+
+                {/* Center: Scaled Temperature & Weather Condition */}
+                <div className="relative z-10 my-auto py-0.5 text-center flex flex-col items-center justify-center">
+                  {loading ? (
+                    <div className="flex flex-col items-center gap-1 py-1">
+                      <div
+                        className={`h-7 w-14 rounded-md animate-pulse ${
+                          isDarkSky ? "bg-white/10" : "bg-black/10"
+                        }`}
+                      />
+                      <div
+                        className={`h-2.5 w-16 rounded animate-pulse ${
+                          isDarkSky ? "bg-white/10" : "bg-black/10"
+                        }`}
+                      />
+                    </div>
+                  ) : (
+                    <>
+                      <div
+                        className={`font-display text-[26px] sm:text-[30px] font-light tracking-tight leading-none select-none flex items-start justify-center transition-colors duration-300 ${
+                          isDarkSky ? "text-white" : "text-slate-800"
+                        }`}
+                        style={
+                          isDarkSky
+                            ? {
+                                textShadow: "0 2px 10px rgba(0, 0, 0, 0.55)",
+                              }
+                            : undefined
+                        }
+                      >
+                        <CountUp value={data.temperature} />
+                        <span className="text-base sm:text-lg font-extralight ml-0.5 opacity-90">°</span>
                       </div>
-                      <span
-                        className={`text-[9px] sm:text-[9.5px] font-bold leading-tight ${
-                          isLight ? "text-slate-800" : "text-white"
+
+                      <p
+                        className={`mt-0.5 text-[9.5px] sm:text-[10.5px] font-medium capitalize tracking-wide select-none transition-colors duration-300 ${
+                          isDarkSky ? "text-white/90" : "text-slate-600"
+                        }`}
+                        style={
+                          isDarkSky
+                            ? { textShadow: "0 1px 3px rgba(0, 0, 0, 0.4)" }
+                            : undefined
+                        }
+                      >
+                        {data.label}
+                      </p>
+                    </>
+                  )}
+                </div>
+
+                {/* Bottom Area: Capsules with Generous Padding + Adequate Border Clearance */}
+                <div
+                  className={`relative z-10 w-full pt-1 border-t no-flip transition-colors duration-300 ${
+                    isDarkSky ? "border-white/15" : "border-slate-300/60"
+                  }`}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setShowHourly((prev) => !prev);
+                  }}
+                >
+                  {showHourly ? (
+                    <motion.div
+                      key="hourly"
+                      initial={{ opacity: 0, y: 3 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -3 }}
+                      transition={{ duration: 0.18 }}
+                      className="grid grid-cols-4 gap-0.5 w-full text-center py-0.5 cursor-pointer"
+                    >
+                      {data.hourly.map((h, idx) => (
+                        <div
+                          key={idx}
+                          className={`flex flex-col items-center justify-center backdrop-blur-md rounded-md py-0.5 px-0.5 border min-w-0 ${
+                            isLight
+                              ? "bg-white/95 border-slate-200/90 text-slate-800"
+                              : "bg-surface-pill/85 border-white/10 text-white"
+                          }`}
+                        >
+                          <span
+                            className={`text-[7.5px] sm:text-[8px] font-medium leading-tight truncate w-full ${
+                              isLight ? "text-slate-600" : "text-neutral-300"
+                            }`}
+                          >
+                            {h.time}
+                          </span>
+                          <div className="my-0.5 scale-75">
+                            <HourlyIcon condition={h.condition} isDay={h.isDay} />
+                          </div>
+                          <span
+                            className={`text-[8.5px] sm:text-[9px] font-bold leading-tight ${
+                              isLight ? "text-slate-800" : "text-white"
+                            }`}
+                          >
+                            {h.temp}°
+                          </span>
+                        </div>
+                      ))}
+                    </motion.div>
+                  ) : (
+                    <motion.div
+                      key="chips"
+                      initial={{ opacity: 0, y: -3 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: 3 }}
+                      transition={{ duration: 0.18 }}
+                      className="grid grid-cols-[auto_1fr_auto] items-center gap-1 w-full cursor-pointer"
+                    >
+                      {/* Humidity Chip - Snug & Compact */}
+                      <Tooltip content={`Relative Humidity: ${data.humidity}%`} side="top">
+                        <div
+                          className={`w-max shrink-0 flex items-center justify-center gap-0.5 py-0.5 px-1.5 rounded-full backdrop-blur-md text-[8.5px] sm:text-[9px] font-semibold whitespace-nowrap shadow-xs border ${
+                            isLight
+                              ? "bg-white/95 border-slate-200/90 text-slate-800"
+                              : "bg-surface-pill/90 border-white/10 text-white"
+                          }`}
+                        >
+                          <Droplets className="h-2.5 w-2.5 text-sky-500 shrink-0" strokeWidth={2.2} />
+                          <span className="tabular-nums leading-none">{data.humidity}%</span>
+                        </div>
+                      </Tooltip>
+
+                      {/* Wind Speed Chip - Full 1fr Expansion with Generous Margin & Padding */}
+                      <Tooltip content={`Wind Speed: ${data.windSpeed} km/h`} side="top">
+                        <div
+                          className={`w-full min-w-0 flex items-center justify-center gap-1 py-0.5 px-2 rounded-full backdrop-blur-md text-[8.5px] sm:text-[9px] font-semibold whitespace-nowrap shadow-xs border ${
+                            isLight
+                              ? "bg-white/95 border-slate-200/90 text-slate-800"
+                              : "bg-surface-pill/90 border-white/10 text-white"
+                          }`}
+                        >
+                          <Wind className="h-2.5 w-2.5 text-teal-500 shrink-0" strokeWidth={2.2} />
+                          <span className="tabular-nums leading-none tracking-tight whitespace-nowrap">{data.windSpeed} km/h</span>
+                        </div>
+                      </Tooltip>
+
+                      {/* Feels Like Chip - Snug & Compact */}
+                      <Tooltip content={`Feels Like Temperature: ${data.feelsLike}°`} side="top">
+                        <div
+                          className={`w-max shrink-0 flex items-center justify-center gap-0.5 py-0.5 px-1.5 rounded-full backdrop-blur-md text-[8.5px] sm:text-[9px] font-semibold whitespace-nowrap shadow-xs border ${
+                            isLight
+                              ? "bg-white/95 border-slate-200/90 text-slate-800"
+                              : "bg-surface-pill/90 border-white/10 text-white"
+                          }`}
+                        >
+                          <Thermometer className="h-2.5 w-2.5 text-amber-500 shrink-0" strokeWidth={2.2} />
+                          <span className="tabular-nums leading-none">{data.feelsLike}°</span>
+                        </div>
+                      </Tooltip>
+                    </motion.div>
+                  )}
+
+                  {/* Bottom Subtle Indicator with ample clearance above bottom border */}
+                  <div className="mt-1 flex items-center justify-center select-none">
+                    <Tooltip
+                      content={showHourly ? "Click to view current conditions" : "Click to view 4-hour forecast"}
+                      side="top"
+                    >
+                      <button
+                        type="button"
+                        className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[8.5px] sm:text-[9px] font-medium tracking-tight transition-all duration-200 cursor-pointer ${
+                          isDarkSky
+                            ? "bg-white/15 hover:bg-white/25 text-white/90 hover:text-white border border-white/20 shadow-xs backdrop-blur-sm"
+                            : "bg-slate-900/5 hover:bg-slate-900/10 text-slate-700 hover:text-slate-900 border border-slate-900/10 shadow-xs"
                         }`}
                       >
-                        {h.temp}°
-                      </span>
-                    </div>
-                  ))}
-                </motion.div>
-              ) : (
-                <motion.div
-                  key="chips"
-                  initial={{ opacity: 0, y: -4 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: 4 }}
-                  transition={{ duration: 0.18 }}
-                  className="grid grid-cols-[auto_1fr_auto] items-center gap-1 w-full cursor-pointer"
-                >
-                  {/* Humidity Chip - Snugly optimized to content without excessive side whitespace */}
-                  <Tooltip content={`Relative Humidity: ${data.humidity}%`} side="top">
-                    <div
-                      className={`w-max shrink-0 flex items-center justify-center gap-1 py-1 px-1.5 rounded-full backdrop-blur-md text-[10px] sm:text-[10.5px] font-semibold whitespace-nowrap shadow-xs border ${
-                        isLight
-                          ? "bg-white/95 border-slate-200/90 text-slate-800"
-                          : "bg-surface-pill/90 border-white/10 text-white"
-                      }`}
-                    >
-                      <Droplets className="h-3 w-3 text-sky-500 shrink-0" strokeWidth={2.2} />
-                      <span className="tabular-nums leading-none">{data.humidity}%</span>
-                    </div>
-                  </Tooltip>
-
-                  {/* Wind Speed Chip - Fills available center space with ample clearance, no clipping */}
-                  <Tooltip content={`Wind Speed: ${data.windSpeed} km/h`} side="top">
-                    <div
-                      className={`w-full min-w-0 flex items-center justify-center gap-1 py-1 px-2 rounded-full backdrop-blur-md text-[10px] sm:text-[10.5px] font-semibold whitespace-nowrap shadow-xs border ${
-                        isLight
-                          ? "bg-white/95 border-slate-200/90 text-slate-800"
-                          : "bg-surface-pill/90 border-white/10 text-white"
-                      }`}
-                    >
-                      <Wind className="h-3 w-3 text-teal-500 shrink-0" strokeWidth={2.2} />
-                      <span className="tabular-nums leading-none">{data.windSpeed} km/h</span>
-                    </div>
-                  </Tooltip>
-
-                  {/* Feels Like Chip - Snugly optimized to content without excessive side whitespace */}
-                  <Tooltip content={`Feels Like Temperature: ${data.feelsLike}°`} side="top">
-                    <div
-                      className={`w-max shrink-0 flex items-center justify-center gap-1 py-1 px-1.5 rounded-full backdrop-blur-md text-[10px] sm:text-[10.5px] font-semibold whitespace-nowrap shadow-xs border ${
-                        isLight
-                          ? "bg-white/95 border-slate-200/90 text-slate-800"
-                          : "bg-surface-pill/90 border-white/10 text-white"
-                      }`}
-                    >
-                      <Thermometer className="h-3 w-3 text-amber-500 shrink-0" strokeWidth={2.2} />
-                      <span className="tabular-nums leading-none">{data.feelsLike}°</span>
-                    </div>
-                  </Tooltip>
-                </motion.div>
-              )}
-
-              {/* Bottom Subtle Indicator with ample clearance above bottom border */}
-              <div className="mt-1 flex items-center justify-center select-none">
-                <Tooltip
-                  content={showHourly ? "Click to view current conditions" : "Click to view 4-hour forecast"}
-                  side="top"
-                >
-                  <button
-                    type="button"
-                    className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[9px] sm:text-[9.5px] font-medium tracking-tight transition-all duration-200 cursor-pointer ${
-                      isDarkSky
-                        ? "bg-white/15 hover:bg-white/25 text-white/90 hover:text-white border border-white/20 shadow-xs backdrop-blur-sm"
-                        : "bg-slate-900/5 hover:bg-slate-900/10 text-slate-700 hover:text-slate-900 border border-slate-900/10 shadow-xs"
-                    }`}
-                  >
-                    <span>{showHourly ? "Tap for metrics" : "Tap for 4h forecast"}</span>
-                  </button>
-                </Tooltip>
-              </div>
-            </div>
+                        <span>{showHourly ? "Tap for metrics" : "Tap for 4h forecast"}</span>
+                      </button>
+                    </Tooltip>
+                  </div>
+                </div>
+              </>
+            )}
           </div>
         </div>
       </div>
