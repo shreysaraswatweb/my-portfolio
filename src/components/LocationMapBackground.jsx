@@ -1,7 +1,7 @@
 import "./LocationMapBackground.css";
 
 // 95 deterministic, seeded blocks modeling the residential street grid of Sector 28, Noida
-const noidaSector28Blocks = [
+export const noidaSector28Blocks = [
   // Sector 28 Ward 3A Park area (top-left)
   { x: -56, y: -66, w: 67, h: 30, color: "#133022" },
   { x: -56, y: -33, w: 67, h: 30, color: "#153627" },
