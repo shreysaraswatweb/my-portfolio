@@ -13,9 +13,11 @@ export const CONFIG = {
   waveStrength: 0.3, // Wave distortion / refraction factor (0.3)
   dotSize: 0.016, // Center popping beacon dot radius
   dotColor: [0.18, 0.89, 0.54], // Center dot color (#2fe28a)
-  center: [0.5, 0.5], // [u, v] center coordinate in UV space
+  center: [0.5, 0.54], // [u, v] center coordinate in UV space (pin node at top 46%)
   darkBottom: 0.3, // Readability darkening at bottom of card
   darkTop: 0.65, // Readability darkening at top of card
+  trailCollectTime: 1.08, // Time (s) when all trails collect at center point
+  waveStartTime: 1.25, // Time (s) when wave launches and green light merges/travels with it
 };
 
 /**
@@ -25,7 +27,6 @@ export const CONFIG = {
  */
 export function generateNoidaMapDataUri(isLight = false) {
   const bg = isLight ? "#eae5dc" : "#080b10";
-  const accent = isLight ? "#16a34a" : "#22c55e";
   const buildingFill = isLight ? "#ffffff" : null;
   const buildingStroke = isLight
     ? 'stroke="rgba(22, 24, 31, 0.08)" stroke-width="0.75"'
@@ -48,15 +49,6 @@ export function generateNoidaMapDataUri(isLight = false) {
     <rect width="300" height="300" fill="${bg}"/>
     <g transform="rotate(-38 150 138)">
       ${rects}
-      <path d="M 150 -50 L 150 138" stroke="${accent}" stroke-width="2" stroke-linecap="round" fill="none" opacity="0.6"/>
-      <path d="M 150 330 L 150 138" stroke="${accent}" stroke-width="2" stroke-linecap="round" fill="none" opacity="0.6"/>
-      <path d="M -40 138 L 150 138" stroke="${accent}" stroke-width="2" stroke-linecap="round" fill="none" opacity="0.6"/>
-      <path d="M 340 138 L 150 138" stroke="${accent}" stroke-width="2" stroke-linecap="round" fill="none" opacity="0.6"/>
-      <path d="M -20 70 L 150 70 L 150 138" stroke="${accent}" stroke-width="2" stroke-linecap="round" fill="none" opacity="0.5"/>
-      <path d="M 218 -40 L 218 138 L 150 138" stroke="${accent}" stroke-width="2" stroke-linecap="round" fill="none" opacity="0.5"/>
-      <path d="M 82 310 L 82 138 L 150 138" stroke="${accent}" stroke-width="2" stroke-linecap="round" fill="none" opacity="0.5"/>
-      <path d="M 218 310 L 218 138 L 150 138" stroke="${accent}" stroke-width="2" stroke-linecap="round" fill="none" opacity="0.5"/>
-      <circle cx="150" cy="138" r="4.5" fill="${accent}" opacity="0.85"/>
     </g>
   </svg>`;
 
@@ -89,14 +81,16 @@ uniform float uDotSize;
 uniform vec3 uDotColor;
 uniform float uDarkBottom;
 uniform float uDarkTop;
+uniform float uTrailCollectTime;
+uniform float uWaveStartTime;
 
 // Liquid wave height field
 float H(vec2 p, float tt) {
   float d = length(p);
-  float a = tt - 0.35;
+  float a = tt - uWaveStartTime;
   float x = d - a * uWaveSpeed;
-  float on = step(0.0, a) * step(a, 2.3);
-  float fade = smoothstep(0.0, 0.12, a) * (1.0 - smoothstep(1.3, 2.3, a));
+  float on = step(0.0, a) * step(a, 2.1);
+  float fade = smoothstep(0.0, 0.15, a) * (1.0 - smoothstep(1.3, 2.1, a));
   return exp(-pow(x * uWaveThickness, 2.0)) * fade * on * 0.06;
 }
 
@@ -116,7 +110,7 @@ void main() {
   float dx = (H(q + vec2(e, 0.0), tt) - H(q - vec2(e, 0.0), tt)) / (2.0 * e);
   float dy = (H(q + vec2(0.0, e), tt) - H(q - vec2(0.0, e), tt)) / (2.0 * e);
 
-  // Distort texture sample position (wave has no color of its own)
+  // Distort texture sample position (water ripple refraction)
   vec2 pd = p - vec2(dx, dy) * uWaveStrength;
 
   // Map to [0, 1] UV space of the card
@@ -126,11 +120,9 @@ void main() {
   float canvasAspect = res.x / res.y;
   vec2 iu;
   if (canvasAspect > uImgAspect) {
-    // Canvas is wider than image -> fit width, crop height
     float visibleHeight = uImgAspect / canvasAspect;
     iu = vec2(c.x, 0.5 + (c.y - 0.5) * visibleHeight);
   } else {
-    // Canvas is taller than image -> fit height, crop width
     float visibleWidth = canvasAspect / uImgAspect;
     iu = vec2(0.5 + (c.x - 0.5) * visibleWidth, c.y);
   }
@@ -138,17 +130,49 @@ void main() {
   // Sample background texture
   vec3 col = texture2D(tx, iu).rgb;
 
-  // Center green beacon dot: scale pop and fade out
+  // ─── CHOREOGRAPHY: Green circular light appears when lights collect, then merges with wave ───
   float d = length(q);
   vec3 gr = vec3(0.2, 1.0, 0.5);
-  float vis = smoothstep(0.05, 0.3, tt) * (1.0 - smoothstep(2.5, 3.1, tt));
-  float sc = vis * (1.0 + 0.25 * sin(clamp((tt - 0.05) / 0.3, 0.0, 1.0) * 3.14159));
-  float dr = uDotSize * sc;
-  float dot = (1.0 - smoothstep(dr - 0.002, dr, d)) * step(0.004, dr);
 
-  col = mix(col, uDotColor, dot);
-  col = mix(col, vec3(0.92, 1.0, 0.95), smoothstep(dr - 0.005, dr - 0.003, d) * dot);
-  col += gr * exp(-d * 45.0) * vis * 0.4;
+  // Phase 1: All lights arrive and collect at the central point (uTrailCollectTime -> uWaveStartTime)
+  float gatherProgress = clamp((tt - uTrailCollectTime) / max(0.001, uWaveStartTime - uTrailCollectTime), 0.0, 1.0);
+  float isGathering = step(uTrailCollectTime, tt) * (1.0 - step(uWaveStartTime, tt));
+
+  float drCenter = uDotSize * (0.6 + 0.9 * sin(gatherProgress * 1.5708));
+  float dotCenter = (1.0 - smoothstep(drCenter - 0.003, drCenter, d)) * isGathering * gatherProgress;
+  float glowCenter = exp(-d * 42.0) * isGathering * gatherProgress * 0.75;
+
+  // Phase 2: Wave launches, and green circular light merges with wave and travels with it
+  float a = tt - uWaveStartTime;
+  float onWave = step(0.0, a) * step(a, 2.1);
+  float waveFade = smoothstep(0.0, 0.15, a) * (1.0 - smoothstep(1.3, 2.1, a));
+  float waveRadius = a * uWaveSpeed;
+
+  // The green circular light ring traveling at waveRadius
+  float ringThickness = uDotSize * (1.0 + 0.45 * smoothstep(0.0, 1.2, a));
+  float distToWave = abs(d - waveRadius);
+  float ringMask = exp(-pow(distToWave / ringThickness, 2.0)) * waveFade * onWave;
+  float ringHighlight = exp(-pow(distToWave / (ringThickness * 0.45), 2.0)) * waveFade * onWave;
+  float ringGlow = exp(-distToWave * 26.0) * waveFade * onWave * 0.55;
+
+  // Center point smooth exit transition as wave departs
+  float centerExit = (1.0 - smoothstep(0.0, 0.35, a)) * onWave;
+  float centerRemnant = (1.0 - smoothstep(uDotSize - 0.003, uDotSize, d)) * centerExit;
+
+  // Blend green circular light into color
+  float totalGreen = clamp(dotCenter + ringMask * 0.95 + centerRemnant * 0.5, 0.0, 1.0);
+  col = mix(col, uDotColor, totalGreen);
+
+  // Blend bright specular highlight
+  float totalHighlight = clamp(
+    smoothstep(drCenter - 0.005, drCenter - 0.002, d) * dotCenter + ringHighlight * 0.8,
+    0.0,
+    1.0
+  );
+  col = mix(col, vec3(0.92, 1.0, 0.95), totalHighlight);
+
+  // Add ambient green glow (both at center during gather and riding with the expanding wave)
+  col += gr * (glowCenter + ringGlow);
 
   // Readability darkening gradients at bottom and top
   vec2 uv0 = gl_FragCoord.xy / res;
@@ -174,6 +198,7 @@ function RippleBackground({
   config = {},
   className = "",
   fallback = null,
+  children = null,
 }) {
   const canvasRef = useRef(null);
   const [glAvailable, setGlAvailable] = useState(true);
@@ -266,6 +291,8 @@ function RippleBackground({
       uDotColor: gl.getUniformLocation(program, "uDotColor"),
       uDarkBottom: gl.getUniformLocation(program, "uDarkBottom"),
       uDarkTop: gl.getUniformLocation(program, "uDarkTop"),
+      uTrailCollectTime: gl.getUniformLocation(program, "uTrailCollectTime"),
+      uWaveStartTime: gl.getUniformLocation(program, "uWaveStartTime"),
     };
 
     // Set static uniforms
@@ -284,6 +311,8 @@ function RippleBackground({
     );
     gl.uniform1f(U.uDarkBottom, activeConfig.darkBottom);
     gl.uniform1f(U.uDarkTop, activeConfig.darkTop);
+    gl.uniform1f(U.uTrailCollectTime, activeConfig.trailCollectTime);
+    gl.uniform1f(U.uWaveStartTime, activeConfig.waveStartTime);
 
     // Texture setup
     let isTextureReady = false;
@@ -430,11 +459,18 @@ function RippleBackground({
     activeConfig.dotSize,
     activeConfig.darkBottom,
     activeConfig.darkTop,
+    activeConfig.trailCollectTime,
+    activeConfig.waveStartTime,
   ]);
 
   if (!glAvailable) {
     if (fallback) {
-      return fallback;
+      return (
+        <>
+          {fallback}
+          {children}
+        </>
+      );
     }
     return (
       <div
@@ -445,16 +481,21 @@ function RippleBackground({
           backgroundPosition: "center",
         }}
         aria-hidden="true"
-      />
+      >
+        {children}
+      </div>
     );
   }
 
   return (
-    <canvas
-      ref={canvasRef}
-      className={`pointer-events-none absolute inset-0 z-0 block h-full w-full rounded-[inherit] ${className}`}
-      aria-hidden="true"
-    />
+    <>
+      <canvas
+        ref={canvasRef}
+        className={`pointer-events-none absolute inset-0 z-0 block h-full w-full rounded-[inherit] ${className}`}
+        aria-hidden="true"
+      />
+      {children}
+    </>
   );
 }
 

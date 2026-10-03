@@ -4,7 +4,7 @@
   --map-block: #1a2029;
   --map-street: #080b10;
   --map-park: #153627;
-  --loop: 3s;
+  --loop: 3.6s;
 }
 
 /* Light Theme Variables */
@@ -13,7 +13,7 @@ html[data-theme="light"] .location-card {
   --map-block: #ffffff;
   --map-street: #eae5dc;
   --map-park: #d4ebd9;
-  --loop: 3s;
+  --loop: 3.6s;
 }
 
 .map-bg {
@@ -141,18 +141,18 @@ html[data-theme="light"] .map-streak-collector {
     stroke-dashoffset: 18;
     opacity: 0;
   }
-  6% {
+  4% {
     opacity: 1;
   }
-  38% {
+  24% {
     stroke-dashoffset: -82;
     opacity: 1;
   }
-  46% {
+  30% {
     stroke-dashoffset: -100;
     opacity: 1;
   }
-  49% {
+  33% {
     stroke-dashoffset: -100;
     opacity: 0;
   }
@@ -164,20 +164,20 @@ html[data-theme="light"] .map-streak-collector {
 
 /* SVG collector node flares as trails converge into it */
 @keyframes collector-glow {
-  0%, 36% {
-    opacity: 0.3;
+  0%, 25% {
+    opacity: 0.2;
     transform: scale(0.8);
   }
-  46%, 51% {
+  30%, 35% {
     opacity: 1;
-    transform: scale(1.6);
+    transform: scale(1.85);
   }
-  65% {
-    opacity: 0.5;
+  42% {
+    opacity: 0.3;
     transform: scale(1);
   }
   100% {
-    opacity: 0.3;
+    opacity: 0.2;
     transform: scale(0.8);
   }
 }

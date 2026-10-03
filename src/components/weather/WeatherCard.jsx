@@ -20,7 +20,7 @@ import {
 import GlassCard from "../ui/GlassCard";
 import IconChip from "../ui/IconChip";
 import Tooltip from "../ui/Tooltip";
-import LocationMapBackground from "../LocationMapBackground";
+import LocationMapBackground, { LocationMapTrails } from "../LocationMapBackground";
 import RippleBackground, { generateNoidaMapDataUri } from "../ui/RippleBackground";
 import { useTheme } from "../../theme/ThemeProvider";
 import useWeather from "../../hooks/useWeather";
@@ -409,9 +409,12 @@ function WeatherCard() {
             {/* Animated City Map Background Layer with WebGL Ripple Effect */}
             <RippleBackground
               image={mapDataUri}
-              center={[0.5, 0.5]}
+              center={[0.5, 0.54]}
               fallback={<LocationMapBackground />}
-            />
+            >
+              {/* Old Green Animated Light Trails */}
+              <LocationMapTrails />
+            </RippleBackground>
 
             {/* Top Row: MapPin Icon + IST Live Badge + Flip Icon */}
             <div className="relative z-[1] flex items-center justify-between">
