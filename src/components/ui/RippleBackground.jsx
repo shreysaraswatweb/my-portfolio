@@ -142,37 +142,56 @@ void main() {
   float dotCenter = (1.0 - smoothstep(drCenter - 0.003, drCenter, d)) * isGathering * gatherProgress;
   float glowCenter = exp(-d * 42.0) * isGathering * gatherProgress * 0.75;
 
-  // Phase 2: Wave launches, and green circular light merges with wave and travels with it
+  // Phase 2: Radar wave launches on collision, and green radar light sweeps outward with the ripple wave
   float a = tt - uWaveStartTime;
-  float onWave = step(0.0, a) * step(a, 2.1);
-  float waveFade = smoothstep(0.0, 0.15, a) * (1.0 - smoothstep(1.3, 2.1, a));
+  float onWave = step(0.0, a) * step(a, 2.15);
+  float waveFade = smoothstep(0.0, 0.14, a) * (1.0 - smoothstep(1.3, 2.15, a));
   float waveRadius = a * uWaveSpeed;
-
-  // The green circular light ring traveling at waveRadius
-  float ringThickness = uDotSize * (1.0 + 0.45 * smoothstep(0.0, 1.2, a));
   float distToWave = abs(d - waveRadius);
-  float ringMask = exp(-pow(distToWave / ringThickness, 2.0)) * waveFade * onWave;
-  float ringHighlight = exp(-pow(distToWave / (ringThickness * 0.45), 2.0)) * waveFade * onWave;
-  float ringGlow = exp(-distToWave * 26.0) * waveFade * onWave * 0.55;
 
-  // Center point smooth exit transition as wave departs
-  float centerExit = (1.0 - smoothstep(0.0, 0.35, a)) * onWave;
+  // A. Leading Radar Wavefront Ring (sharp, glowing neon ping edge)
+  float ringThickness = uDotSize * (0.95 + 0.35 * smoothstep(0.0, 1.0, a));
+  float radarLeadingRing = exp(-pow(distToWave / ringThickness, 2.0)) * waveFade * onWave;
+  float radarSharpCore = exp(-pow(distToWave / (ringThickness * 0.42), 2.0)) * waveFade * onWave;
+
+  // B. Translucent Radar Sweep Fill (smooth phosphor wake inside the advancing wavefront, d <= waveRadius)
+  float sweepTail = 0.10 + 0.08 * smoothstep(0.0, 1.4, a);
+  float radarSweepFill = smoothstep(waveRadius - sweepTail, waveRadius, d) *
+                         (1.0 - smoothstep(waveRadius, waveRadius + 0.015, d)) *
+                         waveFade * onWave * 0.35;
+
+  // C. Secondary Radar Echo Ring (concentric radar ping pulse)
+  float echoOffset = 0.055 + 0.02 * smoothstep(0.0, 1.2, a);
+  float distToEcho = abs(d - (waveRadius - echoOffset));
+  float radarEchoRing = exp(-pow(distToEcho / (ringThickness * 0.85), 2.0)) *
+                        smoothstep(echoOffset, echoOffset + 0.04, waveRadius) *
+                        waveFade * onWave * 0.45;
+
+  // D. Volumetric Atmospheric Green Glow traveling with the radar ripple
+  float radarVolumetricGlow = exp(-distToWave * 22.0) * waveFade * onWave * 0.6;
+
+  // E. Center Point Post-Collision Easing (remnant beacon at origin)
+  float centerExit = (1.0 - smoothstep(0.0, 0.4, a)) * onWave;
   float centerRemnant = (1.0 - smoothstep(uDotSize - 0.003, uDotSize, d)) * centerExit;
 
-  // Blend green circular light into color
-  float totalGreen = clamp(dotCenter + ringMask * 0.95 + centerRemnant * 0.5, 0.0, 1.0);
-  col = mix(col, uDotColor, totalGreen);
-
-  // Blend bright specular highlight
-  float totalHighlight = clamp(
-    smoothstep(drCenter - 0.005, drCenter - 0.002, d) * dotCenter + ringHighlight * 0.8,
+  // Composite Radar Light onto Card Color
+  float totalRadarGreen = clamp(
+    dotCenter + radarLeadingRing * 0.95 + radarEchoRing * 0.5 + radarSweepFill + centerRemnant * 0.45,
     0.0,
     1.0
   );
-  col = mix(col, vec3(0.92, 1.0, 0.95), totalHighlight);
+  col = mix(col, uDotColor, totalRadarGreen);
 
-  // Add ambient green glow (both at center during gather and riding with the expanding wave)
-  col += gr * (glowCenter + ringGlow);
+  // Bright specular glint along the radar wavefront and collision center
+  float totalRadarWhite = clamp(
+    smoothstep(drCenter - 0.005, drCenter - 0.002, d) * dotCenter + radarSharpCore * 0.85,
+    0.0,
+    1.0
+  );
+  col = mix(col, vec3(0.92, 1.0, 0.96), totalRadarWhite);
+
+  // Add ambient green radiation
+  col += gr * (glowCenter + radarVolumetricGlow);
 
   // Readability darkening gradients at bottom and top
   vec2 uv0 = gl_FragCoord.xy / res;
