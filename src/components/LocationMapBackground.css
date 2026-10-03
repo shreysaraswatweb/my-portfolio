@@ -91,9 +91,7 @@ html[data-theme="light"] .map-block.map-block-park {
 
 .map-streak-collector {
   fill: var(--map-accent, #22c55e);
-  filter: drop-shadow(0 0 3px #ffffff)
-    drop-shadow(0 0 8px var(--map-accent, #22c55e))
-    drop-shadow(0 0 14px var(--map-accent, #22c55e));
+  filter: drop-shadow(0 0 3px var(--map-accent, #22c55e));
   transform-origin: 150px 138px;
   opacity: 0.3;
   transition: fill 0.3s ease;
@@ -109,8 +107,7 @@ html[data-theme="light"] .map-streak {
 
 html[data-theme="light"] .map-streak-collector {
   fill: #16a34a;
-  filter: drop-shadow(0 0 2px #ffffff)
-    drop-shadow(0 0 6px rgba(22, 163, 74, 0.85));
+  filter: drop-shadow(0 0 2px rgba(22, 163, 74, 0.6));
 }
 
 @media (prefers-reduced-motion: no-preference) {
@@ -168,12 +165,12 @@ html[data-theme="light"] .map-streak-collector {
     opacity: 0.2;
     transform: scale(0.8);
   }
-  30%, 35% {
-    opacity: 1;
-    transform: scale(1.85);
+  30%, 34% {
+    opacity: 0.75;
+    transform: scale(1.2);
   }
-  42% {
-    opacity: 0.3;
+  40% {
+    opacity: 0.25;
     transform: scale(1);
   }
   100% {
@@ -182,22 +179,9 @@ html[data-theme="light"] .map-streak-collector {
   }
 }
 
-/* ─── Layer C: Blinking Location Point + Radar Pulse Ring ─────────────── */
+/* ─── Layer C: Blinking Location Point ────────────────────────────────── */
 .map-pin-pulse {
-  position: absolute;
-  left: 50%;
-  top: 46%;
-  transform: translate(-50%, -50%);
-  width: 58%;
-  aspect-ratio: 1 / 1;
-  border-radius: 9999px;
-  background: color-mix(in srgb, var(--map-accent, #22c55e) 15%, transparent);
-  border: 1px solid color-mix(in srgb, var(--map-accent, #22c55e) 40%, transparent);
-  box-shadow: inset 0 0 14px color-mix(in srgb, var(--map-accent, #22c55e) 25%, transparent),
-    0 0 16px color-mix(in srgb, var(--map-accent, #22c55e) 30%, transparent);
-  pointer-events: none;
-  opacity: 0;
-  will-change: transform, opacity;
+  display: none !important;
 }
 
 .map-pin-dot {

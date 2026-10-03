@@ -206,8 +206,7 @@ export function LocationMapTrails({ className = "" }) {
           />
         </g>
       </svg>
-      {/* Radar pulse ring expanding outward on collision */}
-      <div className="map-pin-pulse" aria-hidden="true" />
+      {/* Central location beacon pin */}
       <div className="map-pin-dot" aria-hidden="true" />
     </>
   );
