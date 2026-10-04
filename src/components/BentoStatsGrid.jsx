@@ -19,76 +19,7 @@ import {
 } from "./icons/TechIcons";
 
 import WeatherCard from "./weather/WeatherCard";
-
-// Generate deterministic, realistic contribution activity for GitHub calendar
-function generateContributionWeeks(totalWeeks = 24) {
-  const weeks = [];
-  const today = new Date();
-  const dayOfWeek = today.getDay(); // 0 is Sunday
-
-  let seed = 42;
-  function random() {
-    seed = (seed * 9301 + 49297) % 233280;
-    return seed / 233280;
-  }
-
-  const totalDays = totalWeeks * 7;
-  const startDate = new Date(today);
-  startDate.setDate(today.getDate() - totalDays + (7 - dayOfWeek));
-
-  let totalCommits = 0;
-
-  for (let w = 0; w < totalWeeks; w++) {
-    const days = [];
-    for (let d = 0; d < 7; d++) {
-      const date = new Date(startDate);
-      date.setDate(startDate.getDate() + w * 7 + d);
-
-      const isFuture = date > today;
-      let count = 0;
-      let level = 0;
-
-      if (!isFuture) {
-        const rand = random();
-        const isWeekend = d === 0 || d === 6;
-
-        if (isWeekend) {
-          if (rand > 0.65) {
-            count = Math.floor(rand * 4) + 1;
-            level = count >= 3 ? 2 : 1;
-          }
-        } else {
-          if (rand > 0.15) {
-            count = Math.floor(rand * 9) + 1;
-            if (count >= 7) level = 4;
-            else if (count >= 5) level = 3;
-            else if (count >= 3) level = 2;
-            else level = 1;
-          }
-        }
-        totalCommits += count;
-      }
-
-      days.push({
-        date: date.toISOString().split("T")[0],
-        count,
-        level,
-        isFuture,
-      });
-    }
-    weeks.push(days);
-  }
-
-  return { weeks, totalCommits };
-}
-
-const levelColors = [
-  "bg-white/[0.05] dark:bg-white/[0.06] border border-white/[0.04]",
-  "bg-emerald-950/70 border border-emerald-800/40 dark:bg-emerald-900/60",
-  "bg-emerald-700/80 border border-emerald-600/40 dark:bg-emerald-700/80",
-  "bg-emerald-500 border border-emerald-400/50 dark:bg-emerald-500",
-  "bg-emerald-400 border border-emerald-300/60 dark:bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.4)]",
-];
+import GitCalendarCubes from "./ui/GitCalendarCubes";
 
 const topSkills = [
   { id: "react", name: "React", Icon: ReactIcon },
@@ -99,7 +30,6 @@ const topSkills = [
 
 export default function BentoStatsGrid() {
   const [activeTooltip, setActiveTooltip] = useState(null);
-  const { weeks, totalCommits } = useMemo(() => generateContributionWeeks(24), []);
 
   return (
     <motion.section
@@ -147,90 +77,81 @@ export default function BentoStatsGrid() {
         <WeatherCard />
       </motion.div>
 
-      {/* ─── ROW 1: BOX 3 - GIT CALENDER (Spans 2 columns on all viewports) ─── */}
+      {/* ─── ROW 1: BOX 3 - GIT CALENDER (3D Interactive WebGL2 Cubes) ─── */}
       <motion.div
         variants={cardEntrance}
         className="col-span-2 laptop:col-span-2 flex"
       >
         <GlassCard
-          as="a"
-          href="https://github.com/shreysaraswatweb"
-          target="_blank"
-          rel="noopener noreferrer"
+          as="div"
           {...hoverLift}
           className="group relative flex w-full flex-col justify-between rounded-lg p-space-4 transition-all duration-200 hover:border-emerald-500/40 focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500"
         >
           {/* Header */}
           <div className="flex items-center justify-between gap-space-2">
-            <div className="flex items-center gap-space-2.5">
-              <IconChip className="h-space-8 w-space-8 bg-white/5 text-text-primary transition-transform duration-200 group-hover:scale-105">
+            <a
+              href="https://github.com/shreysaraswatweb"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-space-2.5 group/header"
+            >
+              <IconChip className="h-space-8 w-space-8 bg-white/5 text-text-primary transition-transform duration-200 group-hover/header:scale-105">
                 <GithubMark className="h-space-4 w-space-4 text-text-primary" />
               </IconChip>
               <div>
                 <p className="text-micro font-semibold uppercase tracking-wider text-text-secondary">
                   GIT CALENDER
                 </p>
-                <p className="text-caption sm:text-body font-bold text-text-primary leading-tight">
+                <p className="text-caption sm:text-body font-bold text-text-primary leading-tight group-hover/header:text-emerald-400 transition-colors">
                   Contributions
                 </p>
               </div>
-            </div>
+            </a>
 
             <div className="flex items-center gap-space-2">
-              <span className="inline-flex items-center gap-1 rounded-full border border-emerald-500/30 bg-emerald-500/10 px-space-2 py-0.5 text-micro font-medium text-emerald-400">
+              <a
+                href="https://github.com/shreysaraswatweb"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1 rounded-full border border-emerald-500/30 bg-emerald-500/10 px-space-2 py-0.5 text-micro font-medium text-emerald-400 hover:bg-emerald-500/20 transition-colors"
+              >
                 <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
-                {totalCommits}+ Commits
-              </span>
-              <ExternalLinkIcon className="h-space-3 w-space-3 text-text-tertiary transition-colors duration-200 group-hover:text-text-primary" />
+                631+ Commits
+              </a>
+              <a
+                href="https://github.com/shreysaraswatweb"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Visit GitHub Profile"
+              >
+                <ExternalLinkIcon className="h-space-3 w-space-3 text-text-tertiary transition-colors duration-200 group-hover:text-text-primary hover:text-emerald-400" />
+              </a>
             </div>
           </div>
 
-          {/* Calendar Heatmap Grid */}
-          <div className="mt-space-3 overflow-x-auto scrollbar-none pb-0.5 touch-pan-x" data-nested-scroll="x">
-            <div className="inline-flex flex-col gap-1 min-w-full">
-              <div className="flex gap-[3px] items-center">
-                {weeks.map((week, wIndex) => (
-                  <div key={wIndex} className="flex flex-col gap-[3px]">
-                    {week.map((day, dIndex) => (
-                      <div
-                        key={dIndex}
-                        onMouseEnter={() =>
-                          !day.isFuture &&
-                          setActiveTooltip(`${day.count} commits on ${day.date}`)
-                        }
-                        onMouseLeave={() => setActiveTooltip(null)}
-                        title={
-                          day.isFuture
-                            ? undefined
-                            : `${day.count} commits on ${day.date}`
-                        }
-                        className={[
-                          "h-[9px] w-[9px] sm:h-[10px] sm:w-[10px] rounded-[2px] transition-transform duration-150 hover:scale-125 cursor-pointer",
-                          day.isFuture
-                            ? "bg-transparent opacity-0 pointer-events-none"
-                            : levelColors[day.level],
-                        ].join(" ")}
-                      />
-                    ))}
-                  </div>
-                ))}
-              </div>
+          {/* 3D Interactive WebGL2 Cubes Heatmap Grid */}
+          <div className="mt-space-3 relative w-full h-[105px] sm:h-[115px] overflow-hidden rounded-md">
+            <GitCalendarCubes onHover={setActiveTooltip} />
+          </div>
 
-              {/* Legend & Tooltip status line */}
-              <div className="mt-space-2 flex items-center justify-between text-micro text-text-tertiary">
-                <span className="truncate pr-space-2">
-                  {activeTooltip || "github.com/shreysaraswatweb"}
-                </span>
-                <div className="flex items-center gap-1 shrink-0">
-                  <span className="text-[10px]">Less</span>
-                  <span className="h-[7px] w-[7px] rounded-[1px] bg-white/[0.06] border border-white/[0.04]" />
-                  <span className="h-[7px] w-[7px] rounded-[1px] bg-emerald-950/70" />
-                  <span className="h-[7px] w-[7px] rounded-[1px] bg-emerald-700/80" />
-                  <span className="h-[7px] w-[7px] rounded-[1px] bg-emerald-500" />
-                  <span className="h-[7px] w-[7px] rounded-[1px] bg-emerald-400" />
-                  <span className="text-[10px]">More</span>
-                </div>
-              </div>
+          {/* Legend & Tooltip status line */}
+          <div className="mt-space-2 flex items-center justify-between text-micro text-text-tertiary">
+            <a
+              href="https://github.com/shreysaraswatweb"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="truncate pr-space-2 hover:text-emerald-400 transition-colors"
+            >
+              {activeTooltip || "github.com/shreysaraswatweb"}
+            </a>
+            <div className="flex items-center gap-1 shrink-0">
+              <span className="text-[10px]">Less</span>
+              <span className="h-[7px] w-[7px] rounded-[1px] bg-white/[0.06] border border-white/[0.04]" />
+              <span className="h-[7px] w-[7px] rounded-[1px] bg-emerald-950/70" />
+              <span className="h-[7px] w-[7px] rounded-[1px] bg-emerald-700/80" />
+              <span className="h-[7px] w-[7px] rounded-[1px] bg-emerald-500" />
+              <span className="h-[7px] w-[7px] rounded-[1px] bg-emerald-400" />
+              <span className="text-[10px]">More</span>
             </div>
           </div>
         </GlassCard>
