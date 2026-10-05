@@ -130,50 +130,49 @@ void main() {
   // Sample background texture
   vec3 col = texture2D(tx, iu).rgb;
 
-  // ─── CHOREOGRAPHY: Sleek, faded green radar light emerging on collision and spreading with wave ───
+  // ─── CHOREOGRAPHY: Green circular light appears when lights collect, then merges with wave ───
   float d = length(q);
+  vec3 gr = vec3(0.2, 1.0, 0.5);
 
-  // Phase 1: Subtle arrival at central beacon node (uTrailCollectTime -> uWaveStartTime)
+  // Phase 1: All lights arrive and collect at the central point (uTrailCollectTime -> uWaveStartTime)
   float gatherProgress = clamp((tt - uTrailCollectTime) / max(0.001, uWaveStartTime - uTrailCollectTime), 0.0, 1.0);
   float isGathering = step(uTrailCollectTime, tt) * (1.0 - step(uWaveStartTime, tt));
 
-  float drCenter = uDotSize * (0.45 + 0.35 * sin(gatherProgress * 1.5708));
-  float dotCenter = (1.0 - smoothstep(drCenter - 0.002, drCenter, d)) * isGathering * gatherProgress;
+  float drCenter = uDotSize * (0.6 + 0.9 * sin(gatherProgress * 1.5708));
+  float dotCenter = (1.0 - smoothstep(drCenter - 0.003, drCenter, d)) * isGathering * gatherProgress;
+  float glowCenter = exp(-d * 42.0) * isGathering * gatherProgress * 0.75;
 
-  // Phase 2: Radar wave launches on collision; a sleek, faded line sweeps outward with the ripple wave
+  // Phase 2: Wave launches, and green circular light merges with wave and travels with it
   float a = tt - uWaveStartTime;
-  float onWave = step(0.0, a) * step(a, 2.15);
-  float waveFade = smoothstep(0.0, 0.14, a) * (1.0 - smoothstep(1.05, 2.15, a));
+  float onWave = step(0.0, a) * step(a, 2.1);
+  float waveFade = smoothstep(0.0, 0.15, a) * (1.0 - smoothstep(1.3, 2.1, a));
   float waveRadius = a * uWaveSpeed;
+
+  // The green circular light ring traveling at waveRadius
+  float ringThickness = uDotSize * (1.0 + 0.45 * smoothstep(0.0, 1.2, a));
   float distToWave = abs(d - waveRadius);
+  float ringMask = exp(-pow(distToWave / ringThickness, 2.0)) * waveFade * onWave;
+  float ringHighlight = exp(-pow(distToWave / (ringThickness * 0.45), 2.0)) * waveFade * onWave;
+  float ringGlow = exp(-distToWave * 26.0) * waveFade * onWave * 0.55;
 
-  // Sleek, thin radar wave line (subtle ~1.5px - 2px precision stroke)
-  float lineThickness = 0.0045;
-  float radarLine = exp(-pow(distToWave / lineThickness, 2.0));
+  // Center point smooth exit transition as wave departs
+  float centerExit = (1.0 - smoothstep(0.0, 0.35, a)) * onWave;
+  float centerRemnant = (1.0 - smoothstep(uDotSize - 0.003, uDotSize, d)) * centerExit;
 
-  // Delicate feathering immediately adjacent to the stroke (~2px soft edge)
-  float lineSoft = exp(-pow(distToWave / (lineThickness * 2.2), 2.0)) * 0.14;
+  // Blend green circular light into color
+  float totalGreen = clamp(dotCenter + ringMask * 0.95 + centerRemnant * 0.5, 0.0, 1.0);
+  col = mix(col, uDotColor, totalGreen);
 
-  // Subtle center exit as the wave departs from origin
-  float centerExit = (1.0 - smoothstep(0.0, 0.22, a)) * onWave;
-  float centerRemnant = (1.0 - smoothstep(uDotSize - 0.002, uDotSize, d)) * centerExit * 0.22;
-
-  // Faded, translucent green light (max opacity ~0.26 - 0.30, calm & sleek)
-  float totalRadarGreen = clamp(
-    (radarLine * 0.25 + lineSoft) * waveFade * onWave + dotCenter * 0.30 + centerRemnant,
+  // Blend bright specular highlight
+  float totalHighlight = clamp(
+    smoothstep(drCenter - 0.005, drCenter - 0.002, d) * dotCenter + ringHighlight * 0.8,
     0.0,
     1.0
   );
-  col = mix(col, uDotColor, totalRadarGreen);
+  col = mix(col, vec3(0.92, 1.0, 0.95), totalHighlight);
 
-  // Delicate glint along the thin center line (faint sheen, max ~0.14)
-  float lineCore = exp(-pow(distToWave / (lineThickness * 0.5), 2.0));
-  float totalGlint = clamp(
-    lineCore * 0.14 * waveFade * onWave + dotCenter * 0.18,
-    0.0,
-    1.0
-  );
-  col = mix(col, vec3(0.92, 1.0, 0.96), totalGlint);
+  // Add ambient green glow (both at center during gather and riding with the expanding wave)
+  col += gr * (glowCenter + ringGlow);
 
   // Readability darkening gradients at bottom and top
   vec2 uv0 = gl_FragCoord.xy / res;

@@ -2,83 +2,76 @@
 
 import { useEffect, useRef, useState, useMemo } from 'react';
 
-/**
- * ═══════════════════════════════════════════════════════════════════════════
- * SHREYS GIT CONTRIBUTION MATRIX (7 rows x 24 columns)
- * Extracted directly from Shrey's original GitHub Calendar:
- * Letters: S (0..2), H (4..6), R (8..10), E (12..15), Y (17..19), S (21..23)
- * with authentic scatter dots on rows 0 and 6, and latest active commit at col 23.
- * ═══════════════════════════════════════════════════════════════════════════
- */
-export const SHREYS_GIT_MATRIX = [
-  // Row 0 (Sun): Light scatter of activity
-  [2, 0, 2, 0, 0, 0, 2, 2, 0, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0, 0, 2, 0, 0],
-  // Row 1 (Mon): Top bar of SHREYS (with peak commit at [1][23])
-  [3, 3, 3, 0, 3, 0, 3, 0, 3, 3, 3, 0, 3, 3, 3, 3, 0, 3, 0, 3, 0, 3, 3, 4],
-  // Row 2 (Tue): Upper letter stems
-  [3, 0, 0, 0, 3, 0, 3, 0, 3, 0, 3, 0, 3, 0, 0, 0, 0, 3, 0, 3, 0, 3, 0, 0],
-  // Row 3 (Wed): Crossbars of SHREYS
-  [3, 3, 3, 0, 3, 3, 3, 0, 3, 3, 3, 0, 3, 3, 3, 0, 0, 0, 3, 0, 0, 3, 3, 3],
-  // Row 4 (Thu): Lower letter stems
-  [0, 0, 3, 0, 3, 0, 3, 0, 3, 0, 3, 0, 3, 0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 3],
-  // Row 5 (Fri): Bottom bars of SHREYS
-  [3, 3, 3, 0, 3, 0, 3, 0, 3, 0, 3, 0, 3, 3, 3, 3, 0, 0, 3, 0, 0, 3, 3, 3],
-  // Row 6 (Sat): Bottom accent dots
-  [0, 1, 0, 1, 2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 2, 0, 0, 0, 0],
-];
+import shreyGithubData from '../../data/shreyGithubData.json';
 
 /**
- * Generates realistic date and commit counts for each cell in the 24x7 matrix
- * so hover tooltips display actual contribution data totaling ~631 commits.
+ * ═══════════════════════════════════════════════════════════════════════════
+ * SHREY'S REAL GITHUB CONTRIBUTIONS (shreysaraswatweb)
+ * Formats authentic GitHub contribution data into a 7-row calendar matrix
+ * where Row 0 is Sunday ... Row 6 is Saturday.
+ * ═══════════════════════════════════════════════════════════════════════════
  */
-export function generateGitCalendarData(matrix = SHREYS_GIT_MATRIX, totalWeeks = 24) {
+export function buildGitCalendarData(contributions = shreyGithubData.contributions, totalWeeks = 24) {
+  const dataList = Array.isArray(contributions) && contributions.length > 0
+    ? contributions
+    : shreyGithubData.contributions;
+
+  const weeks = [];
+  let currentWeek = [];
+
+  for (const day of dataList) {
+    const dow = new Date(day.date + 'T12:00:00Z').getUTCDay();
+    if (dow === 0 && currentWeek.length > 0) {
+      weeks.push(currentWeek);
+      currentWeek = [];
+    }
+    currentWeek.push(day);
+  }
+  if (currentWeek.length > 0) weeks.push(currentWeek);
+
+  const selectedWeeks = weeks.slice(-totalWeeks);
   const rows = 7;
-  const cols = totalWeeks;
+  const cols = selectedWeeks.length;
   const cells = [];
-  const today = new Date();
-  const dayOfWeek = today.getDay(); // 0 = Sun
-
-  const totalDays = cols * 7;
-  const startDate = new Date(today);
-  startDate.setDate(today.getDate() - totalDays + (7 - dayOfWeek));
-
-  let commitSum = 0;
 
   for (let r = 0; r < rows; r++) {
     const rowList = [];
     for (let c = 0; c < cols; c++) {
-      const date = new Date(startDate);
-      date.setDate(startDate.getDate() + c * 7 + r);
-      const isFuture = date > today;
-      const level = isFuture ? 0 : matrix[r]?.[c] ?? 0;
-
-      let count = 0;
-      if (level === 4) count = 12;
-      else if (level === 3) count = 5 + ((c * 3 + r * 7) % 4);
-      else if (level === 2) count = 3 + ((c + r) % 2);
-      else if (level === 1) count = 1 + ((c * 2) % 2);
-
-      commitSum += count;
-
-      const dateStr = date.toLocaleDateString('en-US', {
-        month: 'short',
-        day: 'numeric',
-        year: 'numeric',
-      });
-
-      rowList.push({
-        col: c,
-        row: r,
-        level,
-        count,
-        date: dateStr,
-        isFuture,
-      });
+      const week = selectedWeeks[c];
+      const day = week?.find((d) => new Date(d.date + 'T12:00:00Z').getUTCDay() === r);
+      if (day) {
+        const dObj = new Date(day.date + 'T12:00:00Z');
+        const dateStr = dObj.toLocaleDateString('en-US', {
+          month: 'short',
+          day: 'numeric',
+          year: 'numeric',
+          timeZone: 'UTC',
+        });
+        rowList.push({
+          col: c,
+          row: r,
+          level: day.level,
+          count: day.count,
+          date: dateStr,
+          isFuture: false,
+        });
+      } else {
+        rowList.push({
+          col: c,
+          row: r,
+          level: 0,
+          count: 0,
+          date: '',
+          isFuture: false,
+        });
+      }
     }
     cells.push(rowList);
   }
 
-  return { cells, totalCommits: Math.max(631, commitSum) };
+  const totalCommits = dataList.reduce((sum, d) => sum + (d.count || 0), 0);
+
+  return { cells, totalCommits, cols, rows };
 }
 
 // ─── WebGL2 Shader Sources ───────────────────────────────────────────────────
@@ -335,9 +328,10 @@ const PALETTES = {
  * ═══════════════════════════════════════════════════════════════════════════
  */
 export default function GitCalendarCubes({
-  matrix = SHREYS_GIT_MATRIX,
+  username = 'shreysaraswatweb',
   cols = 24,
   rows = 7,
+  onTotalLoaded,
   gap = 0.22,
   edgeWidth = 1.2,
   edgeStyle = 'solid',
@@ -365,11 +359,42 @@ export default function GitCalendarCubes({
   const canvasRef = useRef(null);
   const wakeRef = useRef(null);
 
-  // Generate date / commit calendar data
-  const { cells: calendarCells } = useMemo(
-    () => generateGitCalendarData(matrix, cols),
-    [matrix, cols]
+  // Initial state populated with Shrey's real contributions
+  const [calendarData, setCalendarData] = useState(() =>
+    buildGitCalendarData(shreyGithubData.contributions, cols)
   );
+
+  // Fetch live contributions from GitHub API for real-time updates
+  useEffect(() => {
+    if (!username) return;
+    let isMounted = true;
+    const controller = new AbortController();
+
+    fetch(
+      `https://github-contributions-api.jogruber.de/v4/${username}?y=last&client=react-github-calendar`,
+      { signal: controller.signal }
+    )
+      .then((res) => (res.ok ? res.json() : null))
+      .then((data) => {
+        if (isMounted && data?.contributions) {
+          const processed = buildGitCalendarData(data.contributions, cols);
+          setCalendarData(processed);
+          if (onTotalLoaded) {
+            onTotalLoaded(processed.totalCommits);
+          }
+        }
+      })
+      .catch(() => {
+        // Silently retain preloaded real data
+      });
+
+    return () => {
+      isMounted = false;
+      controller.abort();
+    };
+  }, [username, cols, onTotalLoaded]);
+
+  const calendarCells = calendarData.cells;
 
   const [webglSupported, setWebglSupported] = useState(true);
 
@@ -850,9 +875,11 @@ export default function GitCalendarCubes({
         if (col >= 0 && col < grid.cols && row >= 0 && row < grid.rows) {
           const cell = calendarDataRef.current?.[row]?.[col];
           if (cell && !cell.isFuture && onHoverRef.current) {
-            onHoverRef.current(
-              `${cell.count} commit${cell.count === 1 ? '' : 's'} on ${cell.date}`
-            );
+            const countStr =
+              cell.count === 0
+                ? `No contributions`
+                : `${cell.count} contribution${cell.count === 1 ? '' : 's'}`;
+            onHoverRef.current(`${countStr} on ${cell.date}`);
           }
         } else if (onHoverRef.current) {
           onHoverRef.current(null);
@@ -958,7 +985,11 @@ export default function GitCalendarCubes({
                 <div
                   key={r}
                   onMouseEnter={() =>
-                    cell && onHover && onHover(`${cell.count} commits on ${cell.date}`)
+                    cell &&
+                    onHover &&
+                    onHover(
+                      `${cell.count === 0 ? 'No contributions' : `${cell.count} contribution${cell.count === 1 ? '' : 's'}`} on ${cell.date}`
+                    )
                   }
                   onMouseLeave={() => onLeave && onLeave()}
                   className={`h-[9px] w-[9px] sm:h-[10px] sm:w-[10px] rounded-[2px] ${levelColors[lvl]}`}

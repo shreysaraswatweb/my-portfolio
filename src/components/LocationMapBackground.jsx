@@ -128,8 +128,12 @@ export default function LocationMapBackground() {
         </g>
       </svg>
 
-      {/* ─── Layer B & C: Lighted Trails & Radar Pulse ─── */}
+      {/* ─── Layer B: Lighted Trails Converging on Blinking Location Point ─── */}
       <LocationMapTrails />
+
+      {/* ─── Layer C: Blinking Location Point + Converging Radar Pulse Ring ─ */}
+      <div className="map-pin-pulse" />
+      <div className="map-pin-dot" />
 
       {/* ─── Layer D: Readability Overlay ─────────────────────────────────── */}
       <div className="map-readability-overlay" />
@@ -139,75 +143,71 @@ export default function LocationMapBackground() {
 
 export function LocationMapTrails({ className = "" }) {
   return (
-    <>
-      <svg
-        className={`map-svg-streaks ${className}`}
-        width="100%"
-        height="100%"
-        viewBox="0 0 300 300"
-        preserveAspectRatio="xMidYMid slice"
-        aria-hidden="true"
-      >
-        <g transform="rotate(-38 150 138)">
-          {/* Trail 1: North Mall Road -> converges onto Pin (150, 138) */}
-          <path
-            className="map-streak map-streak-1"
-            d="M 150 -50 L 150 138"
-            pathLength="100"
-          />
-          {/* Trail 2: South Mall Road -> converges onto Pin (150, 138) */}
-          <path
-            className="map-streak map-streak-2"
-            d="M 150 330 L 150 138"
-            pathLength="100"
-          />
-          {/* Trail 3: West Cross Lane -> converges onto Pin (150, 138) */}
-          <path
-            className="map-streak map-streak-3"
-            d="M -40 138 L 150 138"
-            pathLength="100"
-          />
-          {/* Trail 4: East Cross Lane (from Chameli Marg) -> converges onto Pin (150, 138) */}
-          <path
-            className="map-streak map-streak-4"
-            d="M 340 138 L 150 138"
-            pathLength="100"
-          />
-          {/* Trail 5: Kachnar Marg NW -> turns onto Mall Road -> collects at Pin */}
-          <path
-            className="map-streak map-streak-5"
-            d="M -20 70 L 150 70 L 150 138"
-            pathLength="100"
-          />
-          {/* Trail 6: Chameli Marg NE -> turns onto Cross Lane -> collects at Pin */}
-          <path
-            className="map-streak map-streak-6"
-            d="M 218 -40 L 218 138 L 150 138"
-            pathLength="100"
-          />
-          {/* Trail 7: West Lane SW -> turns onto Cross Lane -> collects at Pin */}
-          <path
-            className="map-streak map-streak-7"
-            d="M 82 310 L 82 138 L 150 138"
-            pathLength="100"
-          />
-          {/* Trail 8: Chameli Marg SE -> turns onto Cross Lane -> collects at Pin */}
-          <path
-            className="map-streak map-streak-8"
-            d="M 218 310 L 218 138 L 150 138"
-            pathLength="100"
-          />
-          {/* Central convergence node right at Pin (150, 138) where all trails collect */}
-          <circle
-            cx="150"
-            cy="138"
-            r="4.5"
-            className="map-streak-collector"
-          />
-        </g>
-      </svg>
-      {/* Central location beacon pin */}
-      <div className="map-pin-dot" aria-hidden="true" />
-    </>
+    <svg
+      className={`map-svg-streaks ${className}`}
+      width="100%"
+      height="100%"
+      viewBox="0 0 300 300"
+      preserveAspectRatio="xMidYMid slice"
+      aria-hidden="true"
+    >
+      <g transform="rotate(-38 150 138)">
+        {/* Trail 1: North Mall Road -> converges onto Pin (150, 138) */}
+        <path
+          className="map-streak map-streak-1"
+          d="M 150 -50 L 150 138"
+          pathLength="100"
+        />
+        {/* Trail 2: South Mall Road -> converges onto Pin (150, 138) */}
+        <path
+          className="map-streak map-streak-2"
+          d="M 150 330 L 150 138"
+          pathLength="100"
+        />
+        {/* Trail 3: West Cross Lane -> converges onto Pin (150, 138) */}
+        <path
+          className="map-streak map-streak-3"
+          d="M -40 138 L 150 138"
+          pathLength="100"
+        />
+        {/* Trail 4: East Cross Lane (from Chameli Marg) -> converges onto Pin (150, 138) */}
+        <path
+          className="map-streak map-streak-4"
+          d="M 340 138 L 150 138"
+          pathLength="100"
+        />
+        {/* Trail 5: Kachnar Marg NW -> turns onto Mall Road -> collects at Pin */}
+        <path
+          className="map-streak map-streak-5"
+          d="M -20 70 L 150 70 L 150 138"
+          pathLength="100"
+        />
+        {/* Trail 6: Chameli Marg NE -> turns onto Cross Lane -> collects at Pin */}
+        <path
+          className="map-streak map-streak-6"
+          d="M 218 -40 L 218 138 L 150 138"
+          pathLength="100"
+        />
+        {/* Trail 7: West Lane SW -> turns onto Cross Lane -> collects at Pin */}
+        <path
+          className="map-streak map-streak-7"
+          d="M 82 310 L 82 138 L 150 138"
+          pathLength="100"
+        />
+        {/* Trail 8: Chameli Marg SE -> turns onto Cross Lane -> collects at Pin */}
+        <path
+          className="map-streak map-streak-8"
+          d="M 218 310 L 218 138 L 150 138"
+          pathLength="100"
+        />
+        {/* Central convergence node right at Pin (150, 138) where all trails collect */}
+        <circle
+          cx="150"
+          cy="138"
+          r="4.5"
+          className="map-streak-collector"
+        />
+      </g>
+    </svg>
   );
 }

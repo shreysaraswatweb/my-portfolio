@@ -77,21 +77,17 @@ html[data-theme="light"] .map-block.map-block-park {
   stroke-dasharray: 18 120;
   stroke-dashoffset: 18;
   opacity: 0;
-  filter: drop-shadow(0 0 2px #ffffff)
-    drop-shadow(0 0 6px var(--map-accent, #22c55e))
-    drop-shadow(0 0 12px var(--map-accent, #22c55e));
+  filter: drop-shadow(0 0 2px #ffffff) drop-shadow(0 0 6px var(--map-accent, #22c55e)) drop-shadow(0 0 12px var(--map-accent, #22c55e));
   transition: filter 0.28s ease, stroke 0.3s ease;
 }
 
 .location-card:hover .map-streak {
-  filter: drop-shadow(0 0 3px #ffffff)
-    drop-shadow(0 0 8px var(--map-accent, #22c55e))
-    drop-shadow(0 0 16px var(--map-accent, #22c55e)) brightness(1.25);
+  filter: drop-shadow(0 0 3px #ffffff) drop-shadow(0 0 8px var(--map-accent, #22c55e)) drop-shadow(0 0 16px var(--map-accent, #22c55e)) brightness(1.25);
 }
 
 .map-streak-collector {
   fill: var(--map-accent, #22c55e);
-  filter: drop-shadow(0 0 3px var(--map-accent, #22c55e));
+  filter: drop-shadow(0 0 3px #ffffff) drop-shadow(0 0 8px var(--map-accent, #22c55e)) drop-shadow(0 0 14px var(--map-accent, #22c55e));
   transform-origin: 150px 138px;
   opacity: 0.3;
   transition: fill 0.3s ease;
@@ -101,13 +97,12 @@ html[data-theme="light"] .map-block.map-block-park {
 html[data-theme="light"] .map-streak {
   stroke: #16a34a;
   stroke-width: 2;
-  filter: drop-shadow(0 0 2px #ffffff)
-    drop-shadow(0 0 5px rgba(22, 163, 74, 0.8));
+  filter: drop-shadow(0 0 2px #ffffff) drop-shadow(0 0 5px rgba(22, 163, 74, 0.8));
 }
 
 html[data-theme="light"] .map-streak-collector {
   fill: #16a34a;
-  filter: drop-shadow(0 0 2px rgba(22, 163, 74, 0.6));
+  filter: drop-shadow(0 0 2px #ffffff) drop-shadow(0 0 6px rgba(22, 163, 74, 0.85));
 }
 
 @media (prefers-reduced-motion: no-preference) {
@@ -116,16 +111,38 @@ html[data-theme="light"] .map-streak-collector {
   }
 
   /* Direct cardinal arteries */
-  .map-streak-1 { animation-delay: 0s; }
-  .map-streak-2 { animation-delay: 0.05s; }
-  .map-streak-3 { animation-delay: 0.10s; }
-  .map-streak-4 { animation-delay: 0.14s; }
+  .map-streak-1 {
+    animation-delay: 0s;
+  }
+
+  .map-streak-2 {
+    animation-delay: 0.05s;
+  }
+
+  .map-streak-3 {
+    animation-delay: 0.10s;
+  }
+
+  .map-streak-4 {
+    animation-delay: 0.14s;
+  }
 
   /* Corner turns from Kachnar Marg & Chameli Marg */
-  .map-streak-5 { animation-delay: 0.18s; }
-  .map-streak-6 { animation-delay: 0.22s; }
-  .map-streak-7 { animation-delay: 0.26s; }
-  .map-streak-8 { animation-delay: 0.30s; }
+  .map-streak-5 {
+    animation-delay: 0.18s;
+  }
+
+  .map-streak-6 {
+    animation-delay: 0.22s;
+  }
+
+  .map-streak-7 {
+    animation-delay: 0.26s;
+  }
+
+  .map-streak-8 {
+    animation-delay: 0.30s;
+  }
 
   .map-streak-collector {
     animation: collector-glow var(--loop, 3s) infinite ease-in-out;
@@ -138,21 +155,26 @@ html[data-theme="light"] .map-streak-collector {
     stroke-dashoffset: 18;
     opacity: 0;
   }
+
   4% {
     opacity: 1;
   }
+
   24% {
     stroke-dashoffset: -82;
     opacity: 1;
   }
+
   30% {
     stroke-dashoffset: -100;
     opacity: 1;
   }
+
   33% {
     stroke-dashoffset: -100;
     opacity: 0;
   }
+
   100% {
     stroke-dashoffset: -100;
     opacity: 0;
@@ -161,27 +183,46 @@ html[data-theme="light"] .map-streak-collector {
 
 /* SVG collector node flares as trails converge into it */
 @keyframes collector-glow {
-  0%, 25% {
+
+  0%,
+  25% {
     opacity: 0.2;
     transform: scale(0.8);
   }
-  30%, 34% {
-    opacity: 0.75;
-    transform: scale(1.2);
+
+  30%,
+  35% {
+    opacity: 1;
+    transform: scale(1.85);
   }
-  40% {
-    opacity: 0.25;
+
+  42% {
+    opacity: 0.3;
     transform: scale(1);
   }
+
   100% {
     opacity: 0.2;
     transform: scale(0.8);
   }
 }
 
-/* ─── Layer C: Blinking Location Point ────────────────────────────────── */
+/* ─── Layer C: Blinking Location Point + Radar Pulse Ring ─────────────── */
 .map-pin-pulse {
-  display: none !important;
+  position: absolute;
+  left: 50%;
+  top: 46%;
+  transform: translate(-50%, -50%);
+  width: 58%;
+  aspect-ratio: 1 / 1;
+  border-radius: 9999px;
+  background: color-mix(in srgb, var(--map-accent, #22c55e) 15%, transparent);
+  border: 1px solid color-mix(in srgb, var(--map-accent, #22c55e) 40%, transparent);
+  box-shadow: inset 0 0 14px color-mix(in srgb, var(--map-accent, #22c55e) 25%, transparent),
+    0 0 16px color-mix(in srgb, var(--map-accent, #22c55e) 30%, transparent);
+  pointer-events: none;
+  opacity: 0;
+  will-change: transform, opacity;
 }
 
 .map-pin-dot {
@@ -250,6 +291,7 @@ html[data-theme="light"] .map-pin-dot::after {
     transform: scale(0.6);
     opacity: 0.9;
   }
+
   100% {
     transform: scale(2.3);
     opacity: 0;
@@ -257,20 +299,25 @@ html[data-theme="light"] .map-pin-dot::after {
 }
 
 @keyframes pulse-ring {
-  0%, 30% {
+
+  0%,
+  46% {
     transform: translate(-50%, -50%) scale(0.2);
     opacity: 0;
   }
-  34% {
+
+  48% {
     transform: translate(-50%, -50%) scale(0.25);
     opacity: 0.95;
   }
+
   78% {
-    transform: translate(-50%, -50%) scale(1.3);
+    transform: translate(-50%, -50%) scale(1.15);
     opacity: 0;
   }
+
   100% {
-    transform: translate(-50%, -50%) scale(1.3);
+    transform: translate(-50%, -50%) scale(1.15);
     opacity: 0;
   }
 }
@@ -281,31 +328,38 @@ html[data-theme="light"] .map-pin-dot::after {
     box-shadow: 0 0 8px var(--map-accent, #22c55e),
       0 0 18px color-mix(in srgb, var(--map-accent, #22c55e) 60%, transparent);
   }
+
   20% {
     transform: translate(-50%, -50%) scale(1.08);
     box-shadow: 0 0 12px var(--map-accent, #22c55e),
       0 0 24px color-mix(in srgb, var(--map-accent, #22c55e) 70%, transparent);
   }
+
   38% {
     transform: translate(-50%, -50%) scale(1);
     box-shadow: 0 0 8px var(--map-accent, #22c55e);
   }
+
   /* Energy burst when trails collect on the location point! */
-  47%, 52% {
+  47%,
+  52% {
     transform: translate(-50%, -50%) scale(1.4);
     box-shadow: 0 0 16px #ffffff,
       0 0 28px var(--map-accent, #22c55e),
       0 0 46px var(--map-accent, #22c55e);
   }
+
   62% {
     transform: translate(-50%, -50%) scale(1.1);
     box-shadow: 0 0 12px var(--map-accent, #22c55e),
       0 0 22px var(--map-accent, #22c55e);
   }
+
   80% {
     transform: translate(-50%, -50%) scale(0.96);
     box-shadow: 0 0 7px var(--map-accent, #22c55e);
   }
+
   100% {
     transform: translate(-50%, -50%) scale(1);
     box-shadow: 0 0 8px var(--map-accent, #22c55e),
@@ -318,32 +372,24 @@ html[data-theme="light"] .map-pin-dot::after {
   position: absolute;
   inset: 0;
   background:
-    linear-gradient(
-      to top,
+    linear-gradient(to top,
       rgba(10, 13, 18, 0.92) 0%,
       rgba(10, 13, 18, 0.55) 40%,
-      rgba(10, 13, 18, 0) 75%
-    ),
-    radial-gradient(
-      ellipse at center,
+      rgba(10, 13, 18, 0) 75%),
+    radial-gradient(ellipse at center,
       transparent 30%,
-      rgba(0, 0, 0, 0.35) 100%
-    );
+      rgba(0, 0, 0, 0.35) 100%);
   pointer-events: none;
   transition: background 0.3s ease;
 }
 
 html[data-theme="light"] .map-readability-overlay {
   background:
-    linear-gradient(
-      to top,
+    linear-gradient(to top,
       rgba(255, 255, 255, 0.95) 0%,
       rgba(255, 255, 255, 0.7) 45%,
-      rgba(255, 255, 255, 0) 80%
-    ),
-    radial-gradient(
-      ellipse at center,
+      rgba(255, 255, 255, 0) 80%),
+    radial-gradient(ellipse at center,
       transparent 35%,
-      rgba(235, 230, 222, 0.45) 100%
-    );
+      rgba(235, 230, 222, 0.45) 100%);
 }

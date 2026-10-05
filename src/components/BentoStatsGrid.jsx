@@ -30,6 +30,7 @@ const topSkills = [
 
 export default function BentoStatsGrid() {
   const [activeTooltip, setActiveTooltip] = useState(null);
+  const [totalCommits, setTotalCommits] = useState(89);
 
   return (
     <motion.section
@@ -103,7 +104,7 @@ export default function BentoStatsGrid() {
                   GIT CALENDER
                 </p>
                 <p className="text-caption sm:text-body font-bold text-text-primary leading-tight group-hover/header:text-emerald-400 transition-colors">
-                  Contributions
+                  GitHub Contributions
                 </p>
               </div>
             </a>
@@ -116,7 +117,7 @@ export default function BentoStatsGrid() {
                 className="inline-flex items-center gap-1 rounded-full border border-emerald-500/30 bg-emerald-500/10 px-space-2 py-0.5 text-micro font-medium text-emerald-400 hover:bg-emerald-500/20 transition-colors"
               >
                 <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
-                631+ Commits
+                {totalCommits} Contributions
               </a>
               <a
                 href="https://github.com/shreysaraswatweb"
@@ -129,9 +130,17 @@ export default function BentoStatsGrid() {
             </div>
           </div>
 
-          {/* 3D Interactive WebGL2 Cubes Heatmap Grid */}
+          <p className="text-micro text-text-tertiary mt-1">
+            Building, learning, and shipping consistently.
+          </p>
+
+          {/* 3D Interactive WebGL2 Cubes Heatmap Grid (Shrey's Real Contributions) */}
           <div className="mt-space-3 relative w-full h-[105px] sm:h-[115px] overflow-hidden rounded-md">
-            <GitCalendarCubes onHover={setActiveTooltip} />
+            <GitCalendarCubes
+              username="shreysaraswatweb"
+              onHover={setActiveTooltip}
+              onTotalLoaded={setTotalCommits}
+            />
           </div>
 
           {/* Legend & Tooltip status line */}
