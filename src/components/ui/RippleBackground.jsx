@@ -195,6 +195,7 @@ void main() {
 function RippleBackground({
   image = DEFAULT_MAP_IMAGE,
   center = CONFIG.center,
+  isLight = false,
   config = {},
   className = "",
   fallback = null,
@@ -203,8 +204,18 @@ function RippleBackground({
   const canvasRef = useRef(null);
   const [glAvailable, setGlAvailable] = useState(true);
 
+  // In light theme, do not apply the heavy dark readability fade (darkBottom: 0.3)
+  // so the map stays clean, bright, and matching the light theme palette.
+  const defaultDarkBottom = isLight ? 1.0 : 0.3;
+  const defaultDarkTop = isLight ? 1.0 : 0.65;
+
   // Merge runtime config overrides with default CONFIG
-  const activeConfig = { ...CONFIG, ...config };
+  const activeConfig = {
+    ...CONFIG,
+    darkBottom: defaultDarkBottom,
+    darkTop: defaultDarkTop,
+    ...config,
+  };
   const centerCoord = center || activeConfig.center;
 
   useEffect(() => {

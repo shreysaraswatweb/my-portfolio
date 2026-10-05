@@ -1,6 +1,8 @@
 @import "tailwindcss";
 @config "../tailwind.config.js";
 
+@custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *, .dark, .dark *));
+
 @theme {
   --breakpoint-tablet: 480px;
   --breakpoint-desktop: 1024px;

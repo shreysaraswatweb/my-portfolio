@@ -404,11 +404,12 @@ function WeatherCard() {
         <div className="location-face-front">
           <GlassCard
             as="div"
-            className="location-card group relative flex w-full h-full flex-col justify-between overflow-hidden rounded-lg p-3 sm:p-space-4 transition-all duration-200 hover:border-accent-primary/40 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent-primary"
+            className="location-card group relative flex w-full h-full flex-col justify-between overflow-hidden rounded-lg p-3 sm:p-space-4 transition-all duration-200 hover:border-emerald-500/40 focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500"
           >
             {/* Animated City Map Background Layer with WebGL Ripple Effect */}
             <RippleBackground
               image={mapDataUri}
+              isLight={isLight}
               center={[0.5, 0.54]}
               fallback={<LocationMapBackground />}
             >
@@ -416,9 +417,19 @@ function WeatherCard() {
               <LocationMapTrails />
             </RippleBackground>
 
+            {/* Readability gradient behind typography to guarantee WCAG AAA contrast in both themes */}
+            <div
+              className={`pointer-events-none absolute inset-x-0 bottom-0 h-24 rounded-b-lg transition-colors duration-300 ${
+                isLight
+                  ? "bg-gradient-to-t from-[#eae5dc]/90 via-[#eae5dc]/50 to-transparent"
+                  : "bg-gradient-to-t from-[#080b10]/90 via-[#080b10]/50 to-transparent"
+              }`}
+              aria-hidden="true"
+            />
+
             {/* Top Row: MapPin Icon + IST Live Badge + Flip Icon */}
             <div className="relative z-[1] flex items-center justify-between">
-              <IconChip className="h-space-8 w-space-8 bg-accent-primary/10 text-accent-primary transition-transform duration-200 group-hover:scale-105">
+              <IconChip className="h-space-8 w-space-8 bg-surface-pill text-text-primary transition-transform duration-200 group-hover:scale-105">
                 <MapPin className="h-space-4 w-space-4" strokeWidth={1.75} />
               </IconChip>
               <div className="flex items-center gap-1.5">
@@ -437,7 +448,7 @@ function WeatherCard() {
                 <p className="text-micro font-semibold uppercase tracking-wider text-text-secondary">
                   LOCATION
                 </p>
-                <span className="text-[10px] text-emerald-700 dark:text-accent-primary/70 font-medium tracking-tight">
+                <span className="text-[10px] font-medium tracking-tight text-text-secondary group-hover:text-text-primary transition-colors">
                   Hover for weather →
                 </span>
               </div>
