@@ -404,7 +404,7 @@ function WeatherCard() {
         <div className="location-face-front">
           <GlassCard
             as="div"
-            className="location-card group relative flex w-full h-full flex-col justify-between overflow-hidden rounded-lg p-3 sm:p-space-4 transition-all duration-200 hover:border-emerald-500/40 focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500"
+            className="location-card group relative flex w-full h-full flex-col justify-between overflow-hidden rounded-lg p-3 sm:p-space-4 transition-colors duration-200 hover:border-emerald-500/40 focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500"
           >
             {/* Animated City Map Background Layer with WebGL Ripple Effect */}
             <RippleBackground
@@ -768,20 +768,20 @@ function WeatherCard() {
 
                   {/* Bottom Toggle Button */}
                   <div className="w-full flex items-center justify-center select-none pt-1">
-                    <Tooltip
+                    {/* <Tooltip
                       content={showHourly ? "Click to view current conditions" : "Click to view 4-hour forecast"}
                       side="top"
+                    > */}
+                    <button
+                      type="button"
+                      className={`w-full inline-flex items-center justify-center gap-1 py-0.5 px-1.5 rounded-full text-[8.5px] font-medium tracking-tight transition-all duration-200 cursor-pointer ${isDarkSky
+                        ? "bg-white/15 hover:bg-white/25 text-white/90 hover:text-white border border-white/20 shadow-xs backdrop-blur-sm"
+                        : "bg-slate-900/5 hover:bg-slate-900/10 text-slate-700 hover:text-slate-900 border border-slate-900/10 shadow-xs"
+                        }`}
                     >
-                      <button
-                        type="button"
-                        className={`w-full inline-flex items-center justify-center gap-1 py-0.5 px-1.5 rounded-full text-[8.5px] font-medium tracking-tight transition-all duration-200 cursor-pointer ${isDarkSky
-                          ? "bg-white/15 hover:bg-white/25 text-white/90 hover:text-white border border-white/20 shadow-xs backdrop-blur-sm"
-                          : "bg-slate-900/5 hover:bg-slate-900/10 text-slate-700 hover:text-slate-900 border border-slate-900/10 shadow-xs"
-                          }`}
-                      >
-                        <span>{showHourly ? "Tap for metrics" : "Tap for 4h forecast"}</span>
-                      </button>
-                    </Tooltip>
+                      <span>{showHourly ? "Tap for metrics" : "Tap for 4h forecast"}</span>
+                    </button>
+                    {/* </Tooltip> */}
                   </div>
                 </div>
               </>
@@ -990,20 +990,20 @@ function WeatherCard() {
 
                   {/* Bottom Subtle Indicator with ample clearance above bottom border */}
                   <div className="mt-0.5 sm:mt-1 flex items-center justify-center select-none">
-                    <Tooltip
+                    {/* <Tooltip
                       content={showHourly ? "Click to view current conditions" : "Click to view 4-hour forecast"}
                       side="top"
+                    > */}
+                    <button
+                      type="button"
+                      className={`inline-flex items-center gap-1 px-1.5 py-0.5 rounded-full text-[8px] sm:text-[8.5px] font-medium tracking-tight transition-all duration-200 cursor-pointer ${isDarkSky
+                        ? "bg-white/15 hover:bg-white/25 text-white/90 hover:text-white border border-white/20 shadow-xs backdrop-blur-sm"
+                        : "bg-slate-900/5 hover:bg-slate-900/10 text-slate-700 hover:text-slate-900 border border-slate-900/10 shadow-xs"
+                        }`}
                     >
-                      <button
-                        type="button"
-                        className={`inline-flex items-center gap-1 px-1.5 py-0.5 rounded-full text-[8px] sm:text-[8.5px] font-medium tracking-tight transition-all duration-200 cursor-pointer ${isDarkSky
-                          ? "bg-white/15 hover:bg-white/25 text-white/90 hover:text-white border border-white/20 shadow-xs backdrop-blur-sm"
-                          : "bg-slate-900/5 hover:bg-slate-900/10 text-slate-700 hover:text-slate-900 border border-slate-900/10 shadow-xs"
-                          }`}
-                      >
-                        <span>{showHourly ? "Tap for metrics" : "Tap for 4h forecast"}</span>
-                      </button>
-                    </Tooltip>
+                      <span>{showHourly ? "Tap for metrics" : "Tap for 4h forecast"}</span>
+                    </button>
+                    {/* </Tooltip> */}
                   </div>
                 </div>
               </>

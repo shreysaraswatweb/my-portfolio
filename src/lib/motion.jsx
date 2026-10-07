@@ -21,9 +21,15 @@ export const tileTap = {
 };
 
 export const hoverLift = {
-  whileHover: { y: -4 },
-  whileTap: { scale: 0.97 },
-  transition: { duration: 0.28, ease: easeOut },
+  whileHover: {
+    y: -5,
+    transition: { type: "spring", stiffness: 400, damping: 25, mass: 0.8 },
+  },
+  whileTap: {
+    scale: 0.98,
+    transition: { type: "spring", stiffness: 500, damping: 30 },
+  },
+  transition: { type: "spring", stiffness: 400, damping: 25, mass: 0.8 },
 };
 
 export const fadeUp = (delay = 0) => ({

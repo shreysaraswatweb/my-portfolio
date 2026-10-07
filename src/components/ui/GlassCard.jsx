@@ -44,13 +44,20 @@ export default function GlassCard({
       }
     : {};
 
+  // Strip transition-all when Framer Motion handles transform (e.g. whileHover / whileTap)
+  // to prevent CSS transition engine from fighting JS frame-by-frame updates (causing stutter/two-step glitch)
+  const sanitizedClassName = (whileHover || whileTap)
+    ? className.replace(/\btransition-all\b/g, "transition-colors")
+    : className;
+
   return (
     <Component
       className={[
         elevated ? "bg-surface-elevated" : "bg-surface-card",
         "backdrop-blur-glass border border-border-glass glass-edge",
-        className,
-      ].join(" ")}
+        (whileHover || whileTap) ? "transform-gpu will-change-transform" : "",
+        sanitizedClassName,
+      ].filter(Boolean).join(" ")}
       {...motionProps}
       {...props}
     >

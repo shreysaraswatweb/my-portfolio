@@ -83,6 +83,7 @@ uniform float uDarkBottom;
 uniform float uDarkTop;
 uniform float uTrailCollectTime;
 uniform float uWaveStartTime;
+uniform float uIsLight;
 
 // Liquid wave height field
 float H(vec2 p, float tt) {
@@ -111,7 +112,9 @@ void main() {
   float dy = (H(q + vec2(0.0, e), tt) - H(q - vec2(0.0, e), tt)) / (2.0 * e);
 
   // Distort texture sample position (water ripple refraction)
-  vec2 pd = p - vec2(dx, dy) * uWaveStrength;
+  // In light mode, soften wave displacement so crisp street lines do not produce chromatic ringing
+  float waveDistort = uIsLight > 0.5 ? uWaveStrength * 0.72 : uWaveStrength;
+  vec2 pd = p - vec2(dx, dy) * waveDistort;
 
   // Map to [0, 1] UV space of the card
   vec2 c = vec2(pd.x + 0.5, pd.y / asp + 0.5);
@@ -130,9 +133,8 @@ void main() {
   // Sample background texture
   vec3 col = texture2D(tx, iu).rgb;
 
-  // ─── CHOREOGRAPHY: Green circular light appears when lights collect, then merges with wave ───
+  // ─── CHOREOGRAPHY: Beacon dot collects, then merges into expanding radar wave ───
   float d = length(q);
-  vec3 gr = vec3(0.2, 1.0, 0.5);
 
   // Phase 1: All lights arrive and collect at the central point (uTrailCollectTime -> uWaveStartTime)
   float gatherProgress = clamp((tt - uTrailCollectTime) / max(0.001, uWaveStartTime - uTrailCollectTime), 0.0, 1.0);
@@ -148,7 +150,7 @@ void main() {
   float waveFade = smoothstep(0.0, 0.15, a) * (1.0 - smoothstep(1.3, 2.1, a));
   float waveRadius = a * uWaveSpeed;
 
-  // The green circular light ring traveling at waveRadius
+  // The radar wave circular ring traveling at waveRadius
   float ringThickness = uDotSize * (1.0 + 0.45 * smoothstep(0.0, 1.2, a));
   float distToWave = abs(d - waveRadius);
   float ringMask = exp(-pow(distToWave / ringThickness, 2.0)) * waveFade * onWave;
@@ -159,25 +161,51 @@ void main() {
   float centerExit = (1.0 - smoothstep(0.0, 0.35, a)) * onWave;
   float centerRemnant = (1.0 - smoothstep(uDotSize - 0.003, uDotSize, d)) * centerExit;
 
-  // Blend green circular light into color
-  float totalGreen = clamp(dotCenter + ringMask * 0.95 + centerRemnant * 0.5, 0.0, 1.0);
-  col = mix(col, uDotColor, totalGreen);
+  if (uIsLight > 0.5) {
+    // ─── LIGHT THEME: Pure Natural Emerald Palette (Zero Cyan Tint) ───
+    // Primary ring: Rich emerald green (#059669 / #0d9e61, low blue prevents cyan tint)
+    vec3 emeraldRing = vec3(0.04, 0.60, 0.36);
+    // Specular highlight: Warm pearl sage core (#e8faee)
+    vec3 pearlHighlight = vec3(0.91, 0.98, 0.93);
+    // Ambient wave tint: Forest jade (#047857)
+    vec3 forestGlow = vec3(0.03, 0.48, 0.28);
 
-  // Blend bright specular highlight
-  float totalHighlight = clamp(
-    smoothstep(drCenter - 0.005, drCenter - 0.002, d) * dotCenter + ringHighlight * 0.8,
-    0.0,
-    1.0
-  );
-  col = mix(col, vec3(0.92, 1.0, 0.95), totalHighlight);
+    // Center dot & ring blend
+    float totalGreen = clamp(dotCenter + ringMask * 0.92 + centerRemnant * 0.5, 0.0, 1.0);
+    col = mix(col, emeraldRing, totalGreen * 0.88);
 
-  // Add ambient green glow (both at center during gather and riding with the expanding wave)
-  col += gr * (glowCenter + ringGlow);
+    // Specular core crest
+    float totalHighlight = clamp(
+      smoothstep(drCenter - 0.005, drCenter - 0.002, d) * dotCenter + ringHighlight * 0.75,
+      0.0,
+      1.0
+    );
+    col = mix(col, pearlHighlight, totalHighlight * 0.62);
 
-  // Readability darkening gradients at bottom and top
-  vec2 uv0 = gl_FragCoord.xy / res;
-  col *= mix(uDarkBottom, 1.0, smoothstep(0.0, 0.42, uv0.y));
-  col *= mix(1.0, uDarkTop, smoothstep(0.82, 1.0, uv0.y));
+    // Natural ambient tint across the expanding wave (contrast mix, avoiding additive blowout)
+    float ambientFade = clamp(glowCenter * 0.55 + ringGlow * 0.42, 0.0, 0.50);
+    col = mix(col, forestGlow, ambientFade);
+  } else {
+    // ─── DARK THEME: Original Radiant Neon-Emerald (Untouched) ───
+    vec3 gr = vec3(0.2, 1.0, 0.5);
+    float totalGreen = clamp(dotCenter + ringMask * 0.95 + centerRemnant * 0.5, 0.0, 1.0);
+    col = mix(col, uDotColor, totalGreen);
+
+    float totalHighlight = clamp(
+      smoothstep(drCenter - 0.005, drCenter - 0.002, d) * dotCenter + ringHighlight * 0.8,
+      0.0,
+      1.0
+    );
+    col = mix(col, vec3(0.92, 1.0, 0.95), totalHighlight);
+    col += gr * (glowCenter + ringGlow);
+  }
+
+  // Readability darkening gradients at bottom and top (dark mode only)
+  if (uIsLight < 0.5) {
+    vec2 uv0 = gl_FragCoord.xy / res;
+    col *= mix(uDarkBottom, 1.0, smoothstep(0.0, 0.42, uv0.y));
+    col *= mix(1.0, uDarkTop, smoothstep(0.82, 1.0, uv0.y));
+  }
 
   gl_FragColor = vec4(col, 1.0);
 }
@@ -304,6 +332,7 @@ function RippleBackground({
       uDarkTop: gl.getUniformLocation(program, "uDarkTop"),
       uTrailCollectTime: gl.getUniformLocation(program, "uTrailCollectTime"),
       uWaveStartTime: gl.getUniformLocation(program, "uWaveStartTime"),
+      uIsLight: gl.getUniformLocation(program, "uIsLight"),
     };
 
     // Set static uniforms
@@ -316,14 +345,15 @@ function RippleBackground({
     gl.uniform1f(U.uDotSize, activeConfig.dotSize);
     gl.uniform3f(
       U.uDotColor,
-      activeConfig.dotColor[0],
-      activeConfig.dotColor[1],
-      activeConfig.dotColor[2]
+      isLight ? 0.04 : activeConfig.dotColor[0],
+      isLight ? 0.60 : activeConfig.dotColor[1],
+      isLight ? 0.36 : activeConfig.dotColor[2]
     );
     gl.uniform1f(U.uDarkBottom, activeConfig.darkBottom);
     gl.uniform1f(U.uDarkTop, activeConfig.darkTop);
     gl.uniform1f(U.uTrailCollectTime, activeConfig.trailCollectTime);
     gl.uniform1f(U.uWaveStartTime, activeConfig.waveStartTime);
+    gl.uniform1f(U.uIsLight, isLight ? 1.0 : 0.0);
 
     // Texture setup
     let isTextureReady = false;
@@ -472,6 +502,7 @@ function RippleBackground({
     activeConfig.darkTop,
     activeConfig.trailCollectTime,
     activeConfig.waveStartTime,
+    isLight,
   ]);
 
   if (!glAvailable) {

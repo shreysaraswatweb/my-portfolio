@@ -49,7 +49,7 @@ export default function BentoStatsGrid() {
           as="a"
           href="#experience"
           {...hoverLift}
-          className="group relative flex w-full flex-col justify-between rounded-lg p-space-4 transition-all duration-200 hover:border-accent-primary/40 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent-primary"
+          className="group relative flex w-full flex-col justify-between rounded-lg p-space-4 transition-colors duration-200 hover:border-accent-primary/40 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent-primary"
         >
           <div className="flex items-center justify-between">
             <IconChip className="h-space-8 w-space-8 bg-accent-primary/10 text-accent-primary transition-transform duration-200 group-hover:scale-105">
@@ -87,7 +87,7 @@ export default function BentoStatsGrid() {
         <GlassCard
           as="div"
           {...hoverLift}
-          className="group relative flex w-full flex-col justify-between rounded-lg p-space-4 transition-all duration-200 hover:border-emerald-500/40 focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 overflow-hidden !bg-surface-card/45 dark:!bg-[#0c1219]/55"
+          className="group relative flex w-full flex-col justify-between rounded-lg p-space-4 transition-colors duration-200 hover:border-emerald-500/40 focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 overflow-hidden bg-surface-card/90 dark:!bg-[#0c1219]/55"
         >
           {/* Animated 3D Vanta Waves Background */}
           <VantaWavesBackground />
@@ -100,14 +100,14 @@ export default function BentoStatsGrid() {
               rel="noopener noreferrer"
               className="flex items-center gap-space-3 group/header"
             >
-              <IconChip className="h-space-8 w-space-8 bg-white/5 text-text-primary transition-transform duration-200 group-hover/header:scale-105">
-                <GithubMark className="h-space-4 w-space-4 text-text-primary" />
+              <IconChip className="h-space-8 w-space-8 bg-slate-900/5 dark:bg-white/5 border border-slate-900/10 dark:border-white/10 text-slate-900 dark:text-text-primary transition-transform duration-200 group-hover/header:scale-105">
+                <GithubMark className="h-space-4 w-space-4 text-slate-900 dark:text-text-primary" />
               </IconChip>
               <div>
-                <p className="text-micro font-semibold uppercase tracking-wider text-text-secondary">
+                <p className="text-micro font-bold uppercase tracking-wider text-slate-600 dark:text-text-secondary">
                   GIT CALENDER
                 </p>
-                <p className="text-caption sm:text-body font-bold text-text-primary leading-tight group-hover/header:text-emerald-400 transition-colors">
+                <p className="text-caption sm:text-body font-bold text-slate-900 dark:text-text-primary leading-tight group-hover/header:text-emerald-600 dark:group-hover/header:text-emerald-400 transition-colors">
                   GitHub Contributions
                 </p>
               </div>
@@ -118,9 +118,9 @@ export default function BentoStatsGrid() {
                 href="https://github.com/shreysaraswatweb"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-1 rounded-full border border-emerald-500/30 bg-emerald-500/10 px-space-2 py-0.5 text-micro font-medium text-emerald-400 hover:bg-emerald-500/20 transition-colors"
+                className="inline-flex items-center gap-1.5 rounded-full border border-emerald-600/30 bg-emerald-500/15 dark:border-emerald-500/30 dark:bg-emerald-500/10 px-space-2 py-0.5 text-micro font-semibold text-emerald-950 dark:text-emerald-400 hover:bg-emerald-500/25 dark:hover:bg-emerald-500/20 transition-colors shadow-sm dark:shadow-none"
               >
-                <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                <span className="h-1.5 w-1.5 rounded-full bg-emerald-600 dark:bg-emerald-400 animate-pulse" />
                 {totalCommits} Contributions
               </a>
               <a
@@ -129,12 +129,12 @@ export default function BentoStatsGrid() {
                 rel="noopener noreferrer"
                 aria-label="Visit GitHub Profile"
               >
-                <ExternalLinkIcon className="h-space-3 w-space-3 text-text-tertiary transition-colors duration-200 group-hover:text-text-primary hover:text-emerald-400" />
+                <ExternalLinkIcon className="h-space-3 w-space-3 text-slate-500 hover:text-slate-900 dark:text-text-tertiary dark:hover:text-text-primary hover:!text-emerald-600 dark:hover:!text-emerald-400 transition-colors duration-200" />
               </a>
             </div>
           </div>
 
-          <p className="relative z-10 text-micro text-text-tertiary mt-1">
+          <p className="relative z-10 text-micro font-medium text-slate-600 dark:text-text-tertiary mt-1">
             Building, learning, and shipping consistently.
           </p>
 
@@ -148,23 +148,23 @@ export default function BentoStatsGrid() {
           </div>
 
           {/* Legend & Tooltip status line */}
-          <div className="mt-space-2 relative z-10 flex items-center justify-between text-micro text-text-tertiary">
+          <div className="mt-space-2 relative z-10 flex items-center justify-between text-micro text-slate-700 dark:text-text-tertiary font-medium">
             <a
               href="https://github.com/shreysaraswatweb"
               target="_blank"
               rel="noopener noreferrer"
-              className="truncate pr-space-2 hover:text-emerald-400 transition-colors"
+              className="truncate pr-space-2 hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors"
             >
               {activeTooltip || "github.com/shreysaraswatweb"}
             </a>
             <div className="flex items-center gap-1 shrink-0">
-              <span className="text-[10px]">Less</span>
-              <span className="h-[7px] w-[7px] rounded-[1px] bg-white/[0.06] border border-white/[0.04]" />
-              <span className="h-[7px] w-[7px] rounded-[1px] bg-emerald-950/70" />
-              <span className="h-[7px] w-[7px] rounded-[1px] bg-emerald-700/80" />
-              <span className="h-[7px] w-[7px] rounded-[1px] bg-emerald-500" />
-              <span className="h-[7px] w-[7px] rounded-[1px] bg-emerald-400" />
-              <span className="text-[10px]">More</span>
+              <span className="text-[10px] text-slate-600 dark:text-text-tertiary font-medium">Less</span>
+              <span className="h-[7px] w-[7px] rounded-[1px] bg-slate-200 border border-slate-300 dark:bg-white/[0.06] dark:border-white/[0.04]" />
+              <span className="h-[7px] w-[7px] rounded-[1px] bg-emerald-200 dark:bg-emerald-950/70" />
+              <span className="h-[7px] w-[7px] rounded-[1px] bg-emerald-400 dark:bg-emerald-700/80" />
+              <span className="h-[7px] w-[7px] rounded-[1px] bg-emerald-600 dark:bg-emerald-500" />
+              <span className="h-[7px] w-[7px] rounded-[1px] bg-emerald-700 dark:bg-emerald-400" />
+              <span className="text-[10px] text-slate-600 dark:text-text-tertiary font-medium">More</span>
             </div>
           </div>
         </GlassCard>
@@ -176,7 +176,7 @@ export default function BentoStatsGrid() {
           as="a"
           href="#projects"
           {...hoverLift}
-          className="group relative flex w-full flex-col justify-between rounded-lg p-space-4 transition-all duration-200 hover:border-accent-violet/40 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent-violet"
+          className="group relative flex w-full flex-col justify-between rounded-lg p-space-4 transition-colors duration-200 hover:border-accent-violet/40 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent-violet"
         >
           <div className="flex items-center justify-between">
             <IconChip className="h-space-8 w-space-8 bg-accent-violet/10 text-accent-violet transition-transform duration-200 group-hover:scale-105">
@@ -205,7 +205,7 @@ export default function BentoStatsGrid() {
           as="a"
           href="#experience"
           {...hoverLift}
-          className="group relative flex w-full flex-col justify-between rounded-lg p-space-4 transition-all duration-200 hover:border-accent-primary/40 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent-primary"
+          className="group relative flex w-full flex-col justify-between rounded-lg p-space-4 transition-colors duration-200 hover:border-accent-primary/40 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent-primary"
         >
           <div className="flex items-center justify-between">
             <IconChip className="h-space-8 w-space-8 bg-accent-primary/10 text-accent-primary transition-transform duration-200 group-hover:scale-105">
@@ -236,7 +236,7 @@ export default function BentoStatsGrid() {
         className="col-span-2 laptop:col-span-2 flex"
       >
         <GlassCard
-          className="relative flex w-full flex-col justify-between rounded-lg p-space-4 transition-all duration-200 hover:border-accent-violet/40"
+          className="relative flex w-full flex-col justify-between rounded-lg p-space-4 transition-colors duration-200 hover:border-accent-violet/40"
         >
           {/* Header */}
           <div className="flex items-center justify-between">
@@ -267,7 +267,7 @@ export default function BentoStatsGrid() {
             {topSkills.map(({ id, name, Icon }) => (
               <div
                 key={id}
-                className="group/skill relative flex flex-col items-center justify-center rounded-md border border-border-hairline bg-surface-secondary/70 p-space-2 transition-all duration-200 hover:-translate-y-1 hover:border-accent-violet/50 hover:bg-surface-pill hover:shadow-card cursor-default"
+                className="group/skill relative flex flex-col items-center justify-center rounded-md border border-border-hairline bg-surface-secondary/70 p-space-2 transition-[transform,border-color,background-color,box-shadow] duration-200 ease-out hover:-translate-y-1 hover:border-accent-violet/50 hover:bg-surface-pill hover:shadow-card cursor-default"
               >
                 <Icon className="h-space-5 w-space-5 sm:h-space-6 sm:w-space-6 transition-transform duration-200 group-hover/skill:scale-110" />
                 <span className="mt-1.5 truncate text-micro font-medium text-text-secondary group-hover/skill:text-text-primary">
