@@ -87,7 +87,7 @@ export default function BentoStatsGrid() {
         <GlassCard
           as="div"
           {...hoverLift}
-          className="group relative flex w-full flex-col justify-between rounded-lg p-space-4 transition-all duration-200 hover:border-emerald-500/40 focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 overflow-hidden"
+          className="group relative flex w-full flex-col justify-between rounded-lg p-space-4 transition-all duration-200 hover:border-emerald-500/40 focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 overflow-hidden !bg-surface-card/45 dark:!bg-[#0c1219]/55"
         >
           {/* Animated 3D Vanta Waves Background */}
           <VantaWavesBackground />
