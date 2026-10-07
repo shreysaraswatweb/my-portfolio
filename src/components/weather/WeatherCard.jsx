@@ -420,8 +420,8 @@ function WeatherCard() {
             {/* Readability gradient behind typography to guarantee WCAG AAA contrast in both themes */}
             <div
               className={`pointer-events-none absolute inset-x-0 bottom-0 h-24 rounded-b-lg transition-colors duration-300 ${isLight
-                  ? "bg-gradient-to-t from-[#eae5dc]/90 via-[#eae5dc]/50 to-transparent"
-                  : "bg-gradient-to-t from-[#080b10]/90 via-[#080b10]/50 to-transparent"
+                ? "bg-gradient-to-t from-[#eae5dc]/90 via-[#eae5dc]/50 to-transparent"
+                : "bg-gradient-to-t from-[#080b10]/90 via-[#080b10]/50 to-transparent"
                 }`}
               aria-hidden="true"
             />
@@ -447,9 +447,6 @@ function WeatherCard() {
                 <p className="text-micro font-semibold uppercase tracking-wider text-text-secondary">
                   LOCATION
                 </p>
-                <span className="text-[10px] font-medium tracking-tight text-text-secondary group-hover:text-text-primary transition-colors">
-                  Hover for weather →
-                </span>
               </div>
               <p className="mt-0.5 font-display text-body-lg sm:text-h2 font-bold text-text-primary leading-tight">
                 Noida
