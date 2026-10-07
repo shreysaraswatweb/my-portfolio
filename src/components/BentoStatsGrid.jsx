@@ -100,14 +100,14 @@ export default function BentoStatsGrid() {
               rel="noopener noreferrer"
               className="flex items-center gap-space-3 group/header"
             >
-              <IconChip className="h-space-8 w-space-8 bg-slate-900/5 dark:bg-white/5 border border-slate-900/10 dark:border-white/10 text-slate-900 dark:text-text-primary transition-transform duration-200 group-hover/header:scale-105">
-                <GithubMark className="h-space-4 w-space-4 text-slate-900 dark:text-text-primary" />
+              <IconChip className="h-space-8 w-space-8 bg-white/70 dark:bg-white/5 border border-slate-900/10 dark:border-white/10 text-slate-950 dark:text-text-primary backdrop-blur-sm transition-transform duration-200 group-hover/header:scale-105">
+                <GithubMark className="h-space-4 w-space-4 text-slate-950 dark:text-text-primary" />
               </IconChip>
               <div>
-                <p className="text-micro font-bold uppercase tracking-wider text-slate-600 dark:text-text-secondary">
+                <p className="text-micro font-bold uppercase tracking-wider text-slate-700 dark:text-text-secondary">
                   GIT CALENDER
                 </p>
-                <p className="text-caption sm:text-body font-bold text-slate-900 dark:text-text-primary leading-tight group-hover/header:text-emerald-600 dark:group-hover/header:text-emerald-400 transition-colors">
+                <p className="text-caption sm:text-body font-bold text-slate-950 dark:text-text-primary leading-tight group-hover/header:text-emerald-700 dark:group-hover/header:text-emerald-400 transition-colors">
                   GitHub Contributions
                 </p>
               </div>
@@ -118,9 +118,9 @@ export default function BentoStatsGrid() {
                 href="https://github.com/shreysaraswatweb"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-1.5 rounded-full border border-emerald-600/30 bg-emerald-500/15 dark:border-emerald-500/30 dark:bg-emerald-500/10 px-space-2 py-0.5 text-micro font-semibold text-emerald-950 dark:text-emerald-400 hover:bg-emerald-500/25 dark:hover:bg-emerald-500/20 transition-colors shadow-sm dark:shadow-none"
+                className="inline-flex items-center gap-1.5 rounded-full border border-emerald-700/25 bg-white/75 dark:border-emerald-500/30 dark:bg-emerald-500/10 px-space-2 py-0.5 text-micro font-bold text-emerald-950 dark:text-emerald-400 hover:bg-white/95 dark:hover:bg-emerald-500/20 backdrop-blur-sm transition-colors shadow-sm dark:shadow-none"
               >
-                <span className="h-1.5 w-1.5 rounded-full bg-emerald-600 dark:bg-emerald-400 animate-pulse" />
+                <span className="h-1.5 w-1.5 rounded-full bg-emerald-700 dark:bg-emerald-400 animate-pulse" />
                 {totalCommits} Contributions
               </a>
               <a
@@ -129,12 +129,12 @@ export default function BentoStatsGrid() {
                 rel="noopener noreferrer"
                 aria-label="Visit GitHub Profile"
               >
-                <ExternalLinkIcon className="h-space-3 w-space-3 text-slate-500 hover:text-slate-900 dark:text-text-tertiary dark:hover:text-text-primary hover:!text-emerald-600 dark:hover:!text-emerald-400 transition-colors duration-200" />
+                <ExternalLinkIcon className="h-space-3 w-space-3 text-slate-600 hover:text-slate-950 dark:text-text-tertiary dark:hover:text-text-primary hover:!text-emerald-700 dark:hover:!text-emerald-400 transition-colors duration-200" />
               </a>
             </div>
           </div>
 
-          <p className="relative z-10 text-micro font-medium text-slate-600 dark:text-text-tertiary mt-1">
+          <p className="relative z-10 text-micro font-medium text-slate-700 dark:text-text-tertiary mt-1">
             Building, learning, and shipping consistently.
           </p>
 

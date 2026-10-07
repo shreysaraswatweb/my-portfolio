@@ -30,14 +30,14 @@ const THEME_COLORS = {
     rimColor: 0x10b981, // Cyan-emerald rim light
   },
   light: {
-    color: 0xf3f6f4, // Pure luminous pearl white matching light glass cards
-    shininess: 35.0,
-    waveHeight: 12.0,
-    waveSpeed: 0.65,
+    color: 0x6ec9a6, // Fresh, vibrant eucalyptus jade
+    shininess: 60.0, // High specular gloss on wave peaks
+    waveHeight: 18.0, // Pronounced 3D wave crests
+    waveSpeed: 0.72, // Fluid wave undulation
     zoom: 1.15,
-    lightColor: 0xffffff, // Pure crisp specular gloss
-    ambientColor: 0xf8faf8, // Pristine soft porcelain ambient
-    rimColor: 0xa7f3d0, // Delicate emerald rim sheen on wave crests
+    lightColor: 0xffffff, // Pure crisp specular gloss on wave peaks
+    ambientColor: 0x488a70, // Rich forest sage shadow depth for troughs
+    rimColor: 0x059669, // Deep emerald rim sheen on wave crests
   },
 };
 
@@ -111,12 +111,12 @@ export default function VantaWavesBackground({
           scene.traverse((obj) => {
             if (obj.isPointLight) {
               obj.decay = 0; // Disable inverse-square falloff
-              obj.intensity = isLight ? 1.0 : 1.8;
+              obj.intensity = isLight ? 2.0 : 1.8;
               obj.color.set(themeConfig.lightColor);
               obj.position.set(-60, 240, 90);
             }
             if (obj.isAmbientLight) {
-              obj.intensity = isLight ? 1.2 : 1.05;
+              obj.intensity = isLight ? 0.65 : 1.05;
               obj.color.set(themeConfig.ambientColor);
             }
           });
@@ -124,7 +124,7 @@ export default function VantaWavesBackground({
           // Add a dedicated directional rim light for gorgeous metallic facet glints
           const rim = new THREE.DirectionalLight(
             themeConfig.rimColor,
-            isLight ? 0.7 : 1.3
+            isLight ? 1.1 : 1.3
           );
           rim.name = "vantaRimLight";
           rim.position.set(220, 280, 180);
@@ -200,16 +200,16 @@ export default function VantaWavesBackground({
         scene.traverse((obj) => {
           if (obj.isPointLight) {
             obj.color.set(themeConfig.lightColor);
-            obj.intensity = isLight ? 1.0 : 1.8;
+            obj.intensity = isLight ? 2.0 : 1.8;
           }
           if (obj.isAmbientLight) {
             obj.color.set(themeConfig.ambientColor);
-            obj.intensity = isLight ? 1.2 : 1.05;
+            obj.intensity = isLight ? 0.65 : 1.05;
           }
         });
         if (rimLightRef.current) {
           rimLightRef.current.color.set(themeConfig.rimColor);
-          rimLightRef.current.intensity = isLight ? 0.7 : 1.3;
+          rimLightRef.current.intensity = isLight ? 1.1 : 1.3;
         }
       }
     } catch {
@@ -220,7 +220,7 @@ export default function VantaWavesBackground({
   return (
     <div
       className={`pointer-events-none absolute inset-0 z-0 h-full w-full overflow-hidden rounded-[inherit] transition-opacity duration-500 ${className}`}
-      style={{ opacity: opacity ?? (isLight ? 0.55 : 0.95) }}
+      style={{ opacity: opacity ?? (isLight ? 0.88 : 0.95) }}
       aria-hidden="true"
     >
       <div
@@ -231,7 +231,7 @@ export default function VantaWavesBackground({
       <div
         className={`pointer-events-none absolute inset-0 rounded-[inherit] transition-colors duration-300 ${
           isLight
-            ? "bg-gradient-to-t from-white/70 via-white/20 to-transparent"
+            ? "bg-gradient-to-t from-white/35 via-transparent to-transparent"
             : "bg-gradient-to-t from-[#0b0d14]/40 via-transparent to-transparent"
         }`}
       />
