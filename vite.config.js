@@ -75,6 +75,9 @@ export default defineConfig(({ mode }) => {
               if (id.includes("framer-motion")) {
                 return "vendor-framer";
               }
+              if (id.includes("three") || id.includes("vanta")) {
+                return "vendor-three-vanta";
+              }
               if (
                 id.includes("lenis") ||
                 id.includes("lucide-react") ||

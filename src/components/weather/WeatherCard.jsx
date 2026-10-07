@@ -175,8 +175,8 @@ function DevSwitcher({
             type="button"
             onClick={() => onSetPhase(null)}
             className={`px-2 py-0.5 text-[10px] rounded font-medium transition-colors ${forcedPhase === null
-                ? "bg-amber-500 text-black font-bold"
-                : "bg-white/10 text-neutral-300 hover:bg-white/20"
+              ? "bg-amber-500 text-black font-bold"
+              : "bg-white/10 text-neutral-300 hover:bg-white/20"
               }`}
           >
             Auto ({naturalPhase})
@@ -187,8 +187,8 @@ function DevSwitcher({
               type="button"
               onClick={() => onSetPhase(p)}
               className={`px-2 py-0.5 text-[10px] rounded font-medium capitalize transition-colors ${forcedPhase === p
-                  ? "bg-amber-500 text-black font-bold"
-                  : "bg-white/10 text-neutral-300 hover:bg-white/20"
+                ? "bg-amber-500 text-black font-bold"
+                : "bg-white/10 text-neutral-300 hover:bg-white/20"
                 }`}
             >
               {p}
@@ -207,8 +207,8 @@ function DevSwitcher({
             type="button"
             onClick={() => onSetCondition(null)}
             className={`px-2 py-0.5 text-[10px] rounded font-medium transition-colors ${forcedCondition === null
-                ? "bg-cyan-500 text-black font-bold"
-                : "bg-white/10 text-neutral-300 hover:bg-white/20"
+              ? "bg-cyan-500 text-black font-bold"
+              : "bg-white/10 text-neutral-300 hover:bg-white/20"
               }`}
           >
             Auto ({naturalCondition})
@@ -219,8 +219,8 @@ function DevSwitcher({
               type="button"
               onClick={() => onSetCondition(c)}
               className={`px-2 py-0.5 text-[10px] rounded font-medium capitalize transition-colors ${forcedCondition === c
-                  ? "bg-cyan-500 text-black font-bold"
-                  : "bg-white/10 text-neutral-300 hover:bg-white/20"
+                ? "bg-cyan-500 text-black font-bold"
+                : "bg-white/10 text-neutral-300 hover:bg-white/20"
                 }`}
             >
               {c}
@@ -419,11 +419,10 @@ function WeatherCard() {
 
             {/* Readability gradient behind typography to guarantee WCAG AAA contrast in both themes */}
             <div
-              className={`pointer-events-none absolute inset-x-0 bottom-0 h-24 rounded-b-lg transition-colors duration-300 ${
-                isLight
+              className={`pointer-events-none absolute inset-x-0 bottom-0 h-24 rounded-b-lg transition-colors duration-300 ${isLight
                   ? "bg-gradient-to-t from-[#eae5dc]/90 via-[#eae5dc]/50 to-transparent"
                   : "bg-gradient-to-t from-[#080b10]/90 via-[#080b10]/50 to-transparent"
-              }`}
+                }`}
               aria-hidden="true"
             />
 
@@ -468,8 +467,8 @@ function WeatherCard() {
         <div className="location-face-back">
           <div
             className={`group relative flex w-full h-full ${isWide
-                ? "flex-row items-stretch p-2.5 sm:p-3"
-                : "flex-col justify-between p-2 sm:p-2.5"
+              ? "flex-row items-stretch p-2.5 sm:p-3"
+              : "flex-col justify-between p-2 sm:p-2.5"
               } overflow-hidden rounded-lg transition-all duration-300 ${isLight
                 ? "bg-white/80 border border-slate-200/90 shadow-[0_8px_30px_rgba(30,80,140,0.08)]"
                 : "bg-surface-card border border-white/10 shadow-[0_8px_32px_rgba(0,0,0,0.35)]"
@@ -587,16 +586,16 @@ function WeatherCard() {
                       >
                         Noida
                       </p>
-                      <Tooltip content={`Air Quality Index: ${data.aqi} · ${data.aqiStatus}`} side="bottom">
+                      <Tooltip content={`Air Quality Index: ${data.aqi}`} side="bottom">
                         <div className="mt-0.5 flex items-center gap-1.5 text-[9px] sm:text-[9.5px] select-none cursor-pointer">
                           <span
                             className={`h-1.5 w-1.5 rounded-full shrink-0 ${data.aqi <= 50
-                                ? "bg-emerald-500"
-                                : data.aqi <= 100
-                                  ? "bg-amber-400"
-                                  : data.aqi <= 150
-                                    ? "bg-orange-500"
-                                    : "bg-rose-500"
+                              ? "bg-emerald-500"
+                              : data.aqi <= 100
+                                ? "bg-amber-400"
+                                : data.aqi <= 150
+                                  ? "bg-orange-500"
+                                  : "bg-rose-500"
                               }`}
                           />
                           <span
@@ -608,7 +607,7 @@ function WeatherCard() {
                                 : undefined
                             }
                           >
-                            AQI {data.aqi} · {data.aqiStatus}
+                            AQI {data.aqi}
                           </span>
                         </div>
                       </Tooltip>
@@ -623,8 +622,8 @@ function WeatherCard() {
                           )}
                           <span
                             className={`relative inline-flex rounded-full h-2 w-2 ${isOffline
-                                ? "bg-neutral-500"
-                                : "bg-status-available shadow-[0_0_8px_rgba(34,197,94,0.7)]"
+                              ? "bg-neutral-500"
+                              : "bg-status-available shadow-[0_0_8px_rgba(34,197,94,0.7)]"
                               }`}
                           />
                         </span>
@@ -698,8 +697,8 @@ function WeatherCard() {
                         <div
                           key={idx}
                           className={`flex flex-col items-center justify-center backdrop-blur-md rounded-[5px] py-0.5 px-0.5 border min-w-0 ${isLight
-                              ? "bg-white/90 border-slate-200/80 text-slate-800"
-                              : "bg-surface-pill/75 border-white/10 text-white"
+                            ? "bg-white/90 border-slate-200/80 text-slate-800"
+                            : "bg-surface-pill/75 border-white/10 text-white"
                             }`}
                         >
                           <span
@@ -733,8 +732,8 @@ function WeatherCard() {
                       <Tooltip content={`Relative Humidity: ${data.humidity}%`} side="left">
                         <div
                           className={`w-full flex items-center justify-center gap-1.5 py-1 px-2.5 rounded-full backdrop-blur-md text-[10px] font-semibold whitespace-nowrap shadow-xs border ${isLight
-                              ? "bg-white/95 border-slate-200/90 text-slate-800"
-                              : "bg-surface-pill/90 border-white/10 text-white"
+                            ? "bg-white/95 border-slate-200/90 text-slate-800"
+                            : "bg-surface-pill/90 border-white/10 text-white"
                             }`}
                         >
                           <Droplets className="h-3 w-3 text-sky-500 shrink-0" strokeWidth={2.2} />
@@ -746,8 +745,8 @@ function WeatherCard() {
                       <Tooltip content={`Wind Speed: ${data.windSpeed} km/h`} side="left">
                         <div
                           className={`w-full flex items-center justify-center gap-1.5 py-1 px-2.5 rounded-full backdrop-blur-md text-[10px] font-semibold whitespace-nowrap shadow-xs border ${isLight
-                              ? "bg-white/95 border-slate-200/90 text-slate-800"
-                              : "bg-surface-pill/90 border-white/10 text-white"
+                            ? "bg-white/95 border-slate-200/90 text-slate-800"
+                            : "bg-surface-pill/90 border-white/10 text-white"
                             }`}
                         >
                           <Wind className="h-3 w-3 text-teal-500 shrink-0" strokeWidth={2.2} />
@@ -759,8 +758,8 @@ function WeatherCard() {
                       <Tooltip content={`Feels Like Temperature: ${data.feelsLike}°`} side="left">
                         <div
                           className={`w-full flex items-center justify-center gap-1.5 py-1 px-2.5 rounded-full backdrop-blur-md text-[10px] font-semibold whitespace-nowrap shadow-xs border ${isLight
-                              ? "bg-white/95 border-slate-200/90 text-slate-800"
-                              : "bg-surface-pill/90 border-white/10 text-white"
+                            ? "bg-white/95 border-slate-200/90 text-slate-800"
+                            : "bg-surface-pill/90 border-white/10 text-white"
                             }`}
                         >
                           <Thermometer className="h-3 w-3 text-amber-500 shrink-0" strokeWidth={2.2} />
@@ -779,8 +778,8 @@ function WeatherCard() {
                       <button
                         type="button"
                         className={`w-full inline-flex items-center justify-center gap-1 py-0.5 px-1.5 rounded-full text-[8.5px] font-medium tracking-tight transition-all duration-200 cursor-pointer ${isDarkSky
-                            ? "bg-white/15 hover:bg-white/25 text-white/90 hover:text-white border border-white/20 shadow-xs backdrop-blur-sm"
-                            : "bg-slate-900/5 hover:bg-slate-900/10 text-slate-700 hover:text-slate-900 border border-slate-900/10 shadow-xs"
+                          ? "bg-white/15 hover:bg-white/25 text-white/90 hover:text-white border border-white/20 shadow-xs backdrop-blur-sm"
+                          : "bg-slate-900/5 hover:bg-slate-900/10 text-slate-700 hover:text-slate-900 border border-slate-900/10 shadow-xs"
                           }`}
                       >
                         <span>{showHourly ? "Tap for metrics" : "Tap for 4h forecast"}</span>
@@ -808,16 +807,16 @@ function WeatherCard() {
                     >
                       Noida
                     </p>
-                    <Tooltip content={`Air Quality Index: ${data.aqi} · ${data.aqiStatus}`} side="bottom">
+                    <Tooltip content={`Air Quality Index: ${data.aqi}`} side="bottom">
                       <div className="mt-0.5 flex items-center gap-1 text-[8.5px] sm:text-[9.5px] select-none cursor-pointer">
                         <span
                           className={`h-1.5 w-1.5 rounded-full shrink-0 ${data.aqi <= 50
-                              ? "bg-emerald-500"
-                              : data.aqi <= 100
-                                ? "bg-amber-400"
-                                : data.aqi <= 150
-                                  ? "bg-orange-500"
-                                  : "bg-rose-500"
+                            ? "bg-emerald-500"
+                            : data.aqi <= 100
+                              ? "bg-amber-400"
+                              : data.aqi <= 150
+                                ? "bg-orange-500"
+                                : "bg-rose-500"
                             }`}
                         />
                         <span
@@ -829,7 +828,7 @@ function WeatherCard() {
                               : undefined
                           }
                         >
-                          AQI {data.aqi} · {data.aqiStatus}
+                          AQI {data.aqi}
                         </span>
                       </div>
                     </Tooltip>
@@ -844,8 +843,8 @@ function WeatherCard() {
                         )}
                         <span
                           className={`relative inline-flex rounded-full h-2 w-2 ${isOffline
-                              ? "bg-neutral-500"
-                              : "bg-status-available shadow-[0_0_8px_rgba(34,197,94,0.7)]"
+                            ? "bg-neutral-500"
+                            : "bg-status-available shadow-[0_0_8px_rgba(34,197,94,0.7)]"
                             }`}
                         />
                       </span>
@@ -920,8 +919,8 @@ function WeatherCard() {
                         <div
                           key={idx}
                           className={`flex flex-col items-center justify-center backdrop-blur-md rounded-[5px] py-0.5 px-0.5 border min-w-0 ${isLight
-                              ? "bg-white/95 border-slate-200/90 text-slate-800"
-                              : "bg-surface-pill/85 border-white/10 text-white"
+                            ? "bg-white/95 border-slate-200/90 text-slate-800"
+                            : "bg-surface-pill/85 border-white/10 text-white"
                             }`}
                         >
                           <span
@@ -955,8 +954,8 @@ function WeatherCard() {
                       <Tooltip content={`Relative Humidity: ${data.humidity}%`} side="top">
                         <div
                           className={`w-max shrink-0 flex items-center justify-center gap-0.5 py-0.5 px-1 sm:px-1.5 rounded-full backdrop-blur-md text-[8px] sm:text-[8.5px] font-semibold whitespace-nowrap shadow-xs border ${isLight
-                              ? "bg-white/95 border-slate-200/90 text-slate-800"
-                              : "bg-surface-pill/90 border-white/10 text-white"
+                            ? "bg-white/95 border-slate-200/90 text-slate-800"
+                            : "bg-surface-pill/90 border-white/10 text-white"
                             }`}
                         >
                           <Droplets className="h-2.5 w-2.5 text-sky-500 shrink-0" strokeWidth={2.2} />
@@ -968,8 +967,8 @@ function WeatherCard() {
                       <Tooltip content={`Wind Speed: ${data.windSpeed} km/h`} side="top">
                         <div
                           className={`w-full min-w-0 flex items-center justify-center gap-0.5 py-0.5 px-1 sm:px-1.5 rounded-full backdrop-blur-md text-[8px] sm:text-[8.5px] font-semibold whitespace-nowrap shadow-xs border ${isLight
-                              ? "bg-white/95 border-slate-200/90 text-slate-800"
-                              : "bg-surface-pill/90 border-white/10 text-white"
+                            ? "bg-white/95 border-slate-200/90 text-slate-800"
+                            : "bg-surface-pill/90 border-white/10 text-white"
                             }`}
                         >
                           <Wind className="h-2.5 w-2.5 text-teal-500 shrink-0" strokeWidth={2.2} />
@@ -981,8 +980,8 @@ function WeatherCard() {
                       <Tooltip content={`Feels Like Temperature: ${data.feelsLike}°`} side="top">
                         <div
                           className={`w-max shrink-0 flex items-center justify-center gap-0.5 py-0.5 px-1 sm:px-1.5 rounded-full backdrop-blur-md text-[8px] sm:text-[8.5px] font-semibold whitespace-nowrap shadow-xs border ${isLight
-                              ? "bg-white/95 border-slate-200/90 text-slate-800"
-                              : "bg-surface-pill/90 border-white/10 text-white"
+                            ? "bg-white/95 border-slate-200/90 text-slate-800"
+                            : "bg-surface-pill/90 border-white/10 text-white"
                             }`}
                         >
                           <Thermometer className="h-2.5 w-2.5 text-amber-500 shrink-0" strokeWidth={2.2} />
@@ -1001,8 +1000,8 @@ function WeatherCard() {
                       <button
                         type="button"
                         className={`inline-flex items-center gap-1 px-1.5 py-0.5 rounded-full text-[8px] sm:text-[8.5px] font-medium tracking-tight transition-all duration-200 cursor-pointer ${isDarkSky
-                            ? "bg-white/15 hover:bg-white/25 text-white/90 hover:text-white border border-white/20 shadow-xs backdrop-blur-sm"
-                            : "bg-slate-900/5 hover:bg-slate-900/10 text-slate-700 hover:text-slate-900 border border-slate-900/10 shadow-xs"
+                          ? "bg-white/15 hover:bg-white/25 text-white/90 hover:text-white border border-white/20 shadow-xs backdrop-blur-sm"
+                          : "bg-slate-900/5 hover:bg-slate-900/10 text-slate-700 hover:text-slate-900 border border-slate-900/10 shadow-xs"
                           }`}
                       >
                         <span>{showHourly ? "Tap for metrics" : "Tap for 4h forecast"}</span>

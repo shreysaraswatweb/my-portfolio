@@ -70,7 +70,7 @@ export default function Header({ className = "" }) {
       />
 
       {/* Desktop Left: DigitalClock (hidden on mobile/tablet < 1024px) */}
-      <div className="pointer-events-auto hidden lg:flex items-center gap-space-2.5">
+      <div className="pointer-events-auto hidden lg:flex items-center gap-space-3">
         <DigitalClock />
       </div>
 

@@ -48,6 +48,7 @@ export default {
       spacing: {
         "space-1": "4px",
         "space-2": "8px",
+        "space-2.5": "10px",
         "space-3": "12px",
         "space-4": "16px",
         "space-5": "20px",

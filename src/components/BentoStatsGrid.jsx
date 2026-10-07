@@ -20,6 +20,7 @@ import {
 
 import WeatherCard from "./weather/WeatherCard";
 import GitCalendarCubes from "./ui/GitCalendarCubes";
+import VantaWavesBackground from "./ui/VantaWavesBackground";
 
 const topSkills = [
   { id: "react", name: "React", Icon: ReactIcon },
@@ -86,15 +87,18 @@ export default function BentoStatsGrid() {
         <GlassCard
           as="div"
           {...hoverLift}
-          className="group relative flex w-full flex-col justify-between rounded-lg p-space-4 transition-all duration-200 hover:border-emerald-500/40 focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500"
+          className="group relative flex w-full flex-col justify-between rounded-lg p-space-4 transition-all duration-200 hover:border-emerald-500/40 focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 overflow-hidden"
         >
+          {/* Animated 3D Vanta Waves Background */}
+          <VantaWavesBackground />
+
           {/* Header */}
-          <div className="flex items-center justify-between gap-space-2">
+          <div className="relative z-10 flex items-center justify-between gap-space-2">
             <a
               href="https://github.com/shreysaraswatweb"
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center gap-space-2.5 group/header"
+              className="flex items-center gap-space-3 group/header"
             >
               <IconChip className="h-space-8 w-space-8 bg-white/5 text-text-primary transition-transform duration-200 group-hover/header:scale-105">
                 <GithubMark className="h-space-4 w-space-4 text-text-primary" />
@@ -130,12 +134,12 @@ export default function BentoStatsGrid() {
             </div>
           </div>
 
-          <p className="text-micro text-text-tertiary mt-1">
+          <p className="relative z-10 text-micro text-text-tertiary mt-1">
             Building, learning, and shipping consistently.
           </p>
 
           {/* 3D Interactive WebGL2 Cubes Heatmap Grid (Shrey's Real Contributions) */}
-          <div className="mt-space-3 relative w-full h-[105px] sm:h-[115px] overflow-hidden rounded-md">
+          <div className="mt-space-3 relative z-10 w-full h-[105px] sm:h-[115px] overflow-hidden rounded-md">
             <GitCalendarCubes
               username="shreysaraswatweb"
               onHover={setActiveTooltip}
@@ -144,7 +148,7 @@ export default function BentoStatsGrid() {
           </div>
 
           {/* Legend & Tooltip status line */}
-          <div className="mt-space-2 flex items-center justify-between text-micro text-text-tertiary">
+          <div className="mt-space-2 relative z-10 flex items-center justify-between text-micro text-text-tertiary">
             <a
               href="https://github.com/shreysaraswatweb"
               target="_blank"
@@ -236,7 +240,7 @@ export default function BentoStatsGrid() {
         >
           {/* Header */}
           <div className="flex items-center justify-between">
-            <div className="flex items-center gap-space-2.5">
+            <div className="flex items-center gap-space-3">
               <IconChip className="h-space-8 w-space-8 bg-accent-violet/10 text-accent-violet">
                 <Sparkles className="h-space-4 w-space-4" strokeWidth={1.75} />
               </IconChip>
@@ -266,7 +270,7 @@ export default function BentoStatsGrid() {
                 className="group/skill relative flex flex-col items-center justify-center rounded-md border border-border-hairline bg-surface-secondary/70 p-space-2 transition-all duration-200 hover:-translate-y-1 hover:border-accent-violet/50 hover:bg-surface-pill hover:shadow-card cursor-default"
               >
                 <Icon className="h-space-5 w-space-5 sm:h-space-6 sm:w-space-6 transition-transform duration-200 group-hover/skill:scale-110" />
-                <span className="mt-1 truncate text-micro font-medium text-text-secondary group-hover/skill:text-text-primary">
+                <span className="mt-1.5 truncate text-micro font-medium text-text-secondary group-hover/skill:text-text-primary">
                   {name}
                 </span>
               </div>
