@@ -15,10 +15,10 @@ import AvatarFrame from "./AvatarFrame";
 import GlassCard from "./ui/GlassCard";
 import SmoothOverflow from "./SmoothOverflow";
 import {
-  FacebookMark,
   FigmaMark,
   GithubMark,
   InstagramMark,
+  LinkedInMark,
 } from "./icons/BrandIcons";
 import Tooltip from "./ui/Tooltip";
 
@@ -33,7 +33,12 @@ const navIcons = {
 };
 
 const connect = [
-  { id: "facebook", label: "Facebook", href: "#", Mark: FacebookMark },
+  {
+    id: "linkedin",
+    label: "LinkedIn",
+    href: "https://www.linkedin.com/in/shreysaraswat1/",
+    Mark: LinkedInMark,
+  },
   { id: "github", label: "GitHub", href: "#", Mark: GithubMark },
   { id: "figma", label: "Figma", href: "#", Mark: FigmaMark },
   { id: "instagram", label: "Instagram", href: "#", Mark: InstagramMark },

@@ -45,17 +45,18 @@ export const profile = {
   location: "Noida, India",
   joinedOn: "Software work since 2021",
   email: "shreysaraswat1998@gmail.com",
+  linkedin: "https://www.linkedin.com/in/shreysaraswat1/",
   available: false,
   cvUrl: "#",
 };
 
 export const socials = [
   {
-    id: "facebook",
-    label: "Facebook",
-    handle: "On request",
-    href: "#",
-    variant: "facebook",
+    id: "linkedin",
+    label: "LinkedIn",
+    handle: "shreysaraswat1",
+    href: "https://www.linkedin.com/in/shreysaraswat1/",
+    variant: "linkedin",
   },
   {
     id: "github",

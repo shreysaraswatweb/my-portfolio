@@ -18,7 +18,7 @@ function DropShadow({ id }) {
   );
 }
 
-export function FacebookMark({ className = "h-space-8 w-space-8" }) {
+export function LinkedInMark({ className = "h-space-8 w-space-8" }) {
   return (
     <svg
       viewBox="0 0 24 24"
@@ -26,12 +26,12 @@ export function FacebookMark({ className = "h-space-8 w-space-8" }) {
       className={className}
       aria-hidden
     >
-      <path d="M14.5 8.5V6.8c0-.7.5-1.3 1.6-1.3H18V3h-2.4C12.8 3 11 4.7 11 7.2v1.3H9v2.6h2V21h3.5v-9.9h2.4l.6-2.6h-3Z" />
+      <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
     </svg>
   );
 }
 
-export function Facebook3D({ className = "h-icon-3d w-icon-3d" }) {
+export function LinkedIn3D({ className = "h-icon-3d w-icon-3d" }) {
   const id = safeId(useId());
   return (
     <svg viewBox="0 0 64 64" className={className} aria-hidden>
@@ -39,14 +39,21 @@ export function Facebook3D({ className = "h-icon-3d w-icon-3d" }) {
         <DropShadow id={id} />
       </defs>
       <g filter={`url(#${id})`}>
-        <path
-          fill="white"
-          d="M36.2 22.4V18c0-2.2 1.4-3.8 4.2-3.8H46V8h-6.8C32.6 8 28 12.6 28 19.2v3.2h-5.2v7.2H28V56h9.2V29.6h6.4l1.6-7.2H37.2Z"
-        />
+        <rect x="8" y="8" width="48" height="48" rx="10" fill="white" />
+        <g transform="translate(8, 8) scale(2)">
+          <path
+            fill="#0A66C2"
+            d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452z"
+          />
+        </g>
       </g>
     </svg>
   );
 }
+
+// Backward-compatible exports
+export const FacebookMark = LinkedInMark;
+export const Facebook3D = LinkedIn3D;
 
 export function GithubMark({ className = "h-space-8 w-space-8" }) {
   return (

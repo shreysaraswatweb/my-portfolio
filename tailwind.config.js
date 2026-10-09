@@ -32,6 +32,7 @@ export default {
         "accent-violet": "#8B5CF6",
         "accent-end": "#A855F7",
         facebook: "#1877F2",
+        linkedin: "#0A66C2",
         "devto-card": "#F4F4F5",
         "text-primary": "rgb(var(--rgb-text-primary) / <alpha-value>)",
         "text-secondary": "rgb(var(--rgb-text-secondary) / <alpha-value>)",
@@ -140,6 +141,8 @@ export default {
           "linear-gradient(165deg, #3A5BA0 0%, #243056 52%, #1A2238 100%)",
         "facebook-card":
           "linear-gradient(165deg, #5AB0FF 0%, #2E89F6 48%, #1877F2 100%)",
+        "linkedin-card":
+          "linear-gradient(165deg, #3B92E8 0%, #0A66C2 48%, #004182 100%)",
         "github-card": "linear-gradient(165deg, #2C3038 0%, #12141A 100%)",
         "figma-card": "linear-gradient(165deg, #2A3142 0%, #171A22 100%)",
       },

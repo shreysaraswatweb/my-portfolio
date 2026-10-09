@@ -7,19 +7,20 @@ import PillButton from "./ui/PillButton";
 import {
   Devto3D,
   DevtoMark,
-  Facebook3D,
-  FacebookMark,
   Figma3D,
   FigmaMark,
   Github3D,
   GithubMark,
+  LinkedIn3D,
+  LinkedInMark,
   Mail3D,
   MailMark,
 } from "./icons/BrandIcons";
 
 const compactMarks = {
   email: MailMark,
-  facebook: FacebookMark,
+  linkedin: LinkedInMark,
+  facebook: LinkedInMark,
   github: GithubMark,
   figma: FigmaMark,
   devto: DevtoMark,
@@ -27,7 +28,8 @@ const compactMarks = {
 
 const bentoMarks = {
   email: Mail3D,
-  facebook: Facebook3D,
+  linkedin: LinkedIn3D,
+  facebook: LinkedIn3D,
   github: Github3D,
   figma: Figma3D,
   devto: Devto3D,
@@ -35,7 +37,8 @@ const bentoMarks = {
 
 const bentoSurfaces = {
   email: "bg-email-card",
-  facebook: "bg-facebook-card",
+  linkedin: "bg-linkedin-card",
+  facebook: "bg-linkedin-card",
   github: "bg-github-card ring-1 ring-inset ring-border-glass",
   figma: "bg-figma-card ring-1 ring-inset ring-border-glass",
   devto: "bg-devto-card",
@@ -151,7 +154,7 @@ function DesktopTile({ item }) {
 
 export default function ContactGrid({ layout = "mobile" }) {
   const email = socials.find((item) => item.id === "email");
-  const facebook = socials.find((item) => item.id === "facebook");
+  const linkedin = socials.find((item) => item.id === "linkedin");
   const github = socials.find((item) => item.id === "github");
   const figma = socials.find((item) => item.id === "figma");
   const devto = socials.find((item) => item.id === "devto");
@@ -166,7 +169,7 @@ export default function ContactGrid({ layout = "mobile" }) {
         viewport={{ once: true }}
         className="grid grid-cols-2 gap-space-3 laptop:grid-cols-4"
       >
-        {[email, facebook, github, figma].map((item) => (
+        {[email, linkedin, github, figma].map((item) => (
           <DesktopTile key={item.id} item={item} />
         ))}
       </motion.div>
@@ -182,7 +185,7 @@ export default function ContactGrid({ layout = "mobile" }) {
       className="grid grid-cols-2 gap-space-3"
     >
       <BentoTile item={email} />
-      <BentoTile item={facebook} />
+      <BentoTile item={linkedin} />
       <BentoTile item={github} className="col-span-2 min-h-tile-row" />
       <BentoTile item={figma} />
       <BentoTile item={devto} />
@@ -192,7 +195,7 @@ export default function ContactGrid({ layout = "mobile" }) {
 
 export function QuickLinks() {
   const items = socials.filter((item) =>
-    ["email", "facebook", "github", "figma"].includes(item.id),
+    ["email", "linkedin", "github", "figma"].includes(item.id),
   );
   const devto = socials.find((item) => item.id === "devto");
 
