@@ -71,10 +71,18 @@ function SocialRow() {
     >
       {chips.map((item) => {
         const Mark = socialMarks[item.id];
+        const isExternal =
+          typeof item.href === "string" &&
+          item.href !== "#" &&
+          !item.href.startsWith("#") &&
+          !item.href.startsWith("mailto:");
+
         return (
           <motion.a
             key={item.id}
             href={item.href}
+            target={isExternal ? "_blank" : undefined}
+            rel={isExternal ? "noopener noreferrer" : undefined}
             aria-label={`${item.label} profile`}
             variants={cardEntrance}
             {...hoverLift}

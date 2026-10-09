@@ -39,7 +39,12 @@ const connect = [
     href: "https://www.linkedin.com/in/shreysaraswat1/",
     Mark: LinkedInMark,
   },
-  { id: "github", label: "GitHub", href: "#", Mark: GithubMark },
+  {
+    id: "github",
+    label: "GitHub",
+    href: "https://github.com/shreysaraswatweb",
+    Mark: GithubMark,
+  },
   { id: "figma", label: "Figma", href: "#", Mark: FigmaMark },
   { id: "instagram", label: "Instagram", href: "#", Mark: InstagramMark },
 ];
@@ -248,17 +253,27 @@ export default function Sidebar({
           Let&apos;s Connect
         </p>
         <div className="mb-space-4 flex gap-space-2">
-          {connect.map(({ id, label, href, Mark }) => (
-            <Tooltip key={id} content={label} side="top">
-              <a
-                href={href}
-                aria-label={label}
-                className="hover-icon flex h-space-10 w-space-10 items-center justify-center rounded-md border border-border-hairline bg-surface-secondary text-text-primary"
-              >
-                <Mark className="h-space-5 w-space-5" />
-              </a>
-            </Tooltip>
-          ))}
+          {connect.map(({ id, label, href, Mark }) => {
+            const isExternal =
+              typeof href === "string" &&
+              href !== "#" &&
+              !href.startsWith("#") &&
+              !href.startsWith("mailto:");
+
+            return (
+              <Tooltip key={id} content={label} side="top">
+                <a
+                  href={href}
+                  aria-label={label}
+                  target={isExternal ? "_blank" : undefined}
+                  rel={isExternal ? "noopener noreferrer" : undefined}
+                  className="hover-icon flex h-space-10 w-space-10 items-center justify-center rounded-md border border-border-hairline bg-surface-secondary text-text-primary"
+                >
+                  <Mark className="h-space-5 w-space-5" />
+                </a>
+              </Tooltip>
+            );
+          })}
         </div>
         <p className="text-micro text-text-tertiary">
           © {new Date().getFullYear()} {profile.displayName} — {profile.role}

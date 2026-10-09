@@ -20,9 +20,17 @@ const techIconMap = {
 };
 
 export function ProjectCard({ project }) {
+  const isExternal =
+    typeof project.href === "string" &&
+    project.href !== "#" &&
+    !project.href.startsWith("#") &&
+    !project.href.startsWith("mailto:");
+
   return (
     <motion.a
       href={project.href}
+      target={isExternal ? "_blank" : undefined}
+      rel={isExternal ? "noopener noreferrer" : undefined}
       {...hoverLift}
       variants={cardEntrance}
       className="hover-media relative min-w-project-card flex-1 overflow-hidden rounded-lg"

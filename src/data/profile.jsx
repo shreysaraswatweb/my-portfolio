@@ -46,6 +46,7 @@ export const profile = {
   joinedOn: "Software work since 2021",
   email: "shreysaraswat1998@gmail.com",
   linkedin: "https://www.linkedin.com/in/shreysaraswat1/",
+  github: "https://github.com/shreysaraswatweb",
   available: false,
   cvUrl: "#",
 };
@@ -61,8 +62,8 @@ export const socials = [
   {
     id: "github",
     label: "GitHub",
-    handle: "On request",
-    href: "#",
+    handle: "shreysaraswatweb",
+    href: "https://github.com/shreysaraswatweb",
     variant: "github",
   },
   {

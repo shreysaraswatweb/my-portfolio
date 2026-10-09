@@ -44,14 +44,25 @@ const bentoSurfaces = {
   devto: "bg-devto-card",
 };
 
+const isExternalLink = (url) =>
+  typeof url === "string" &&
+  url !== "#" &&
+  !url.startsWith("#") &&
+  !url.startsWith("mailto:") &&
+  !url.startsWith("tel:");
+
 function BentoTile({ item, className = "" }) {
+  if (!item) return null;
   const Mark = bentoMarks[item.id];
   const isLight = item.variant === "devto";
   const isGithub = item.variant === "github";
+  const isExternal = isExternalLink(item.href);
 
   return (
     <motion.a
       href={item.href}
+      target={isExternal ? "_blank" : undefined}
+      rel={isExternal ? "noopener noreferrer" : undefined}
       variants={cardEntrance}
       {...hoverLift}
       className={[
@@ -96,12 +107,16 @@ function BentoTile({ item, className = "" }) {
 }
 
 function DesktopTile({ item }) {
+  if (!item) return null;
   const Mark = compactMarks[item.id];
   const isLight = item.variant === "devto";
+  const isExternal = isExternalLink(item.href);
 
   return (
     <motion.a
       href={item.href}
+      target={isExternal ? "_blank" : undefined}
+      rel={isExternal ? "noopener noreferrer" : undefined}
       variants={cardEntrance}
       {...hoverLift}
       className={[
@@ -207,10 +222,13 @@ export function QuickLinks() {
       <div className="grid grid-cols-2 gap-space-3">
         {items.map((item) => {
           const Mark = compactMarks[item.id];
+          const isExternal = isExternalLink(item.href);
           return (
             <a
               key={item.id}
               href={item.href}
+              target={isExternal ? "_blank" : undefined}
+              rel={isExternal ? "noopener noreferrer" : undefined}
               className="hover-lift flex min-h-[44px] min-w-0 flex-col items-center justify-center gap-space-2 rounded-lg bg-surface-secondary px-space-3 py-space-4"
             >
               <Mark className="h-space-8 w-space-8 text-text-primary" />
@@ -224,6 +242,8 @@ export function QuickLinks() {
       <div className="mt-space-3 flex flex-col gap-space-3">
         <a
           href={devto.href}
+          target={isExternalLink(devto.href) ? "_blank" : undefined}
+          rel={isExternalLink(devto.href) ? "noopener noreferrer" : undefined}
           className="hover-lift flex min-h-[44px] items-center justify-center rounded-lg bg-text-primary py-space-3 text-caption font-bold text-text-on-accent"
         >
           DEV.to
