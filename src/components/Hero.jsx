@@ -663,11 +663,13 @@ function DashboardHero() {
 function getSculptedCardPath(w, h) {
   const W = Math.max(w || 356, 320);
   const H = Math.max(h || 470, 380);
+  const isSm = W >= 365;
   const xCenter = W / 2;
-  const x1 = Math.round(xCenter - 112);
-  const x2 = Math.round(xCenter + 112);
-  const yFloor = 186;
-  const rf = 34; // Equal circular fillet radius at both bottom corners of cutout
+  const halfNotch = isSm ? 117 : 112;
+  const x1 = Math.round(xCenter - halfNotch);
+  const x2 = Math.round(xCenter + halfNotch);
+  const yFloor = isSm ? 164 : 154;
+  const rf = isSm ? 30 : 28; // Equal circular fillet radius at both bottom corners of cutout
   const ri = 16; // Inner corner radius at shoulder tops
   const ro = 24; // Outer corner radius at shoulder tops
   const rb = 28; // Outer bottom card corner radius
@@ -757,7 +759,7 @@ export function IdentityHero() {
         </svg>
 
         {/* Card Content (Padded below the U-notch) */}
-        <div className="relative z-10 px-5 sm:px-6 pb-6 pt-[198px] sm:pt-[204px]">
+        <div className="relative z-10 px-5 sm:px-6 pb-6 pt-[166px] sm:pt-[176px]">
           {/* Name */}
           <h1 className="font-display text-[22px] sm:text-2xl font-bold tracking-tight text-text-primary text-center leading-tight">
             {profile.displayName}
