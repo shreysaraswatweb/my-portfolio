@@ -28,6 +28,7 @@
 
 ## Contact & Links
 - Website: https://shrey-saraswat-portfolio.vercel.app/
-- GitHub: https://github.com/
-- Figma: https://figma.com/
+- LinkedIn: https://www.linkedin.com/in/shreysaraswat1/
+- GitHub: https://github.com/shreysaraswatweb
+- X (Twitter): https://x.com/shreyweb
 - DEV.to: https://dev.to/

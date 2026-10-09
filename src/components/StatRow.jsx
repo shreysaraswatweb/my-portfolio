@@ -5,10 +5,10 @@ import { cardEntrance, staggerContainer, hoverLift } from "../lib/motion";
 import GlassCard from "./ui/GlassCard";
 import IconChip from "./ui/IconChip";
 import {
-  FigmaMark,
   GithubMark,
   InstagramMark,
   LinkedInMark,
+  XMark,
 } from "./icons/BrandIcons";
 
 const infoIcons = {
@@ -22,7 +22,8 @@ const socialMarks = {
   linkedin: LinkedInMark,
   facebook: LinkedInMark,
   github: GithubMark,
-  figma: FigmaMark,
+  x: XMark,
+  figma: XMark,
   instagram: InstagramMark,
 };
 

@@ -47,6 +47,7 @@ export const profile = {
   email: "shreysaraswat1998@gmail.com",
   linkedin: "https://www.linkedin.com/in/shreysaraswat1/",
   github: "https://github.com/shreysaraswatweb",
+  x: "https://x.com/shreyweb",
   available: false,
   cvUrl: "#",
 };
@@ -67,11 +68,11 @@ export const socials = [
     variant: "github",
   },
   {
-    id: "figma",
-    label: "Figma",
-    handle: "On request",
-    href: "#",
-    variant: "figma",
+    id: "x",
+    label: "X",
+    handle: "@shreyweb",
+    href: "https://x.com/shreyweb",
+    variant: "x",
   },
   {
     id: "instagram",

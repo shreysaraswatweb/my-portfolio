@@ -15,10 +15,10 @@ import AvatarFrame from "./AvatarFrame";
 import GlassCard from "./ui/GlassCard";
 import SmoothOverflow from "./SmoothOverflow";
 import {
-  FigmaMark,
   GithubMark,
   InstagramMark,
   LinkedInMark,
+  XMark,
 } from "./icons/BrandIcons";
 import Tooltip from "./ui/Tooltip";
 
@@ -45,7 +45,7 @@ const connect = [
     href: "https://github.com/shreysaraswatweb",
     Mark: GithubMark,
   },
-  { id: "figma", label: "Figma", href: "#", Mark: FigmaMark },
+  { id: "x", label: "X", href: "https://x.com/shreyweb", Mark: XMark },
   { id: "instagram", label: "Instagram", href: "#", Mark: InstagramMark },
 ];
 

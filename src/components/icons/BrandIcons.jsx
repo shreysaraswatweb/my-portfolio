@@ -86,6 +86,48 @@ export function Github3D({ className = "h-icon-3d w-icon-3d" }) {
   );
 }
 
+export function XMark({ className = "h-space-8 w-space-8" }) {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      fill="currentColor"
+      className={className}
+      aria-hidden
+    >
+      <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+    </svg>
+  );
+}
+
+export function X3D({ className = "h-icon-3d w-icon-3d" }) {
+  const id = safeId(useId());
+  return (
+    <svg viewBox="0 0 64 64" className={className} aria-hidden>
+      <defs>
+        <DropShadow id={id} />
+      </defs>
+      <g filter={`url(#${id})`}>
+        <rect
+          x="8"
+          y="8"
+          width="48"
+          height="48"
+          rx="11"
+          fill="#000000"
+          stroke="rgba(255, 255, 255, 0.2)"
+          strokeWidth="1.5"
+        />
+        <g transform="translate(14, 14) scale(1.5)">
+          <path
+            fill="white"
+            d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"
+          />
+        </g>
+      </g>
+    </svg>
+  );
+}
+
 export function FigmaMark({ className = "h-space-8 w-space-8" }) {
   return (
     <svg viewBox="0 0 24 24" className={className} aria-hidden>

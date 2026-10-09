@@ -145,6 +145,7 @@ export default {
           "linear-gradient(165deg, #3B92E8 0%, #0A66C2 48%, #004182 100%)",
         "github-card": "linear-gradient(165deg, #2C3038 0%, #12141A 100%)",
         "figma-card": "linear-gradient(165deg, #2A3142 0%, #171A22 100%)",
+        "x-card": "linear-gradient(165deg, #2A2E39 0%, #111318 100%)",
       },
     },
   },
