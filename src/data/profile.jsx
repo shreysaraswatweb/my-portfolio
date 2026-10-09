@@ -48,6 +48,7 @@ export const profile = {
   linkedin: "https://www.linkedin.com/in/shreysaraswat1/",
   github: "https://github.com/shreysaraswatweb",
   x: "https://x.com/shreyweb",
+  devto: "https://dev.to/shreysaraswatweb",
   available: false,
   cvUrl: "#",
 };
@@ -91,8 +92,8 @@ export const socials = [
   {
     id: "devto",
     label: "Dev.to",
-    handle: "On request",
-    href: "#",
+    handle: "shreysaraswatweb",
+    href: "https://dev.to/shreysaraswatweb",
     variant: "devto",
   },
 ];
