@@ -362,7 +362,7 @@ export const assets = {
 };
 
 export const bioLines = [
-  { emoji: "👨‍💻", text: "Product UI engineer — React & Angular" },
-  { emoji: "📍", text: profile.location },
-  { emoji: "🎓", text: "Mechanical Engineering → software" },
+  { emoji: "💼", text: "Product UI Engineer — React & Angular" },
+  { emoji: "🎓", text: "Mechanical Engineering → Software" },
+  { emoji: "⚡", text: "Specs & Figma → Production UI" },
 ];

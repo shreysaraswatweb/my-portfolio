@@ -1,9 +1,10 @@
 import { ArrowRight, Cake, MapPin, User } from "lucide-react";
+import { motion } from "framer-motion";
 import { assets, bioLines, profile } from "../data/profile";
 import GlassCard from "./ui/GlassCard";
 import PillButton from "./ui/PillButton";
 import AvatarFrame from "./AvatarFrame";
-import { useRef, useState, useEffect } from "react";
+import { useRef, useState, useEffect, useMemo } from "react";
 import "../assets/styles/Hero.css";
 
 export function IdentityHeader({ align = "center" }) {
@@ -659,20 +660,163 @@ function DashboardHero() {
   );
 }
 
+function getSculptedCardPath(w, h) {
+  const W = Math.max(w || 356, 320);
+  const H = Math.max(h || 470, 380);
+  const xCenter = W / 2;
+  const x1 = Math.round(xCenter - 112);
+  const x2 = Math.round(xCenter + 112);
+  const yFloor = 186;
+  const rf = 34; // Equal circular fillet radius at both bottom corners of cutout
+  const ri = 16; // Inner corner radius at shoulder tops
+  const ro = 24; // Outer corner radius at shoulder tops
+  const rb = 28; // Outer bottom card corner radius
+
+  return [
+    `M 0,${ro}`,
+    `C 0,${(ro * 0.4477).toFixed(1)} ${(ro * 0.4477).toFixed(1)},0 ${ro},0`,
+    `L ${x1 - ri},0`,
+    `C ${(x1 - ri + ri * 0.5523).toFixed(1)},0 ${x1},${(ri * 0.4477).toFixed(1)} ${x1},${ri}`,
+    `L ${x1},${yFloor - rf}`,
+    `C ${x1},${(yFloor - rf + rf * 0.5523).toFixed(1)} ${(x1 + rf - rf * 0.5523).toFixed(1)},${yFloor} ${x1 + rf},${yFloor}`,
+    `L ${x2 - rf},${yFloor}`,
+    `C ${(x2 - rf + rf * 0.5523).toFixed(1)},${yFloor} ${x2},${(yFloor - rf + rf * 0.5523).toFixed(1)} ${x2},${yFloor - rf}`,
+    `L ${x2},${ri}`,
+    `C ${x2},${(ri * 0.4477).toFixed(1)} ${(x2 + ri - ri * 0.5523).toFixed(1)},0 ${x2 + ri},0`,
+    `L ${W - ro},0`,
+    `C ${(W - ro + ro * 0.5523).toFixed(1)},0 ${W},${(ro * 0.4477).toFixed(1)} ${W},${ro}`,
+    `L ${W},${H - rb}`,
+    `C ${W},${(H - rb + rb * 0.5523).toFixed(1)} ${(W - rb + rb * 0.5523).toFixed(1)},${H} ${W - rb},${H}`,
+    `L ${rb},${H}`,
+    `C ${(rb * 0.4477).toFixed(1)},${H} 0,${(H - rb + rb * 0.5523).toFixed(1)} 0,${H - rb}`,
+    "Z",
+  ].join(" ");
+}
+
+export function IdentityHero() {
+  const cardRef = useRef(null);
+  const [dimensions, setDimensions] = useState({ width: 356, height: 470 });
+
+  useEffect(() => {
+    if (!cardRef.current) return;
+    const updateSize = () => {
+      if (cardRef.current) {
+        const rect = cardRef.current.getBoundingClientRect();
+        if (rect.width > 0 && rect.height > 0) {
+          setDimensions({
+            width: Math.round(rect.width),
+            height: Math.round(rect.height),
+          });
+        }
+      }
+    };
+    updateSize();
+    const ro = new ResizeObserver(updateSize);
+    ro.observe(cardRef.current);
+    return () => ro.disconnect();
+  }, []);
+
+  const pathD = useMemo(
+    () => getSculptedCardPath(dimensions.width, dimensions.height),
+    [dimensions.width, dimensions.height]
+  );
+
+  return (
+    <div id="home" className="relative w-full max-w-[356px] sm:max-w-[370px] mx-auto mt-6 sm:mt-7 pt-[32px] filter drop-shadow-[0_12px_28px_rgba(0,0,0,0.35)] dark:drop-shadow-[0_14px_32px_rgba(0,0,0,0.5)]">
+      {/* ─── Hidden SVG Definition with Exact Pixel Coordinates (Zero Distortion) ─── */}
+      <svg width="0" height="0" className="absolute pointer-events-none" aria-hidden="true">
+        <defs>
+          <clipPath id="sculpted-profile-card-clip" clipPathUnits="userSpaceOnUse">
+            <path d={pathD} />
+          </clipPath>
+        </defs>
+      </svg>
+
+      {/* ─── Single Unified Glass Card Body (Zero Seams, Zero Color Split) ─── */}
+      <div
+        ref={cardRef}
+        className="relative w-full bg-surface-card backdrop-blur-glass overflow-hidden"
+        style={{
+          clipPath: "url(#sculpted-profile-card-clip)",
+          WebkitClipPath: "url(#sculpted-profile-card-clip)",
+        }}
+      >
+        {/* Continuous 1px Glass Border Perimeter */}
+        <svg
+          className="absolute inset-0 w-full h-full pointer-events-none z-10"
+          viewBox={`0 0 ${dimensions.width} ${dimensions.height}`}
+          aria-hidden="true"
+        >
+          <path
+            d={pathD}
+            vectorEffect="non-scaling-stroke"
+            stroke="var(--color-border-glass)"
+            strokeWidth="1.25"
+            fill="none"
+          />
+        </svg>
+
+        {/* Card Content (Padded below the U-notch) */}
+        <div className="relative z-10 px-5 sm:px-6 pb-6 pt-[198px] sm:pt-[204px]">
+          {/* Name */}
+          <h1 className="font-display text-[22px] sm:text-2xl font-bold tracking-tight text-text-primary text-center leading-tight">
+            {profile.displayName}
+          </h1>
+
+          {/* Handle */}
+          <p className="text-xs sm:text-[13px] font-medium text-text-tertiary text-center mt-1">
+            @shreysaraswat
+          </p>
+
+          {/* 3 Bio Bullets (Centered Block, Left-Aligned Rows) */}
+          <div className="mt-4 flex flex-col items-center">
+            <div className="flex flex-col gap-2 sm:gap-2.5 text-xs sm:text-[13px] text-text-secondary font-medium">
+              {bioLines.map((line) => (
+                <div key={line.text} className="flex items-center gap-2.5">
+                  <span className="text-sm shrink-0">{line.emoji}</span>
+                  <span>{line.text}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Bottom Meta Row */}
+          <div className="mt-5 pt-3.5 border-t border-border-hairline/60 flex items-center justify-between text-micro sm:text-caption text-text-tertiary font-medium px-1">
+            <div className="flex items-center gap-1.5">
+              <MapPin className="h-3.5 w-3.5 shrink-0 text-text-tertiary" strokeWidth={1.75} />
+              <span>{profile.location}</span>
+            </div>
+            <div className="flex items-center gap-1.5">
+              <Cake className="h-3.5 w-3.5 shrink-0 text-text-tertiary" strokeWidth={1.75} />
+              <span>{profile.joinedOn}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* ─── Large Prominent Avatar Positioned at top: -26px ─── */}
+      <div className="absolute -top-[26px] left-1/2 -translate-x-1/2 z-20 pointer-events-auto">
+        <motion.div
+          animate={{ y: [0, -3.5, 0] }}
+          transition={{ duration: 4.8, repeat: Infinity, ease: "easeInOut" }}
+          className="relative w-[204px] h-[204px] sm:w-[214px] sm:h-[214px] rounded-[30px] overflow-hidden border border-amber-300/30 dark:border-white/10 shadow-[0_12px_36px_rgba(245,184,46,0.32)] bg-[#f5b82e]"
+        >
+          <img
+            src={assets.avatar}
+            alt={profile.displayName}
+            className="w-full h-full object-cover"
+            loading="eager"
+            fetchPriority="high"
+          />
+        </motion.div>
+      </div>
+    </div>
+  );
+}
+
 export default function Hero({ variant = "dashboard" }) {
   if (variant === "identity") {
-    return (
-      <div id="home" className="relative pt-avatar-lift">
-        <div className="absolute left-1/2 top-0 z-10 -translate-x-1/2">
-          <AvatarFrame size="mobile" />
-        </div>
-        <GlassCard className="rounded-xl px-space-6 pb-space-6 pt-avatar-sink">
-          <IdentityHeader />
-          <BioList />
-          <MetaRow />
-        </GlassCard>
-      </div>
-    );
+    return <IdentityHero />;
   }
 
   return <DashboardHero />;
