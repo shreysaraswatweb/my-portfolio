@@ -694,8 +694,8 @@ function WeatherCard() {
                         <div
                           key={idx}
                           className={`flex flex-col items-center justify-center backdrop-blur-md rounded-[5px] py-0.5 px-0.5 border min-w-0 ${isLight
-                            ? "bg-white/90 border-slate-200/80 text-slate-800"
-                            : "bg-surface-pill/75 border-white/10 text-white"
+                            ? "bg-white/60 border-slate-200/80 text-slate-800"
+                            : "bg-surface-pill/50 border-white/15 text-white"
                             }`}
                         >
                           <span
@@ -916,8 +916,8 @@ function WeatherCard() {
                         <div
                           key={idx}
                           className={`flex flex-col items-center justify-center backdrop-blur-md rounded-[5px] py-0.5 px-0.5 border min-w-0 ${isLight
-                            ? "bg-white/95 border-slate-200/90 text-slate-800"
-                            : "bg-surface-pill/85 border-white/10 text-white"
+                            ? "bg-white/60 border-slate-200/80 text-slate-800"
+                            : "bg-surface-pill/50 border-white/15 text-white"
                             }`}
                         >
                           <span
