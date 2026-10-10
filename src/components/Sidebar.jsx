@@ -148,7 +148,7 @@ export default function Sidebar({
             {profile.displayName}
           </p>
           <p className="truncate text-caption text-text-secondary">
-            {profile.role}
+            {profile.shortRole || "Frontend Developer"}
           </p>
         </div>
         {drawer ? (

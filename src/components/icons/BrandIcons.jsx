@@ -227,62 +227,69 @@ export function Devto3D({ className = "h-icon-3d w-icon-3d" }) {
   );
 }
 
-export function MailMark({ className = "h-space-8 w-space-8" }) {
+export function GmailMark({ className = "h-space-8 w-space-8" }) {
   return (
-    <svg viewBox="0 0 48 48" className={className} aria-hidden>
-      <rect x="4" y="10" width="40" height="28" rx="6" fill="white" />
+    <svg viewBox="0 49.4 512 399.42" className={className} aria-hidden>
       <path
-        d="M6 14 24 27 42 14"
-        fill="none"
-        stroke="#3B4A8A"
-        strokeWidth="3"
-        strokeLinejoin="round"
+        fill="#4285F4"
+        d="M34.91 448.818h81.454V251L0 163.727V413.91c0 19.287 15.622 34.91 34.91 34.91z"
+      />
+      <path
+        fill="#34A853"
+        d="M395.636 448.818h81.455c19.287 0 34.909-15.622 34.909-34.909V163.727L395.636 251z"
+      />
+      <path
+        fill="#FBBC04"
+        d="M395.636 99.727V251L512 163.727v-46.545c0-43.142-49.25-67.782-83.782-41.891z"
+      />
+      <path
+        fill="#EA4335"
+        d="M116.364 251V99.727L256 204.455 395.636 99.727V251L256 355.727z"
+      />
+      <path
+        fill="#C5221F"
+        d="M0 117.182v46.545L116.364 251V99.727L83.782 75.291C49.25 49.4 0 74.04 0 117.18z"
       />
     </svg>
   );
 }
 
-export function Mail3D({ className = "h-icon-3d w-icon-3d" }) {
+export function Gmail3D({ className = "h-icon-3d w-icon-3d" }) {
   const id = safeId(useId());
-  const paper = safeId(useId());
   return (
     <svg viewBox="0 0 64 64" className={className} aria-hidden>
       <defs>
         <DropShadow id={id} />
-        <linearGradient id={paper} x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stopColor="#FFFFFF" />
-          <stop offset="100%" stopColor="#D7E0F2" />
-        </linearGradient>
       </defs>
       <g filter={`url(#${id})`}>
-        <rect
-          x="8"
-          y="16"
-          width="48"
-          height="32"
-          rx="7"
-          fill={`url(#${paper})`}
-        />
-        <path
-          d="M11 20.5 32 35 53 20.5"
-          fill="none"
-          stroke="#4C5E92"
-          strokeWidth="2.6"
-          strokeLinejoin="round"
-        />
-        <path
-          d="M11 44.5 24 31"
-          stroke="#4C5E92"
-          strokeWidth="2"
-          opacity="0.45"
-        />
-        <path
-          d="M53 44.5 40 31"
-          stroke="#4C5E92"
-          strokeWidth="2"
-          opacity="0.45"
-        />
+        <rect x="8" y="8" width="48" height="48" rx="10" fill="white" />
+        <g transform="translate(14, 18) scale(0.07)">
+          <path
+            fill="#4285F4"
+            d="M34.91 448.818h81.454V251L0 163.727V413.91c0 19.287 15.622 34.91 34.91 34.91z"
+          />
+          <path
+            fill="#34A853"
+            d="M395.636 448.818h81.455c19.287 0 34.909-15.622 34.909-34.909V163.727L395.636 251z"
+          />
+          <path
+            fill="#FBBC04"
+            d="M395.636 99.727V251L512 163.727v-46.545c0-43.142-49.25-67.782-83.782-41.891z"
+          />
+          <path
+            fill="#EA4335"
+            d="M116.364 251V99.727L256 204.455 395.636 99.727V251L256 355.727z"
+          />
+          <path
+            fill="#C5221F"
+            d="M0 117.182v46.545L116.364 251V99.727L83.782 75.291C49.25 49.4 0 74.04 0 117.18z"
+          />
+        </g>
       </g>
     </svg>
   );
 }
+
+// Backward-compatible exports
+export const MailMark = GmailMark;
+export const Mail3D = Gmail3D;

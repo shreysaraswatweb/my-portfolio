@@ -12,7 +12,9 @@ export default function TopBar({ onMenu }) {
           <p className="text-body font-medium text-text-primary">
             {profile.displayName}
           </p>
-          <p className="text-caption text-text-secondary">{profile.role}</p>
+          <p className="text-caption text-text-secondary">
+            {profile.shortRole || "Frontend Developer"}
+          </p>
         </div>
       </div>
       <button

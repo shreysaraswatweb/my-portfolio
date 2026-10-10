@@ -6,6 +6,7 @@ import GlassCard from "./ui/GlassCard";
 import IconChip from "./ui/IconChip";
 import {
   GithubMark,
+  GmailMark,
   InstagramMark,
   LinkedInMark,
   XMark,
@@ -25,6 +26,8 @@ const socialMarks = {
   x: XMark,
   figma: XMark,
   instagram: InstagramMark,
+  gmail: GmailMark,
+  email: GmailMark,
 };
 
 function InfoRow() {

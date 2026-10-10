@@ -35,6 +35,7 @@ export const profile = {
   handle: "Frontend Developer — React & Angular",
   initials: "SS",
   role: "Frontend Developer — React & Angular",
+  shortRole: "Frontend Developer",
   tagline: "Product-UI engineer — specs and Figma to working, API-integrated interfaces.",
   greeting: "Hello, I'm",
   description:
@@ -83,11 +84,11 @@ export const socials = [
     variant: "instagram",
   },
   {
-    id: "email",
-    label: "Email",
+    id: "gmail",
+    label: "Gmail",
     handle: "shreysaraswat1998@gmail.com",
     href: "mailto:shreysaraswat1998@gmail.com",
-    variant: "email",
+    variant: "gmail",
   },
   {
     id: "devto",

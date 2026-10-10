@@ -138,7 +138,9 @@ export default {
         "canvas-glow": "var(--bg-canvas-glow)",
         "nav-active-fill": "var(--bg-nav-active-fill)",
         "email-card":
-          "linear-gradient(165deg, #3A5BA0 0%, #243056 52%, #1A2238 100%)",
+          "linear-gradient(165deg, #EA4335 0%, #D93025 50%, #B31412 100%)",
+        "gmail-card":
+          "linear-gradient(165deg, #EA4335 0%, #D93025 50%, #B31412 100%)",
         "facebook-card":
           "linear-gradient(165deg, #5AB0FF 0%, #2E89F6 48%, #1877F2 100%)",
         "linkedin-card":

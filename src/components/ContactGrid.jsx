@@ -9,16 +9,17 @@ import {
   DevtoMark,
   Github3D,
   GithubMark,
+  Gmail3D,
+  GmailMark,
   LinkedIn3D,
   LinkedInMark,
-  Mail3D,
-  MailMark,
   X3D,
   XMark,
 } from "./icons/BrandIcons";
 
 const compactMarks = {
-  email: MailMark,
+  gmail: GmailMark,
+  email: GmailMark,
   linkedin: LinkedInMark,
   facebook: LinkedInMark,
   github: GithubMark,
@@ -28,7 +29,8 @@ const compactMarks = {
 };
 
 const bentoMarks = {
-  email: Mail3D,
+  gmail: Gmail3D,
+  email: Gmail3D,
   linkedin: LinkedIn3D,
   facebook: LinkedIn3D,
   github: Github3D,
@@ -38,7 +40,8 @@ const bentoMarks = {
 };
 
 const bentoSurfaces = {
-  email: "bg-email-card",
+  gmail: "bg-gmail-card",
+  email: "bg-gmail-card",
   linkedin: "bg-linkedin-card",
   facebook: "bg-linkedin-card",
   github: "bg-github-card ring-1 ring-inset ring-border-glass",
@@ -111,8 +114,9 @@ function BentoTile({ item, className = "" }) {
 
 function DesktopTile({ item }) {
   if (!item) return null;
-  const Mark = compactMarks[item.id];
+  const Mark = compactMarks[item.id] || compactMarks[item.variant];
   const isLight = item.variant === "devto";
+  const isGmail = item.id === "gmail" || item.id === "email";
   const isExternal = isExternalLink(item.href);
 
   return (
@@ -128,7 +132,11 @@ function DesktopTile({ item }) {
       ].join(" ")}
     >
       <div className="flex items-start justify-between">
-        {Mark ? (
+        {isGmail ? (
+          <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-white shadow-sm p-1.5">
+            <Mark className="h-full w-full" />
+          </div>
+        ) : Mark ? (
           <Mark
             className={
               isLight
@@ -171,7 +179,7 @@ function DesktopTile({ item }) {
 }
 
 export default function ContactGrid({ layout = "mobile" }) {
-  const email = socials.find((item) => item.id === "email");
+  const gmail = socials.find((item) => item.id === "gmail" || item.id === "email");
   const linkedin = socials.find((item) => item.id === "linkedin");
   const github = socials.find((item) => item.id === "github");
   const x = socials.find((item) => item.id === "x");
@@ -187,7 +195,7 @@ export default function ContactGrid({ layout = "mobile" }) {
         viewport={{ once: true }}
         className="grid grid-cols-2 gap-space-3 laptop:grid-cols-4"
       >
-        {[email, linkedin, github, x].map((item) => (
+        {[linkedin, github, x, gmail].map((item) => (
           <DesktopTile key={item?.id || Math.random()} item={item} />
         ))}
       </motion.div>
@@ -202,7 +210,7 @@ export default function ContactGrid({ layout = "mobile" }) {
       animate="visible"
       className="grid grid-cols-2 gap-space-3"
     >
-      <BentoTile item={email} />
+      <BentoTile item={gmail} />
       <BentoTile item={linkedin} />
       <BentoTile item={github} className="col-span-2 min-h-tile-row" />
       <BentoTile item={x} />
@@ -211,11 +219,42 @@ export default function ContactGrid({ layout = "mobile" }) {
   );
 }
 
+const quickLinkCardStyles = {
+  linkedin: {
+    bg: "bg-gradient-to-br from-[#0077B5] via-[#0A66C2] to-[#004182] text-white shadow-md shadow-[#0A66C2]/30 border border-blue-400/30",
+    hover: "hover:shadow-lg hover:shadow-[#0A66C2]/45",
+  },
+  github: {
+    bg: "bg-gradient-to-br from-[#2D333B] via-[#24292E] to-[#161B22] text-white shadow-md shadow-black/50 border border-white/20",
+    hover: "hover:shadow-lg hover:shadow-black/70",
+  },
+  x: {
+    bg: "bg-gradient-to-br from-[#22252B] via-[#121418] to-[#000000] text-white shadow-md shadow-black/50 border border-white/20",
+    hover: "hover:shadow-lg hover:shadow-black/70",
+  },
+  gmail: {
+    bg: "bg-gradient-to-br from-[#EA4335] via-[#D93025] to-[#B31412] text-white shadow-md shadow-[#EA4335]/30 border border-red-400/30",
+    hover: "hover:shadow-lg hover:shadow-[#EA4335]/45",
+  },
+  email: {
+    bg: "bg-gradient-to-br from-[#EA4335] via-[#D93025] to-[#B31412] text-white shadow-md shadow-[#EA4335]/30 border border-red-400/30",
+    hover: "hover:shadow-lg hover:shadow-[#EA4335]/45",
+  },
+};
+
 export function QuickLinks() {
-  const items = socials.filter((item) =>
-    ["email", "linkedin", "github", "x"].includes(item.id),
-  );
-  const devto = socials.find((item) => item.id === "devto");
+  const desiredOrder = ["linkedin", "github", "x", "gmail"];
+  const items = desiredOrder
+    .map((id) =>
+      socials.find(
+        (item) => item.id === id || (id === "gmail" && item.id === "email")
+      )
+    )
+    .filter(Boolean);
+
+  const devto = socials.find((item) => item.id === "devto") || {
+    href: profile.devto || "https://dev.to/shreysaraswatweb",
+  };
 
   return (
     <GlassCard className="rounded-xl p-space-5">
@@ -224,18 +263,38 @@ export function QuickLinks() {
       </h2>
       <div className="grid grid-cols-2 gap-space-3">
         {items.map((item) => {
-          const Mark = compactMarks[item.id];
+          const Mark = compactMarks[item.id] || compactMarks[item.variant];
           const isExternal = isExternalLink(item.href);
+          const style =
+            quickLinkCardStyles[item.id] ||
+            quickLinkCardStyles[item.variant] || {
+              bg: "bg-surface-secondary text-text-primary",
+              hover: "",
+            };
+          const isGmail = item.id === "gmail" || item.id === "email";
+
           return (
             <a
               key={item.id}
               href={item.href}
               target={isExternal ? "_blank" : undefined}
               rel={isExternal ? "noopener noreferrer" : undefined}
-              className="hover-lift flex min-h-[44px] min-w-0 flex-col items-center justify-center gap-space-2 rounded-lg bg-surface-secondary px-space-3 py-space-4"
+              className={[
+                "hover-lift flex min-h-[44px] min-w-0 flex-col items-center justify-center gap-space-2 rounded-lg px-space-3 py-space-4 transition-all duration-200",
+                style.bg,
+                style.hover,
+              ].join(" ")}
             >
-              <Mark className="h-space-8 w-space-8 text-text-primary" />
-              <span className="text-caption text-text-secondary">
+              <div className="flex h-8 w-8 items-center justify-center">
+                {isGmail ? (
+                  <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-white shadow-sm p-1">
+                    <Mark className="h-full w-full" />
+                  </div>
+                ) : Mark ? (
+                  <Mark className="h-space-8 w-space-8 text-white drop-shadow-sm" />
+                ) : null}
+              </div>
+              <span className="text-caption font-semibold text-white tracking-wide">
                 {item.label}
               </span>
             </a>
@@ -251,8 +310,12 @@ export function QuickLinks() {
         >
           DEV.to
         </a>
-        <PillButton href={profile.cvUrl || "#contact"} variant="ghost" className="w-full min-h-[44px]">
-          Download CV
+        <PillButton
+          href={profile.cvUrl || "#contact"}
+          variant="ghost"
+          className="w-full min-h-[44px]"
+        >
+          Download Resume
         </PillButton>
       </div>
     </GlassCard>
