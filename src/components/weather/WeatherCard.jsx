@@ -495,6 +495,7 @@ function WeatherCard() {
               parallax={parallax}
               isPaused={isPaused}
               prefersReducedMotion={prefersReducedMotion}
+              isWide={isWide}
             />
             <Moon
               phase={phase}

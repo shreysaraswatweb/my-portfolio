@@ -8,6 +8,7 @@ function Sun({
   parallax = { x: 0, y: 0 },
   isPaused = false,
   prefersReducedMotion = false,
+  isWide = false,
 }) {
   if (phase === "night") return null;
 
@@ -34,6 +35,12 @@ function Sun({
   const isDawn = phase === "dawn";
   const isEvening = phase === "evening";
 
+  // In wide mode, map sun into the open sky of the left section (just like Moon does)
+  // so it is beautifully visible next to the temperature and never hides behind the right pills
+  const sunX = isWide ? 43 + (pos.x - 74) * 0.4 : pos.x;
+  const sunY = isWide ? (isEvening ? 44 : Math.min(pos.y, 42)) : pos.y;
+  const sunScale = isWide ? pos.scale * 0.9 : pos.scale;
+
   // Primary palette tints
   const coreGradStart = isDawn ? "#fff0f0" : isEvening ? "#fff2d6" : "#ffffff";
   const coreGradMid = isDawn ? "#fca5a5" : isEvening ? "#fb923c" : "#fde047";
@@ -44,14 +51,14 @@ function Sun({
     <motion.div
       className="absolute pointer-events-none select-none z-[2]"
       style={{
-        left: `${pos.x}%`,
-        top: `${pos.y}%`,
+        left: `${sunX}%`,
+        top: `${sunY}%`,
         opacity: effectiveOpacity,
       }}
       animate={{
         x: parallax.x * -12,
         y: parallax.y * -12,
-        scale: pos.scale,
+        scale: sunScale,
       }}
       transition={{ type: "spring", stiffness: 120, damping: 25 }}
       aria-hidden="true"
