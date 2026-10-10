@@ -3,7 +3,6 @@ import { motion } from "framer-motion";
 import { assets, bioLines, profile } from "../data/profile";
 import GlassCard from "./ui/GlassCard";
 import PillButton from "./ui/PillButton";
-import AvatarFrame from "./AvatarFrame";
 import { useRef, useState, useEffect, useMemo } from "react";
 import "../assets/styles/Hero.css";
 
