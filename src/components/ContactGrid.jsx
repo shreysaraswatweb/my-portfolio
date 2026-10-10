@@ -57,16 +57,31 @@ const isExternalLink = (url) =>
   !url.startsWith("mailto:") &&
   !url.startsWith("tel:");
 
+const resolveSocialHref = (item) => {
+  if (!item) return "#";
+  const isGmail = item.id === "gmail" || item.id === "email";
+  if (isGmail) {
+    if (item.href?.startsWith("mailto:")) {
+      return `https://mail.google.com/mail/?view=cm&fs=1&to=${item.href.replace("mailto:", "")}`;
+    }
+    if (!item.href || item.href === "#") {
+      return `https://mail.google.com/mail/?view=cm&fs=1&to=${profile.email || "shreysaraswat1998@gmail.com"}`;
+    }
+  }
+  return item.href;
+};
+
 function BentoTile({ item, className = "" }) {
   if (!item) return null;
   const Mark = bentoMarks[item.id];
   const isLight = item.variant === "devto";
   const isGithub = item.variant === "github";
-  const isExternal = isExternalLink(item.href);
+  const href = resolveSocialHref(item);
+  const isExternal = isExternalLink(href);
 
   return (
     <motion.a
-      href={item.href}
+      href={href}
       target={isExternal ? "_blank" : undefined}
       rel={isExternal ? "noopener noreferrer" : undefined}
       variants={cardEntrance}
@@ -117,11 +132,12 @@ function DesktopTile({ item }) {
   const Mark = compactMarks[item.id] || compactMarks[item.variant];
   const isLight = item.variant === "devto";
   const isGmail = item.id === "gmail" || item.id === "email";
-  const isExternal = isExternalLink(item.href);
+  const href = resolveSocialHref(item);
+  const isExternal = isExternalLink(href);
 
   return (
     <motion.a
-      href={item.href}
+      href={href}
       target={isExternal ? "_blank" : undefined}
       rel={isExternal ? "noopener noreferrer" : undefined}
       variants={cardEntrance}
@@ -264,7 +280,8 @@ export function QuickLinks() {
       <div className="grid grid-cols-2 gap-space-3">
         {items.map((item) => {
           const Mark = compactMarks[item.id] || compactMarks[item.variant];
-          const isExternal = isExternalLink(item.href);
+          const href = resolveSocialHref(item);
+          const isExternal = isExternalLink(href);
           const style =
             quickLinkCardStyles[item.id] ||
             quickLinkCardStyles[item.variant] || {
@@ -276,7 +293,7 @@ export function QuickLinks() {
           return (
             <a
               key={item.id}
-              href={item.href}
+              href={href}
               target={isExternal ? "_blank" : undefined}
               rel={isExternal ? "noopener noreferrer" : undefined}
               className={[

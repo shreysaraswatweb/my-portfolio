@@ -87,7 +87,7 @@ export const socials = [
     id: "gmail",
     label: "Gmail",
     handle: "shreysaraswat1998@gmail.com",
-    href: "mailto:shreysaraswat1998@gmail.com",
+    href: "https://mail.google.com/mail/?view=cm&fs=1&to=shreysaraswat1998@gmail.com",
     variant: "gmail",
   },
   {

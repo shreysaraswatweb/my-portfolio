@@ -730,8 +730,8 @@ function WeatherCard() {
                       <Tooltip content={`Relative Humidity: ${data.humidity}%`} side="left">
                         <div
                           className={`w-full flex items-center justify-center gap-1.5 py-1 px-2.5 rounded-full backdrop-blur-md text-[10px] font-semibold whitespace-nowrap shadow-xs border ${isLight
-                            ? "bg-white/95 border-slate-200/90 text-slate-800"
-                            : "bg-surface-pill/90 border-white/10 text-white"
+                            ? "bg-white/60 border-slate-200/80 text-slate-800"
+                            : "bg-surface-pill/50 border-white/15 text-white"
                             }`}
                         >
                           <Droplets className="h-3 w-3 text-sky-500 shrink-0" strokeWidth={2.2} />
@@ -743,8 +743,8 @@ function WeatherCard() {
                       <Tooltip content={`Wind Speed: ${data.windSpeed} km/h`} side="left">
                         <div
                           className={`w-full flex items-center justify-center gap-1.5 py-1 px-2.5 rounded-full backdrop-blur-md text-[10px] font-semibold whitespace-nowrap shadow-xs border ${isLight
-                            ? "bg-white/95 border-slate-200/90 text-slate-800"
-                            : "bg-surface-pill/90 border-white/10 text-white"
+                            ? "bg-white/60 border-slate-200/80 text-slate-800"
+                            : "bg-surface-pill/50 border-white/15 text-white"
                             }`}
                         >
                           <Wind className="h-3 w-3 text-teal-500 shrink-0" strokeWidth={2.2} />
@@ -756,8 +756,8 @@ function WeatherCard() {
                       <Tooltip content={`Feels Like Temperature: ${data.feelsLike}°`} side="left">
                         <div
                           className={`w-full flex items-center justify-center gap-1.5 py-1 px-2.5 rounded-full backdrop-blur-md text-[10px] font-semibold whitespace-nowrap shadow-xs border ${isLight
-                            ? "bg-white/95 border-slate-200/90 text-slate-800"
-                            : "bg-surface-pill/90 border-white/10 text-white"
+                            ? "bg-white/60 border-slate-200/80 text-slate-800"
+                            : "bg-surface-pill/50 border-white/15 text-white"
                             }`}
                         >
                           <Thermometer className="h-3 w-3 text-amber-500 shrink-0" strokeWidth={2.2} />
@@ -952,8 +952,8 @@ function WeatherCard() {
                       <Tooltip content={`Relative Humidity: ${data.humidity}%`} side="top">
                         <div
                           className={`w-max shrink-0 flex items-center justify-center gap-0.5 py-0.5 px-1 sm:px-1.5 rounded-full backdrop-blur-md text-[8px] sm:text-[8.5px] font-semibold whitespace-nowrap shadow-xs border ${isLight
-                            ? "bg-white/95 border-slate-200/90 text-slate-800"
-                            : "bg-surface-pill/90 border-white/10 text-white"
+                            ? "bg-white/60 border-slate-200/80 text-slate-800"
+                            : "bg-surface-pill/50 border-white/15 text-white"
                             }`}
                         >
                           <Droplets className="h-2.5 w-2.5 text-sky-500 shrink-0" strokeWidth={2.2} />
@@ -965,8 +965,8 @@ function WeatherCard() {
                       <Tooltip content={`Wind Speed: ${data.windSpeed} km/h`} side="top">
                         <div
                           className={`w-full min-w-0 flex items-center justify-center gap-0.5 py-0.5 px-1 sm:px-1.5 rounded-full backdrop-blur-md text-[8px] sm:text-[8.5px] font-semibold whitespace-nowrap shadow-xs border ${isLight
-                            ? "bg-white/95 border-slate-200/90 text-slate-800"
-                            : "bg-surface-pill/90 border-white/10 text-white"
+                            ? "bg-white/60 border-slate-200/80 text-slate-800"
+                            : "bg-surface-pill/50 border-white/15 text-white"
                             }`}
                         >
                           <Wind className="h-2.5 w-2.5 text-teal-500 shrink-0" strokeWidth={2.2} />
@@ -978,8 +978,8 @@ function WeatherCard() {
                       <Tooltip content={`Feels Like Temperature: ${data.feelsLike}°`} side="top">
                         <div
                           className={`w-max shrink-0 flex items-center justify-center gap-0.5 py-0.5 px-1 sm:px-1.5 rounded-full backdrop-blur-md text-[8px] sm:text-[8.5px] font-semibold whitespace-nowrap shadow-xs border ${isLight
-                            ? "bg-white/95 border-slate-200/90 text-slate-800"
-                            : "bg-surface-pill/90 border-white/10 text-white"
+                            ? "bg-white/60 border-slate-200/80 text-slate-800"
+                            : "bg-surface-pill/50 border-white/15 text-white"
                             }`}
                         >
                           <Thermometer className="h-2.5 w-2.5 text-amber-500 shrink-0" strokeWidth={2.2} />
