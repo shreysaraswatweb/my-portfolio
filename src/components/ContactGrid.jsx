@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import { profile, socials } from "../data/profile";
 import { cardEntrance, staggerContainer, hoverLift } from "../lib/motion";
+import { useTheme } from "../theme/ThemeProvider";
 import GlassCard from "./ui/GlassCard";
 import ExternalLinkIcon from "./ui/ExternalLinkIcon";
 import PillButton from "./ui/PillButton";
@@ -236,29 +237,87 @@ export default function ContactGrid({ layout = "mobile" }) {
 }
 
 const quickLinkCardStyles = {
-  linkedin: {
-    bg: "bg-gradient-to-br from-[#0077B5] via-[#0A66C2] to-[#004182] text-white shadow-md shadow-[#0A66C2]/30 border border-blue-400/30",
-    hover: "hover:shadow-lg hover:shadow-[#0A66C2]/45",
+  dark: {
+    linkedin: {
+      bg: "bg-gradient-to-br from-[#0077B5] via-[#0A66C2] to-[#004182] text-white shadow-md shadow-[#0A66C2]/30 border border-blue-400/30",
+      hover: "hover:shadow-lg hover:shadow-[#0A66C2]/45 hover:border-blue-300/50",
+      icon: "text-white drop-shadow-sm",
+      label: "text-white",
+      badge: "bg-white shadow-sm",
+    },
+    github: {
+      bg: "bg-gradient-to-br from-[#2D333B] via-[#24292E] to-[#161B22] text-white shadow-md shadow-black/50 border border-white/20",
+      hover: "hover:shadow-lg hover:shadow-black/70 hover:border-white/35",
+      icon: "text-white drop-shadow-sm",
+      label: "text-white",
+      badge: "bg-white shadow-sm",
+    },
+    x: {
+      bg: "bg-gradient-to-br from-[#22252B] via-[#121418] to-[#000000] text-white shadow-md shadow-black/50 border border-white/20",
+      hover: "hover:shadow-lg hover:shadow-black/70 hover:border-white/35",
+      icon: "text-white drop-shadow-sm",
+      label: "text-white",
+      badge: "bg-white shadow-sm",
+    },
+    gmail: {
+      bg: "bg-gradient-to-br from-[#EA4335] via-[#D93025] to-[#B31412] text-white shadow-md shadow-[#EA4335]/30 border border-red-400/30",
+      hover: "hover:shadow-lg hover:shadow-[#EA4335]/45 hover:border-red-300/50",
+      icon: "text-white drop-shadow-sm",
+      label: "text-white",
+      badge: "bg-white shadow-sm",
+    },
+    email: {
+      bg: "bg-gradient-to-br from-[#EA4335] via-[#D93025] to-[#B31412] text-white shadow-md shadow-[#EA4335]/30 border border-red-400/30",
+      hover: "hover:shadow-lg hover:shadow-[#EA4335]/45 hover:border-red-300/50",
+      icon: "text-white drop-shadow-sm",
+      label: "text-white",
+      badge: "bg-white shadow-sm",
+    },
   },
-  github: {
-    bg: "bg-gradient-to-br from-[#2D333B] via-[#24292E] to-[#161B22] text-white shadow-md shadow-black/50 border border-white/20",
-    hover: "hover:shadow-lg hover:shadow-black/70",
-  },
-  x: {
-    bg: "bg-gradient-to-br from-[#22252B] via-[#121418] to-[#000000] text-white shadow-md shadow-black/50 border border-white/20",
-    hover: "hover:shadow-lg hover:shadow-black/70",
-  },
-  gmail: {
-    bg: "bg-gradient-to-br from-[#EA4335] via-[#D93025] to-[#B31412] text-white shadow-md shadow-[#EA4335]/30 border border-red-400/30",
-    hover: "hover:shadow-lg hover:shadow-[#EA4335]/45",
-  },
-  email: {
-    bg: "bg-gradient-to-br from-[#EA4335] via-[#D93025] to-[#B31412] text-white shadow-md shadow-[#EA4335]/30 border border-red-400/30",
-    hover: "hover:shadow-lg hover:shadow-[#EA4335]/45",
+  light: {
+    linkedin: {
+      bg: "bg-gradient-to-br from-blue-50/90 via-sky-50/70 to-blue-100/60 border border-blue-200/90 shadow-xs shadow-blue-500/10",
+      hover: "hover:bg-blue-100/80 hover:border-blue-400/80 hover:shadow-md hover:shadow-blue-500/15",
+      icon: "text-[#0A66C2]",
+      label: "text-slate-800",
+      badge: "bg-white shadow-xs border border-blue-100",
+    },
+    github: {
+      bg: "bg-gradient-to-br from-[#F6F8FA] via-[#F3F4F6] to-[#E5E7EB] border border-slate-300/80 shadow-xs shadow-slate-900/5",
+      hover: "hover:bg-slate-200/70 hover:border-slate-400 hover:shadow-md hover:shadow-slate-900/10",
+      icon: "text-[#24292E]",
+      label: "text-slate-800",
+      badge: "bg-white shadow-xs border border-slate-200",
+    },
+    x: {
+      bg: "bg-gradient-to-br from-[#FFFFFF] via-[#F8F9FA] to-[#EDEFF2] border border-neutral-300/80 shadow-xs shadow-black/5",
+      hover: "hover:bg-neutral-100/90 hover:border-neutral-400 hover:shadow-md hover:shadow-black/10",
+      icon: "text-neutral-900",
+      label: "text-neutral-900",
+      badge: "bg-white shadow-xs border border-neutral-200",
+    },
+    gmail: {
+      bg: "bg-gradient-to-br from-red-50/90 via-rose-50/70 to-red-100/60 border border-red-200/90 shadow-xs shadow-red-500/10",
+      hover: "hover:bg-red-100/80 hover:border-red-400/80 hover:shadow-md hover:shadow-red-500/15",
+      icon: "text-[#D93025]",
+      label: "text-slate-800",
+      badge: "bg-white shadow-xs border border-red-100",
+    },
+    email: {
+      bg: "bg-gradient-to-br from-red-50/90 via-rose-50/70 to-red-100/60 border border-red-200/90 shadow-xs shadow-red-500/10",
+      hover: "hover:bg-red-100/80 hover:border-red-400/80 hover:shadow-md hover:shadow-red-500/15",
+      icon: "text-[#D93025]",
+      label: "text-slate-800",
+      badge: "bg-white shadow-xs border border-red-100",
+    },
   },
 };
 
 export function QuickLinks() {
+  const { resolved } = useTheme();
+  const isLight = resolved === "light";
+  const themeCardStyles = isLight ? quickLinkCardStyles.light : quickLinkCardStyles.dark;
+
   const desiredOrder = ["linkedin", "github", "x", "gmail"];
   const items = desiredOrder
     .map((id) =>
@@ -283,10 +342,17 @@ export function QuickLinks() {
           const href = resolveSocialHref(item);
           const isExternal = isExternalLink(href);
           const style =
-            quickLinkCardStyles[item.id] ||
-            quickLinkCardStyles[item.variant] || {
-              bg: "bg-surface-secondary text-text-primary",
-              hover: "",
+            themeCardStyles[item.id] ||
+            themeCardStyles[item.variant] || {
+              bg: isLight
+                ? "bg-white/80 border border-slate-200/80 shadow-xs"
+                : "bg-surface-secondary border border-white/10",
+              hover: isLight
+                ? "hover:bg-white hover:border-slate-300"
+                : "hover:bg-surface-pill",
+              icon: isLight ? "text-slate-800" : "text-white",
+              label: isLight ? "text-slate-800" : "text-white",
+              badge: "bg-white shadow-xs",
             };
           const isGmail = item.id === "gmail" || item.id === "email";
 
@@ -304,14 +370,26 @@ export function QuickLinks() {
             >
               <div className="flex h-8 w-8 items-center justify-center">
                 {isGmail ? (
-                  <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-white shadow-sm p-1">
+                  <div
+                    className={[
+                      "flex h-8 w-8 items-center justify-center rounded-lg p-1",
+                      style.badge,
+                    ].join(" ")}
+                  >
                     <Mark className="h-full w-full" />
                   </div>
                 ) : Mark ? (
-                  <Mark className="h-space-8 w-space-8 text-white drop-shadow-sm" />
+                  <Mark
+                    className={["h-space-8 w-space-8", style.icon].join(" ")}
+                  />
                 ) : null}
               </div>
-              <span className="text-caption font-semibold text-white tracking-wide">
+              <span
+                className={[
+                  "text-caption font-semibold tracking-wide",
+                  style.label,
+                ].join(" ")}
+              >
                 {item.label}
               </span>
             </a>
@@ -323,7 +401,12 @@ export function QuickLinks() {
           href={devto.href}
           target={isExternalLink(devto.href) ? "_blank" : undefined}
           rel={isExternalLink(devto.href) ? "noopener noreferrer" : undefined}
-          className="hover-lift flex min-h-[44px] items-center justify-center rounded-lg bg-text-primary py-space-3 text-caption font-bold text-text-on-accent"
+          className={[
+            "hover-lift flex min-h-[44px] items-center justify-center rounded-lg py-space-3 text-caption font-bold transition-all duration-200",
+            isLight
+              ? "border border-slate-200/90 bg-white/90 text-slate-800 shadow-xs hover:border-slate-300 hover:bg-white hover:shadow-sm"
+              : "bg-white text-neutral-950 shadow-md shadow-black/20 hover:bg-neutral-100",
+          ].join(" ")}
         >
           DEV.to
         </a>
