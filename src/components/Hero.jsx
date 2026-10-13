@@ -660,8 +660,8 @@ function DashboardHero() {
 }
 
 function getSculptedCardPath(w, h) {
-  const W = Math.max(w || 356, 320);
-  const H = Math.max(h || 470, 380);
+  const W = Math.max(w || 356, 280);
+  const H = Math.max(h || 380, 200);
   const isSm = W >= 365;
   const xCenter = W / 2;
   const halfNotch = isSm ? 117 : 112;
@@ -696,7 +696,7 @@ function getSculptedCardPath(w, h) {
 
 export function IdentityHero() {
   const cardRef = useRef(null);
-  const [dimensions, setDimensions] = useState({ width: 356, height: 470 });
+  const [dimensions, setDimensions] = useState({ width: 356, height: 380 });
 
   useEffect(() => {
     if (!cardRef.current) return;
@@ -704,10 +704,11 @@ export function IdentityHero() {
       if (cardRef.current) {
         const rect = cardRef.current.getBoundingClientRect();
         if (rect.width > 0 && rect.height > 0) {
-          setDimensions({
-            width: Math.round(rect.width),
-            height: Math.round(rect.height),
-          });
+          const w = Math.round(rect.width);
+          const h = Math.round(rect.height);
+          setDimensions((prev) =>
+            prev.width !== w || prev.height !== h ? { width: w, height: h } : prev
+          );
         }
       }
     };
@@ -722,12 +723,14 @@ export function IdentityHero() {
     [dimensions.width, dimensions.height]
   );
 
+  const clipId = `sculpted-profile-card-clip-${dimensions.width}-${dimensions.height}`;
+
   return (
     <div id="home" className="relative w-full max-w-[356px] sm:max-w-[370px] mx-auto mt-6 sm:mt-7 pt-[32px] filter drop-shadow-[0_12px_28px_rgba(0,0,0,0.35)] dark:drop-shadow-[0_14px_32px_rgba(0,0,0,0.5)]">
       {/* ─── Hidden SVG Definition with Exact Pixel Coordinates (Zero Distortion) ─── */}
       <svg width="0" height="0" className="absolute pointer-events-none" aria-hidden="true">
         <defs>
-          <clipPath id="sculpted-profile-card-clip" clipPathUnits="userSpaceOnUse">
+          <clipPath id={clipId} clipPathUnits="userSpaceOnUse">
             <path d={pathD} />
           </clipPath>
         </defs>
@@ -738,14 +741,15 @@ export function IdentityHero() {
         ref={cardRef}
         className="relative w-full bg-surface-card backdrop-blur-glass overflow-hidden"
         style={{
-          clipPath: "url(#sculpted-profile-card-clip)",
-          WebkitClipPath: "url(#sculpted-profile-card-clip)",
+          clipPath: `url(#${clipId})`,
+          WebkitClipPath: `url(#${clipId})`,
         }}
       >
         {/* Continuous 1px Glass Border Perimeter */}
         <svg
           className="absolute inset-0 w-full h-full pointer-events-none z-10"
           viewBox={`0 0 ${dimensions.width} ${dimensions.height}`}
+          preserveAspectRatio="none"
           aria-hidden="true"
         >
           <path
