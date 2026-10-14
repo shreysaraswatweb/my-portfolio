@@ -297,13 +297,16 @@ function WeatherCard() {
   // Performance guards: pause off-screen & background tabs
   const [isInView, setIsInView] = useState(true);
   const [isDocVisible, setIsDocVisible] = useState(true);
-  const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
+  const [prefersReducedMotion, setPrefersReducedMotion] = useState(() =>
+    typeof window !== "undefined"
+      ? window.matchMedia("(prefers-reduced-motion: reduce)").matches
+      : false
+  );
 
   // Monitor prefers-reduced-motion
   useEffect(() => {
     if (typeof window === "undefined") return;
     const media = window.matchMedia("(prefers-reduced-motion: reduce)");
-    setPrefersReducedMotion(media.matches);
     const handler = (e) => setPrefersReducedMotion(e.matches);
     media.addEventListener("change", handler);
     return () => media.removeEventListener("change", handler);

@@ -17,6 +17,8 @@ const ExperienceTimeline = lazy(() => import("../components/ExperienceTimeline")
 const MediaPlayer = lazy(() => import("../components/MediaPlayer"));
 const ContactCard = lazy(() => import("../components/ContactCard"));
 
+const CURRENT_YEAR = new Date().getFullYear();
+
 export default function MobileApp() {
   const [tab, setTab] = useState("Photos");
 
@@ -75,7 +77,7 @@ export default function MobileApp() {
         </div>
 
         <footer className="mt-space-8 text-center text-micro text-text-tertiary">
-          © {new Date().getFullYear()} {profile.displayName} — {profile.role}
+          © {CURRENT_YEAR} {profile.displayName} — {profile.role}
         </footer>
       </div>
     </div>

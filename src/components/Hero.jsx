@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 import { assets, bioLines, profile } from "../data/profile";
 import GlassCard from "./ui/GlassCard";
 import PillButton from "./ui/PillButton";
-import { useRef, useState, useEffect, useMemo } from "react";
+import { useRef, useState, useEffect, useLayoutEffect, useMemo } from "react";
 import "../assets/styles/Hero.css";
 
 export function IdentityHeader({ align = "center" }) {
@@ -696,9 +696,14 @@ function getSculptedCardPath(w, h) {
 
 export function IdentityHero() {
   const cardRef = useRef(null);
-  const [dimensions, setDimensions] = useState({ width: 356, height: 380 });
+  const [dimensions, setDimensions] = useState(() => {
+    if (typeof window === "undefined") return { width: 356, height: 380 };
+    const isSm = window.innerWidth >= 640;
+    const w = isSm ? 370 : Math.min(356, Math.max(280, window.innerWidth - 32));
+    return { width: w, height: 380 };
+  });
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (!cardRef.current) return;
     const updateSize = () => {
       if (cardRef.current) {
@@ -739,27 +744,20 @@ export function IdentityHero() {
       {/* ─── Single Unified Glass Card Body (Zero Seams, Zero Color Split) ─── */}
       <div
         ref={cardRef}
-        className="relative w-full bg-surface-card backdrop-blur-glass overflow-hidden"
+        className="relative w-full overflow-hidden"
         style={{
           clipPath: `url(#${clipId})`,
           WebkitClipPath: `url(#${clipId})`,
+          transform: "translateZ(0)",
+          WebkitBackfaceVisibility: "hidden",
+          backfaceVisibility: "hidden",
         }}
       >
-        {/* Continuous 1px Glass Border Perimeter */}
-        <svg
-          className="absolute inset-0 w-full h-full pointer-events-none z-10"
-          viewBox={`0 0 ${dimensions.width} ${dimensions.height}`}
-          preserveAspectRatio="none"
+        {/* Anti-aliased Bleed Backdrop Glass Layer (Eliminates Skia/WebKit clip-path white edge lines) */}
+        <div
+          className="absolute -inset-2 bg-surface-card backdrop-blur-glass pointer-events-none"
           aria-hidden="true"
-        >
-          <path
-            d={pathD}
-            vectorEffect="non-scaling-stroke"
-            stroke="var(--color-border-glass)"
-            strokeWidth="1.25"
-            fill="none"
-          />
-        </svg>
+        />
 
         {/* Card Content (Padded below the U-notch) */}
         <div className="relative z-10 px-5 sm:px-6 pb-6 pt-[166px] sm:pt-[176px]">

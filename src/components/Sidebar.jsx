@@ -49,6 +49,8 @@ const connect = [
   { id: "instagram", label: "Instagram", href: "#", Mark: InstagramMark },
 ];
 
+const CURRENT_YEAR = new Date().getFullYear();
+
 export default function Sidebar({
   active = "home",
   onNavigate,
@@ -276,7 +278,7 @@ export default function Sidebar({
           })}
         </div>
         <p className="text-micro text-text-tertiary">
-          © {new Date().getFullYear()} {profile.displayName} — {profile.role}
+          © {CURRENT_YEAR} {profile.displayName} — {profile.role}
         </p>
       </footer>
     </GlassCard>

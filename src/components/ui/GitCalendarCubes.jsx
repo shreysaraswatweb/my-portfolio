@@ -422,16 +422,16 @@ export default function GitCalendarCubes({
   };
 
   const settingsRef = useRef(settings);
-  settingsRef.current = settings;
-
   const calendarDataRef = useRef(calendarCells);
-  calendarDataRef.current = calendarCells;
-
   const onHoverRef = useRef(onHover);
-  onHoverRef.current = onHover;
-
   const onLeaveRef = useRef(onLeave);
-  onLeaveRef.current = onLeave;
+
+  useEffect(() => {
+    settingsRef.current = settings;
+    calendarDataRef.current = calendarCells;
+    onHoverRef.current = onHover;
+    onLeaveRef.current = onLeave;
+  });
 
   useEffect(() => {
     const container = containerRef.current;

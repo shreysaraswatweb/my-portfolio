@@ -212,8 +212,8 @@ export default function ContactGrid({ layout = "mobile" }) {
         viewport={{ once: true }}
         className="grid grid-cols-2 gap-space-3 laptop:grid-cols-4"
       >
-        {[linkedin, github, x, gmail].map((item) => (
-          <DesktopTile key={item?.id || Math.random()} item={item} />
+        {[linkedin, github, x, gmail].map((item, idx) => (
+          <DesktopTile key={item?.id || item?.platform || item?.label || idx} item={item} />
         ))}
       </motion.div>
     );

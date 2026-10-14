@@ -14,6 +14,8 @@ const AchievementCard = lazy(() => import("../components/AchievementCard"));
 const MediaPlayer = lazy(() => import("../components/MediaPlayer"));
 const ContactCard = lazy(() => import("../components/ContactCard"));
 
+const CURRENT_YEAR = new Date().getFullYear();
+
 export default function DesktopDashboard() {
   return (
     <div className="mx-auto flex min-h-screen max-w-shell flex-col">
@@ -31,7 +33,7 @@ export default function DesktopDashboard() {
             <CertificationGrid />
           </Suspense>
           <footer className="pt-space-6 text-center text-micro text-text-tertiary">
-            © {new Date().getFullYear()} {profile.displayName} — {profile.role}
+            © {CURRENT_YEAR} {profile.displayName} — {profile.role}
           </footer>
         </div>
         <aside className="w-full p-space-6 pt-0 laptop:w-rail laptop:p-space-6 laptop:pl-0 laptop:pt-space-5">
