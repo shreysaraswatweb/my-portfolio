@@ -1,0 +1,189 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    body { background: #121620; margin: 0; padding: 40px; display: flex; gap: 20px; }
+    canvas { width: 300px; height: 300px; border: 1px solid rgba(255,255,255,0.1); border-radius: 16px; }
+  </style>
+</head>
+<body>
+  <canvas id="c"></canvas>
+  <script>
+    const img = new Image();
+    img.src = "/scratch/raw_frame.png";
+    img.onload = () => {
+      const canvas = document.getElementById("c");
+      canvas.width = 600;
+      canvas.height = 600;
+      const gl = canvas.getContext("webgl", { alpha: true, premultipliedAlpha: false, antialias: true });
+
+      const vs = `
+        attribute vec2 a_pos;
+        varying vec2 v_uv;
+        void main() {
+          v_uv = a_pos * 0.5 + 0.5;
+          v_uv.y = 1.0 - v_uv.y;
+          gl_Position = vec4(a_pos, 0.0, 1.0);
+        }
+      `;
+
+      const fs = `
+        precision mediump float;
+        uniform sampler2D u_tex;
+        varying vec2 v_uv;
+
+        const float VID_W = 1280.0;
+        const float VID_H = 720.0;
+        const float CROP_X = 346.0;
+        const float CROP_Y = 0.0;
+        const float CROP_W = 576.0;
+        const float CROP_H = 601.0;
+
+        // Pristine Vector Palette
+        const vec3 COLOR_PEACH = vec3(242.0/255.0, 218.0/255.0, 190.0/255.0);
+        const vec3 COLOR_PEACH_BORDER = vec3(198.0/255.0, 155.0/255.0, 125.0/255.0); // Warm terracotta tone
+        const vec3 COLOR_CRIMSON = vec3(168.0/255.0, 52.0/255.0, 58.0/255.0);
+        const vec3 COLOR_CRIMSON_BORDER = vec3(115.0/255.0, 32.0/255.0, 36.0/255.0); // Deep wine tone
+
+        // Classify sample at uv:
+        // returns: vec4(r, g, b, isForeground)
+        // where rgb is the vector color, and isForeground is 1.0 (fg) or 0.0 (bg)
+        vec4 evalVectorSample(vec2 uv) {
+          vec4 col = texture2D(u_tex, uv);
+
+          float maxC = max(max(col.r, col.g), col.b);
+          float minC = min(min(col.r, col.g), col.b);
+          float sat = maxC > 0.0 ? (maxC - minC) / maxC : 0.0;
+          float luma = dot(col.rgb, vec3(0.2126, 0.7152, 0.0722));
+
+          // Pure white background
+          if (sat < 0.12 && luma > 0.88) {
+            return vec4(0.0, 0.0, 0.0, 0.0);
+          }
+
+          // Crimson fill
+          if (col.r > 0.41 && (col.r - col.g) > 0.11 && (col.r - col.b) > 0.08 && luma < 0.65) {
+            return vec4(COLOR_CRIMSON, 1.0);
+          }
+
+          // Peach flesh fill
+          if (col.r > 0.65 && col.g > 0.50 && (col.r - col.b) > 0.06 && luma > 0.55) {
+            return vec4(COLOR_PEACH, 1.0);
+          }
+
+          // Search outward in 8 directions at two radii (5.0 and 11.0 video pixels)
+          vec2 texel = vec2(1.0 / VID_W, 1.0 / VID_H);
+          float rWeight = 0.0;
+          float pWeight = 0.0;
+
+          for (int i = 0; i < 8; i++) {
+            float ang = float(i) * 0.785398;
+            vec2 dir = vec2(cos(ang), sin(ang));
+            
+            vec4 col1 = texture2D(u_tex, uv + dir * 5.0 * texel);
+            vec4 col2 = texture2D(u_tex, uv + dir * 11.0 * texel);
+
+            // Crimson detection: red dominance over green and blue, luma < 0.70
+            if (col1.r > 0.40 && (col1.r - col1.g) > 0.10 && (col1.r - col1.b) > 0.08 && col1.r < 0.85) rWeight += 1.5;
+            if (col2.r > 0.40 && (col2.r - col2.g) > 0.10 && (col2.r - col2.b) > 0.08 && col2.r < 0.85) rWeight += 1.0;
+
+            // Peach detection: warm skin tone (r > g > b, r-b > 0.08), NOT white background (luma < 0.86)
+            float luma1 = dot(col1.rgb, vec3(0.2126, 0.7152, 0.0722));
+            float luma2 = dot(col2.rgb, vec3(0.2126, 0.7152, 0.0722));
+            if (col1.r > 0.62 && col1.g > 0.48 && (col1.r - col1.b) > 0.08 && luma1 < 0.86) pWeight += 1.5;
+            if (col2.r > 0.62 && col2.g > 0.48 && (col2.r - col2.b) > 0.08 && luma2 < 0.86) pWeight += 1.0;
+          }
+
+          if (rWeight > pWeight && rWeight > 0.5) {
+            return vec4(COLOR_CRIMSON_BORDER, 1.0);
+          } else if (pWeight > rWeight && pWeight > 0.5) {
+            return vec4(COLOR_PEACH_BORDER, 1.0);
+          } else {
+            // Spatial heuristic for ambiguous edges:
+            vec2 inAnim = (uv * vec2(VID_W, VID_H) - vec2(CROP_X, CROP_Y)) / vec2(CROP_W, CROP_H);
+            if (inAnim.y < 0.38) {
+              return vec4(COLOR_PEACH_BORDER, 1.0); // Head & shoulders
+            }
+            if (inAnim.y > 0.52 || inAnim.x > 0.52 || inAnim.x < 0.20) {
+              return vec4(COLOR_CRIMSON_BORDER, 1.0); // Stairs
+            }
+            return vec4(COLOR_PEACH_BORDER, 1.0);
+          }
+        }
+
+        void main() {
+          vec2 texel = vec2(1.0 / VID_W, 1.0 / VID_H);
+          float baseU = (CROP_X + v_uv.x * CROP_W) / VID_W;
+          float baseV = (CROP_Y + v_uv.y * CROP_H) / VID_H;
+          vec2 centerUV = vec2(baseU, baseV);
+
+          // 9-Tap Multi-Sampling for sub-pixel anti-aliased edge smoothing
+          vec4 sC  = evalVectorSample(centerUV);
+          vec4 sL  = evalVectorSample(centerUV + vec2(-1.5,  0.0) * texel);
+          vec4 sR  = evalVectorSample(centerUV + vec2( 1.5,  0.0) * texel);
+          vec4 sT  = evalVectorSample(centerUV + vec2( 0.0, -1.5) * texel);
+          vec4 sB  = evalVectorSample(centerUV + vec2( 0.0,  1.5) * texel);
+          vec4 sTL = evalVectorSample(centerUV + vec2(-1.1, -1.1) * texel);
+          vec4 sTR = evalVectorSample(centerUV + vec2( 1.1, -1.1) * texel);
+          vec4 sBL = evalVectorSample(centerUV + vec2(-1.1,  1.1) * texel);
+          vec4 sBR = evalVectorSample(centerUV + vec2( 1.1,  1.1) * texel);
+
+          float totalCoverage = sC.a * 0.28 + (sL.a + sR.a + sT.a + sB.a) * 0.12 + (sTL.a + sTR.a + sBL.a + sBR.a) * 0.06;
+
+          if (totalCoverage < 0.03) {
+            gl_FragColor = vec4(0.0);
+            return;
+          }
+
+          // Weighted color
+          vec3 avgColor = sC.rgb * 0.28 + (sL.rgb + sR.rgb + sT.rgb + sB.rgb) * 0.12 + (sTL.rgb + sTR.rgb + sBL.rgb + sBR.rgb) * 0.06;
+
+          float finalAlpha = clamp(pow(totalCoverage, 0.8), 0.0, 1.0);
+          gl_FragColor = vec4(avgColor, finalAlpha);
+        }
+      `;
+
+      const createShader = (t, s) => {
+        const sh = gl.createShader(t);
+        gl.shaderSource(sh, s);
+        gl.compileShader(sh);
+        if (!gl.getShaderParameter(sh, gl.COMPILE_STATUS)) {
+          console.error("Shader compile error:", gl.getShaderInfoLog(sh));
+        }
+        return sh;
+      };
+
+      const prog = gl.createProgram();
+      gl.attachShader(prog, createShader(gl.VERTEX_SHADER, vs));
+      gl.attachShader(prog, createShader(gl.FRAGMENT_SHADER, fs));
+      gl.linkProgram(prog);
+      gl.useProgram(prog);
+
+      const buf = gl.createBuffer();
+      gl.bindBuffer(gl.ARRAY_BUFFER, buf);
+      gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1,-1, 1,-1, -1,1, 1,1]), gl.STATIC_DRAW);
+
+      const aPos = gl.getAttribLocation(prog, "a_pos");
+      gl.enableVertexAttribArray(aPos);
+      gl.vertexAttribPointer(aPos, 2, gl.FLOAT, false, 0, 0);
+
+      const tex = gl.createTexture();
+      gl.bindTexture(gl.TEXTURE_2D, tex);
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+      gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, img);
+
+      gl.viewport(0, 0, 600, 600);
+      gl.clearColor(0, 0, 0, 0);
+      gl.clear(gl.COLOR_BUFFER_BIT);
+      gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+
+      window._RENDER_DONE = true;
+    };
+  </script>
+</body>
+</html>
+  

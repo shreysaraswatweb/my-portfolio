@@ -21,6 +21,7 @@ import {
 import WeatherCard from "./weather/WeatherCard";
 import GitCalendarCubes from "./ui/GitCalendarCubes";
 import VantaWavesBackground from "./ui/VantaWavesBackground";
+import CareerStairAscent from "./ui/CareerStairAscent";
 
 const topSkills = [
   { id: "react", name: "React", Icon: ReactIcon },
@@ -32,6 +33,7 @@ const topSkills = [
 export default function BentoStatsGrid() {
   const [activeTooltip, setActiveTooltip] = useState(null);
   const [totalCommits, setTotalCommits] = useState(89);
+  const [isExpHovered, setIsExpHovered] = useState(false);
 
   return (
     <motion.section
@@ -49,18 +51,23 @@ export default function BentoStatsGrid() {
           as="a"
           href="#experience"
           {...hoverLift}
-          className="group relative flex w-full flex-col justify-between rounded-lg p-space-4 transition-colors duration-200 hover:border-accent-primary/40 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent-primary"
+          onMouseEnter={() => setIsExpHovered(true)}
+          onMouseLeave={() => setIsExpHovered(false)}
+          className="group relative flex w-full flex-col justify-between overflow-hidden rounded-lg p-space-4 transition-colors duration-200 hover:border-accent-primary/40 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent-primary min-h-[170px]"
         >
-          <div className="flex items-center justify-between">
+          {/* Video Background */}
+          <CareerStairAscent isHovered={isExpHovered} />
+
+          <div className="relative z-10 flex items-center justify-between">
             <IconChip className="h-space-8 w-space-8 bg-accent-primary/10 text-accent-primary transition-transform duration-200 group-hover:scale-105">
               <Briefcase className="h-space-4 w-space-4" strokeWidth={1.75} />
             </IconChip>
-            <span className="rounded-full bg-surface-pill px-space-2 py-0.5 text-micro font-medium uppercase tracking-wider text-text-secondary border border-border-hairline">
+            <span className="rounded-full bg-surface-pill px-space-2 py-0.5 text-micro font-medium uppercase tracking-wider text-text-secondary border border-border-hairline backdrop-blur-sm">
               Active
             </span>
           </div>
 
-          <div className="mt-space-3">
+          <div className="relative z-10 mt-space-3">
             <p className="text-micro font-semibold uppercase tracking-wider text-text-secondary">
               WORK EXP
             </p>
