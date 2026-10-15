@@ -82,6 +82,20 @@ html[data-theme="light"] {
   --shadow-card: 0 8px 32px rgb(22 24 31 / 0.08);
 }
 
+/* Hide default side scrollbar globally across all browsers (replaced by top ScrollProgress) */
+html,
+body {
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE and Edge */
+}
+
+html::-webkit-scrollbar,
+body::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Edge, Opera */
+  width: 0;
+  height: 0;
+}
+
 html {
   background-color: rgb(var(--rgb-canvas-mid));
   overflow-x: clip;
@@ -90,6 +104,7 @@ html {
   -webkit-overflow-scrolling: touch;
   overscroll-behavior-y: auto;
 }
+
 
 /* Lenis smooth scrolling integration */
 html.lenis,

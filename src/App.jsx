@@ -3,6 +3,7 @@ import { SpeedInsights } from "@vercel/speed-insights/react";
 import { Analytics } from "@vercel/analytics/react";
 import useDesktop from "./hooks/useDesktop";
 import PortfolioLoader from "./components/PortfolioLoader";
+import { ScrollProgress } from "@/registry/magicui/scroll-progress";
 
 import MobileApp from "./layouts/MobileApp";
 const DesktopDashboard = lazy(() => import("./layouts/DesktopDashboard"));
@@ -29,6 +30,9 @@ export default function App() {
       {showLoader && (
         <PortfolioLoader onComplete={() => setShowLoader(false)} />
       )}
+
+      {/* Magic UI Top Scroll Progress Bar */}
+      <ScrollProgress className="top-0" />
 
       <main id="main-content">
         <Suspense fallback={null}>
