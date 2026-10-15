@@ -39,6 +39,7 @@ export function Tooltip({
   className = "",
   arrow = true,
   disabled = false,
+  gap = 9,
 }) {
   const [isOpen, setIsOpen] = useState(false);
   const isDetailed = Boolean(tag || action || (title && content));
@@ -59,8 +60,8 @@ export function Tooltip({
 
   const ARROW_HEIGHT = isDetailed ? 8 : 6;
   const ARROW_WIDTH = isDetailed ? 18 : 14;
-  const GAP = isDetailed ? 6 : 5;
-  const VIEWPORT_PADDING = 12;
+  const GAP = isDetailed ? Math.max(gap, 10) : gap;
+  const VIEWPORT_PADDING = 16;
 
   const updatePosition = useCallback(() => {
     if (!triggerRef.current) return;
@@ -85,10 +86,10 @@ export function Tooltip({
     let tooltipWidth = tooltipRef.current?.offsetWidth;
     if (!tooltipWidth) {
       if (isDetailed) {
-        tooltipWidth = 270;
+        tooltipWidth = 280;
       } else {
         const text = String(content || title || "");
-        tooltipWidth = Math.min(220, Math.max(64, text.length * 8 + 28));
+        tooltipWidth = Math.min(360, Math.max(64, text.length * 8 + 36));
       }
     }
 
@@ -288,8 +289,8 @@ export function Tooltip({
                   "border border-border-hairline dark:border-border-glass glass-edge",
                   "shadow-card",
                   isDetailed
-                    ? "rounded-2xl p-3.5 sm:p-4"
-                    : "rounded-xl px-2.5 py-1 w-max max-w-[240px] whitespace-nowrap flex items-center justify-center",
+                    ? "rounded-2xl p-4 sm:p-5"
+                    : "rounded-xl px-3.5 py-1.5 sm:px-4 sm:py-2 w-max max-w-[360px] sm:max-w-md whitespace-nowrap flex items-center justify-center",
                   className
                 )}
               >
@@ -351,7 +352,7 @@ export function Tooltip({
 
                 {/* Compact Simple Tooltip Mode (Theme buttons, icons, etc.) */}
                 {!isDetailed ? (
-                  <span className="font-display text-caption font-semibold text-text-primary tracking-tight">
+                  <span className="font-display text-caption font-semibold text-text-primary tracking-tight px-1">
                     {content || title}
                   </span>
                 ) : (

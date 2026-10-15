@@ -77,7 +77,7 @@ export const ScrollProgress = forwardRef(
       <motion.div
         ref={ref}
         className={cn(
-          "fixed inset-x-0 z-[60] h-[2.5px] origin-left bg-gradient-to-r from-[#A97CF8] via-[#F38CB8] to-[#FDCC92] pointer-events-none",
+          "fixed inset-x-0 z-[60] h-[3px] origin-left bg-gradient-to-r from-[#7C3AED] via-[#DB2777] to-[#D97706] shadow-[0_1px_3px_rgba(124,58,237,0.22)] dark:from-[#A97CF8] dark:via-[#F38CB8] dark:to-[#FDCC92] dark:shadow-none pointer-events-none",
           !hasCustomTop && "top-0",
           className,
         )}
