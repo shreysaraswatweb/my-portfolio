@@ -3,68 +3,104 @@ import "./PortfolioLoader.css";
 
 const STEPS = [
   [0, "Booting up…"],
-  [25, "Compiling components…"],
-  [50, "Wiring up APIs…"],
-  [75, "Polishing the UI…"],
-  [95, "Almost there…"],
+  [22, "Compiling components…"],
+  [48, "Wiring up APIs…"],
+  [72, "Polishing the UI…"],
+  [92, "Almost there…"],
   [100, "Ready"],
 ];
 
 export default function PortfolioLoader({ onComplete }) {
-  const [progress, setProgress] = useState(0);
-  const [message, setMessage] = useState(STEPS[0][1]);
   const [isDone, setIsDone] = useState(false);
   const [isRendered, setIsRendered] = useState(true);
-  const timerRef = useRef(null);
+
+  const fillRef = useRef(null);
+  const pctRef = useRef(null);
+  const msgRef = useRef(null);
+
+  const rAFRef = useRef(null);
   const finishTimeoutRef = useRef(null);
   const cleanupTimeoutRef = useRef(null);
 
   useEffect(() => {
-    // Lock scrolling while the intro loader runs
+    // Lock background scrolling while the intro loader runs
     const previousOverflow = document.body.style.overflow;
     document.body.style.overflow = "hidden";
 
-    let currentProgress = 0;
+    let current = 0;
+    let velocity = 0;
+    let lastTime = performance.now();
+    const startTime = performance.now();
+    const DURATION = 3500; // Slower, calm, silky smooth inertial travel (~3.5s)
+    let hasCompleted = false;
 
-    timerRef.current = setInterval(() => {
-      // Natural organic progress easing
-      currentProgress = Math.min(
-        100,
-        currentProgress +
-          Math.max(0.6, (100 - currentProgress) * 0.038) +
-          Math.random() * 1.4
-      );
+    const frame = (now) => {
+      // Clamped delta-time to ensure seamless playback across 60Hz - 120Hz+ displays
+      const dt = Math.min((now - lastTime) / 1000, 0.08);
+      lastTime = now;
 
-      const rounded = Math.floor(currentProgress);
-      setProgress(rounded);
+      const elapsed = now - startTime;
+      const t = Math.min(1, elapsed / DURATION);
 
-      for (let i = STEPS.length - 1; i >= 0; i--) {
-        if (rounded >= STEPS[i][0]) {
-          setMessage(STEPS[i][1]);
-          break;
+      // Smooth progression curve: accelerates out of the gate, cruises steadily with inertia, glides gracefully into 100%
+      const target = 100 * (1 - Math.pow(1 - t, 2.3));
+
+      // Inertial spring physics:
+      // Spring force pulls smoothly towards target; exponential velocity damping creates physical mass & momentum
+      const springForce = (target - current) * 11;
+      velocity += springForce * dt;
+      velocity *= Math.pow(0.06, dt); // Inertial friction / air damping
+      current += velocity * dt;
+
+      if (t >= 1 && 100 - current < 0.15) {
+        current = 100;
+      }
+
+      const clamped = Math.max(0, Math.min(100, current));
+      const rounded = Math.floor(clamped);
+
+      // Direct DOM mutation for 120fps hardware-composited rendering
+      if (fillRef.current) {
+        fillRef.current.style.width = `${clamped.toFixed(2)}%`;
+      }
+      if (pctRef.current) {
+        pctRef.current.textContent = `${rounded}%`;
+      }
+      if (msgRef.current) {
+        for (let i = STEPS.length - 1; i >= 0; i--) {
+          if (rounded >= STEPS[i][0]) {
+            msgRef.current.textContent = STEPS[i][1];
+            break;
+          }
         }
       }
 
-      if (currentProgress >= 100) {
-        clearInterval(timerRef.current);
-        timerRef.current = null;
+      if (current < 99.98 && !hasCompleted) {
+        rAFRef.current = requestAnimationFrame(frame);
+      } else if (!hasCompleted) {
+        hasCompleted = true;
+        if (fillRef.current) fillRef.current.style.width = "100%";
+        if (pctRef.current) pctRef.current.textContent = "100%";
+        if (msgRef.current) msgRef.current.textContent = "Ready";
 
-        // Brief hold at 100% "Ready" so it registers clearly
+        // Calm pause on 100% "Ready" before initiating the slow cinematic fade
         finishTimeoutRef.current = setTimeout(() => {
           setIsDone(true);
           document.body.style.overflow = previousOverflow;
 
-          // Remove from DOM after fade-out transition completes
+          // Remove from DOM after the 1.15s slow fade-out transition completes
           cleanupTimeoutRef.current = setTimeout(() => {
             setIsRendered(false);
             if (onComplete) onComplete();
-          }, 650);
-        }, 420);
+          }, 1200);
+        }, 520);
       }
-    }, 50);
+    };
+
+    rAFRef.current = requestAnimationFrame(frame);
 
     return () => {
-      if (timerRef.current) clearInterval(timerRef.current);
+      if (rAFRef.current) cancelAnimationFrame(rAFRef.current);
       if (finishTimeoutRef.current) clearTimeout(finishTimeoutRef.current);
       if (cleanupTimeoutRef.current) clearTimeout(cleanupTimeoutRef.current);
       document.body.style.overflow = previousOverflow;
@@ -97,26 +133,25 @@ export default function PortfolioLoader({ onComplete }) {
         </div>
 
         {/* 3D Orbit Track & Planet Dot */}
-        <div className="loader-orbit portfolio-loader-orbit" aria-hidden="true">
+        <div className="portfolio-loader-orbit" aria-hidden="true">
           <span className="portfolio-loader-orbit-ring" />
           <span className="portfolio-loader-orbit-dot" />
         </div>
 
         {/* Gradient Progress Bar */}
         <div className="portfolio-loader-bar">
-          <div
-            className="portfolio-loader-fill"
-            style={{ width: `${progress}%` }}
-          />
+          <div ref={fillRef} className="portfolio-loader-fill" />
         </div>
 
         {/* Meta Status & Numeric Percentage */}
         <div className="portfolio-loader-meta">
           <span className="portfolio-loader-status">
             <i className="portfolio-loader-dot" />
-            <span>{message}</span>
+            <span ref={msgRef}>Booting up…</span>
           </span>
-          <span className="portfolio-loader-pct">{progress}%</span>
+          <span ref={pctRef} className="portfolio-loader-pct">
+            0%
+          </span>
         </div>
       </div>
     </div>

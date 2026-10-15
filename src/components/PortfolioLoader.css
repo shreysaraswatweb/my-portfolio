@@ -16,15 +16,17 @@
   color: #f3f1f8;
   font-family: Inter, system-ui, -apple-system, sans-serif;
   transition:
-    opacity 0.65s cubic-bezier(0.16, 1, 0.3, 1),
-    transform 0.65s cubic-bezier(0.16, 1, 0.3, 1),
-    visibility 0.65s;
-  will-change: opacity, transform;
+    opacity 1.15s cubic-bezier(0.4, 0, 0.2, 1),
+    transform 1.15s cubic-bezier(0.4, 0, 0.2, 1),
+    filter 1.15s cubic-bezier(0.4, 0, 0.2, 1),
+    visibility 1.15s;
+  will-change: opacity, transform, filter;
 }
 
 .portfolio-loader-overlay.is-done {
   opacity: 0;
-  transform: scale(1.04);
+  transform: scale(1.03);
+  filter: blur(4px);
   pointer-events: none;
   visibility: hidden;
 }
@@ -171,11 +173,27 @@
 }
 
 .portfolio-loader-fill {
+  position: relative;
   height: 100%;
+  width: 0%;
   border-radius: 99px;
   background: linear-gradient(90deg, #f7a31c, #e8559a 55%, #9b5cf6);
-  box-shadow: 0 0 14px rgba(232, 85, 154, 0.6);
-  transition: width 0.22s ease-out;
+  box-shadow: 0 0 16px rgba(232, 85, 154, 0.7);
+  transition: none; /* Crucial: no CSS transition delay fighting the inertial physics rAF loop */
+  will-change: width;
+}
+
+.portfolio-loader-fill::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 18px;
+  border-radius: 99px;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.55));
+  filter: blur(1.5px);
+  pointer-events: none;
 }
 
 /* ─── Meta Status Row ─── */
