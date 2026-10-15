@@ -77,11 +77,11 @@ export const socials = [
     variant: "x",
   },
   {
-    id: "instagram",
-    label: "Instagram",
-    handle: "On request",
-    href: "#",
-    variant: "instagram",
+    id: "devto",
+    label: "Dev.to",
+    handle: "shreysaraswatweb",
+    href: "https://dev.to/shreysaraswatweb",
+    variant: "devto",
   },
   {
     id: "gmail",
@@ -89,13 +89,6 @@ export const socials = [
     handle: "shreysaraswat1998@gmail.com",
     href: "https://mail.google.com/mail/?view=cm&fs=1&to=shreysaraswat1998@gmail.com",
     variant: "gmail",
-  },
-  {
-    id: "devto",
-    label: "Dev.to",
-    handle: "shreysaraswatweb",
-    href: "https://dev.to/shreysaraswatweb",
-    variant: "devto",
   },
 ];
 

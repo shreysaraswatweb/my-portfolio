@@ -15,8 +15,8 @@ import AvatarFrame from "./AvatarFrame";
 import GlassCard from "./ui/GlassCard";
 import SmoothOverflow from "./SmoothOverflow";
 import {
+  DevtoMark,
   GithubMark,
-  InstagramMark,
   LinkedInMark,
   XMark,
 } from "./icons/BrandIcons";
@@ -46,7 +46,12 @@ const connect = [
     Mark: GithubMark,
   },
   { id: "x", label: "X", href: "https://x.com/shreyweb", Mark: XMark },
-  { id: "instagram", label: "Instagram", href: "#", Mark: InstagramMark },
+  {
+    id: "devto",
+    label: "Dev.to",
+    href: profile.devto || "https://dev.to/shreysaraswatweb",
+    Mark: DevtoMark,
+  },
 ];
 
 const CURRENT_YEAR = new Date().getFullYear();

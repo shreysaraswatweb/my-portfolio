@@ -5,9 +5,9 @@ import { cardEntrance, staggerContainer, hoverLift } from "../lib/motion";
 import GlassCard from "./ui/GlassCard";
 import IconChip from "./ui/IconChip";
 import {
+  DevtoMark,
   GithubMark,
   GmailMark,
-  InstagramMark,
   LinkedInMark,
   XMark,
 } from "./icons/BrandIcons";
@@ -25,7 +25,8 @@ const socialMarks = {
   github: GithubMark,
   x: XMark,
   figma: XMark,
-  instagram: InstagramMark,
+  instagram: DevtoMark,
+  devto: DevtoMark,
   gmail: GmailMark,
   email: GmailMark,
 };
