@@ -78,7 +78,6 @@ export default function CareerStairAscent({ className = "", isHovered = false })
         precision mediump float;
         uniform sampler2D u_tex;
         uniform vec2 u_canvasRes;
-        uniform float u_isLight;
         varying vec2 v_uv;
 
         const float VID_W = 1280.0;
@@ -89,7 +88,7 @@ export default function CareerStairAscent({ className = "", isHovered = false })
         const float CROP_H = 601.0;
 
         // Backdrop zoom level (zoomed-out centered backdrop)
-        const float ZOOM = 0.58;
+        const float ZOOM = 0.48;
 
         const vec3 STROKE_COLOR = vec3(46.0 / 255.0, 49.0 / 255.0, 59.0 / 255.0);
         const float STROKE_LUMA = 0.2126 * (46.0 / 255.0) + 0.7152 * (49.0 / 255.0) + 0.0722 * (59.0 / 255.0);
@@ -125,7 +124,6 @@ export default function CareerStairAscent({ className = "", isHovered = false })
           float animH = ZOOM;
           float animW = animH * animAspect * (u_canvasRes.y / u_canvasRes.x);
 
-          // If on a narrow card, ensure width stays comfortably framed
           if (animW > 0.88) {
             float shrink = 0.88 / animW;
             animW = 0.88;
@@ -144,40 +142,28 @@ export default function CareerStairAscent({ className = "", isHovered = false })
             return;
           }
 
-          // Calculate distance to closest border (0.0 at edge, 0.5 at center)
+          // Subtle, clean border fade (outer 8% gently dissolves)
           float edgeDist = min(min(uvXInAnim, 1.0 - uvXInAnim), min(uvYInAnim, 1.0 - uvYInAnim));
-
-          // Border fade ramp: 0.0 at edge, smoothly reaches 1.0 at 0.22 depth
-          float borderFade = smoothstep(0.0, 0.22, edgeDist);
-
-          // Card boundary edge fade to ensure soft transition into card margins
-          float cardEdgeDist = min(min(v_uv.x, 1.0 - v_uv.x), min(v_uv.y, 1.0 - v_uv.y));
-          borderFade *= smoothstep(0.0, 0.08, cardEdgeDist);
+          float borderFade = smoothstep(0.0, 0.08, edgeDist);
 
           float vidU = (CROP_X + uvXInAnim * CROP_W) / VID_W;
           float vidV = (CROP_Y + uvYInAnim * CROP_H) / VID_H;
           vec2 vidUV = vec2(vidU, vidV);
 
-          // ─── DYNAMIC BORDER BLUR KERNEL SPREAD ─────────────────────────
-          // In the center (borderFade ~ 1.0): spread is 0.85 texels (crisp vector MSAA).
-          // Near the border (borderFade < 1.0): spread expands up to 4.5 texels,
-          // physically blurring the graphic strokes as they dissolve!
-          float blurFactor = 1.0 - borderFade;
-          float spread = 0.85 + blurFactor * 4.2;
+          // ─── OPTIMIZED SUB-PIXEL MSAA WITH TIGHT EDGE SOFTENING ───────
+          float spread = 0.85 + (1.0 - borderFade) * 1.0;
+          vec2 texel = vec2(1.0 / VID_W, 1.0 / VID_H) * spread;
 
-          vec2 texel = vec2(1.0 / VID_W, 1.0 / VID_H);
-          vec2 d1 = texel * vec2(-0.85, -0.85) * spread;
-          vec2 d2 = texel * vec2( 0.85, -0.85) * spread;
-          vec2 d3 = texel * vec2(-0.85,  0.85) * spread;
-          vec2 d4 = texel * vec2( 0.85,  0.85) * spread;
-          vec2 d5 = texel * vec2( 0.0,  -1.10) * spread;
-          vec2 d6 = texel * vec2( 0.0,   1.10) * spread;
-          vec2 d7 = texel * vec2(-1.10,  0.0)  * spread;
-          vec2 d8 = texel * vec2( 1.10,  0.0)  * spread;
+          vec2 d1 = texel * vec2(-0.85, -0.85);
+          vec2 d2 = texel * vec2( 0.85, -0.85);
+          vec2 d3 = texel * vec2(-0.85,  0.85);
+          vec2 d4 = texel * vec2( 0.85,  0.85);
+          vec2 d5 = texel * vec2( 0.0,  -1.10);
+          vec2 d6 = texel * vec2( 0.0,   1.10);
+          vec2 d7 = texel * vec2(-1.10,  0.0);
+          vec2 d8 = texel * vec2( 1.10,  0.0);
 
-          // Center sample
           vec4 c0 = sampleUnmatted(vidUV);
-
           vec4 s1 = sampleUnmatted(vidUV + d1);
           vec4 s2 = sampleUnmatted(vidUV + d2);
           vec4 s3 = sampleUnmatted(vidUV + d3);
@@ -187,7 +173,7 @@ export default function CareerStairAscent({ className = "", isHovered = false })
           vec4 s7 = sampleUnmatted(vidUV + d7);
           vec4 s8 = sampleUnmatted(vidUV + d8);
 
-          // Gaussian-weighted sub-pixel alpha smoothing with blur spread
+          // Gaussian-weighted sub-pixel alpha smoothing
           float smoothA = c0.a * 0.28 + (s1.a + s2.a + s3.a + s4.a) * 0.10 + (s5.a + s6.a + s7.a + s8.a) * 0.08;
 
           vec3 outRgb = c0.rgb;
@@ -195,7 +181,6 @@ export default function CareerStairAscent({ className = "", isHovered = false })
             outRgb = STROKE_COLOR;
           }
 
-          // Apply soft faded blur boundary
           smoothA *= borderFade;
 
           gl_FragColor = vec4(outRgb, smoothA);
@@ -237,36 +222,46 @@ export default function CareerStairAscent({ className = "", isHovered = false })
       gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
 
       const uCanvasRes = gl.getUniformLocation(program, "u_canvasRes");
-      const uIsLight = gl.getUniformLocation(program, "u_isLight");
+
+      let lastVideoTime = -1;
+      let lastW = 0;
+      let lastH = 0;
 
       const render = () => {
         if (!isMounted) return;
 
-        if (video.readyState >= 2) {
-          const dpr = Math.min(window.devicePixelRatio || 1, 2);
+        if (video.readyState >= 2 && !video.paused) {
+          const dpr = Math.min(window.devicePixelRatio || 1, 1.5);
           const w = Math.round(canvas.clientWidth * dpr);
           const h = Math.round(canvas.clientHeight * dpr);
 
-          if (w > 0 && h > 0) {
-            if (canvas.width !== w || canvas.height !== h) {
+          const curTime = video.currentTime;
+          const sizeChanged = w !== lastW || h !== lastH;
+          const timeChanged = curTime !== lastVideoTime;
+
+          if (w > 0 && h > 0 && (sizeChanged || timeChanged)) {
+            if (sizeChanged) {
               canvas.width = w;
               canvas.height = h;
               gl.viewport(0, 0, w, h);
+              lastW = w;
+              lastH = h;
+              gl.useProgram(program);
+              gl.uniform2f(uCanvasRes, w, h);
             }
 
-            gl.useProgram(program);
-            gl.uniform2f(uCanvasRes, w, h);
-            gl.uniform1f(uIsLight, isLightRef.current ? 1.0 : 0.0);
-
-            gl.bindTexture(gl.TEXTURE_2D, texture);
-            gl.texImage2D(
-              gl.TEXTURE_2D,
-              0,
-              gl.RGBA,
-              gl.RGBA,
-              gl.UNSIGNED_BYTE,
-              video
-            );
+            if (timeChanged) {
+              lastVideoTime = curTime;
+              gl.bindTexture(gl.TEXTURE_2D, texture);
+              gl.texImage2D(
+                gl.TEXTURE_2D,
+                0,
+                gl.RGBA,
+                gl.RGBA,
+                gl.UNSIGNED_BYTE,
+                video
+              );
+            }
 
             gl.clearColor(0, 0, 0, 0);
             gl.clear(gl.COLOR_BUFFER_BIT);
@@ -296,21 +291,32 @@ export default function CareerStairAscent({ className = "", isHovered = false })
       const strokeB = 59;
       const strokeLuma = (0.2126 * strokeR + 0.7152 * strokeG + 0.0722 * strokeB) / 255;
 
+      let lastVideoTime = -1;
+      let lastW = 0;
+      let lastH = 0;
+
       const render2D = () => {
         if (!isMounted) return;
 
-        if (video.readyState >= 2) {
+        if (video.readyState >= 2 && !video.paused) {
           const w = canvas.clientWidth;
           const h = canvas.clientHeight;
-          if (w > 0 && h > 0) {
-            if (canvas.width !== w || canvas.height !== h) {
+          const curTime = video.currentTime;
+          const sizeChanged = w !== lastW || h !== lastH;
+          const timeChanged = curTime !== lastVideoTime;
+
+          if (w > 0 && h > 0 && (sizeChanged || timeChanged)) {
+            lastVideoTime = curTime;
+            if (sizeChanged) {
               canvas.width = w;
               canvas.height = h;
+              lastW = w;
+              lastH = h;
             }
 
             ctx.clearRect(0, 0, w, h);
 
-            const ZOOM = 0.81;
+            const ZOOM = 0.48;
             const animAspect = CROP_W / CROP_H;
             let drawH = h * ZOOM;
             let drawW = drawH * animAspect;
@@ -404,32 +410,14 @@ export default function CareerStairAscent({ className = "", isHovered = false })
         style={{ display: "none" }}
       />
 
-      {/* Real-time Centered Backdrop Canvas with feathered border mask */}
+      {/* Real-time Centered Backdrop Canvas with clean, subtle edge feather */}
       <canvas
         ref={canvasRef}
         className="pointer-events-none absolute inset-0 h-full w-full rounded-[inherit]"
         style={{
-          maskImage: "radial-gradient(ellipse 92% 88% at 50% 50%, black 50%, rgba(0,0,0,0.7) 75%, transparent 100%)",
-          WebkitMaskImage: "radial-gradient(ellipse 92% 88% at 50% 50%, black 50%, rgba(0,0,0,0.7) 75%, transparent 100%)",
+          maskImage: "radial-gradient(ellipse 95% 90% at 50% 50%, black 80%, transparent 100%)",
+          WebkitMaskImage: "radial-gradient(ellipse 95% 90% at 50% 50%, black 80%, transparent 100%)",
         }}
-      />
-
-      {/* Border Faded Blur Layer — applies soft optical blur on the outer borders */}
-      <div
-        className="pointer-events-none absolute inset-0 rounded-[inherit] backdrop-blur-[2px] sm:backdrop-blur-sm"
-        style={{
-          maskImage: "radial-gradient(ellipse 85% 80% at 50% 50%, transparent 45%, black 85%)",
-          WebkitMaskImage: "radial-gradient(ellipse 85% 80% at 50% 50%, transparent 45%, black 85%)",
-        }}
-      />
-
-      {/* Subtle border fade vignette (soft inset dissolve) */}
-      <div
-        className={`pointer-events-none absolute inset-0 rounded-[inherit] transition-colors duration-300 ${
-          isLight
-            ? "shadow-[inset_0_0_24px_12px_rgba(250,246,241,0.6)]"
-            : "shadow-[inset_0_0_24px_12px_rgba(12,16,23,0.65)]"
-        }`}
       />
 
       {/* Subtle bottom-left text readability gradient */}
